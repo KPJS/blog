@@ -1,5 +1,6 @@
 {
-    "name": "KPJS blog",
+    "name": "KPJS-blog",
+    "version": "0.0.0.1",
     "engine": "0.12.x",
     "main": "app.js"
 }
