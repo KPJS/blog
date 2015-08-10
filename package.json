@@ -1,0 +1,6 @@
+{
+    "name": "KPJS blog",
+    "engine": "0.12.x",
+    "main": "app.js",
+    "dependencies": {}
+}
