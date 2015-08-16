@@ -1,7 +1,27 @@
 var port = process.env.PORT || 1337;
 var http = require('http');
+var templateStart = "</div></body></html>";
+var templateEnd = "<html><head><meta charset=\"UTF-8\"></head><body><div>";
+var fs = require('fs');
 http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World\n');
+  if(/.png$/.test(req.url)) {
+    res.writeHead(200, {'Content-Type': 'image/png'});
+    readFile('.' + req.url, function(content) {
+      res.end(content);
+    });
+  } else {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    readFile('1st-post.txt', function(content) {
+      res.end(templateStart + content + templateEnd);
+    });
+  }
 }).listen(port);
 console.log('Server running on '+ port);
+
+function readFile(path, callback) {
+  fs.readFile(path, function(err, content) {
+    if(err)
+      console.log(err);
+    callback(content);
+  });
+}
