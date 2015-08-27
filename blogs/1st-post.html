@@ -1,7 +1,9 @@
 <div>To all fellow comrades javascripters, WE ARE ALIVE ! ;]</div>
-<div>Our movement has grown into stage, where we need to throw ourselves into the water and gradually learn to swim in the web (hopefully without drowning).
+<div>
+    Our movement has grown into stage, where we need to throw ourselves into the water and gradually learn to swim in the web (hopefully without drowning).
 And thus has begun our javascript jurney through life, space and
-everything:</div>
+everything:
+</div>
 
 <h1>Session 1: Project setup = github + travis + azure</h1>
 
@@ -10,13 +12,15 @@ everything:</div>
 <h2>1. GitHub</h2>
 <div>The idea is fairly simple. Instead of our previous kinda lame setup of everyone being able to commit to the repo, we want to go "the fork way" and allow the project to grow in many ways while controlling the core. Therefore we want to create an organization, which would have reasonable amount of administrators that can merge pull requests without additional delays. Basically, we are all equals, but these guys are even more equal ;]</div>
 <div>We chose free plan </div>
-<img src="static/02.png"/>
-<div>Made the repo public, chose license [Unlicese]</div> 
-<img src="static/03.png"/>
+<img src="/img/02.png" />
+<div>Made the repo public, chose license [Unlicese]</div>
+<img src="/img/03.png" />
 <div>And added administrators.</div>
-<br/>
-<div>We all forked the repo to our personal github repositories and cloned to local
-versions:</div>
+<br />
+<div>
+    We all forked the repo to our personal github repositories and cloned to local
+versions:
+</div>
 <pre>
 
 [user@machine projects]$ git clone https://github.com/[USER]/blog.git                                                                                                      
@@ -28,8 +32,10 @@ Unpacking objects: 100% (5/5), done.
 Checking connectivity... done.
 
 </pre>
-<div>Let us check if git has created two remotes (orignal organizations repo
-+ users fork) or just one (users fork)</div>
+<div>
+    Let us check if git has created two remotes (orignal organizations repo
++ users fork) or just one (users fork)
+</div>
 <pre>
 
 [user@machine projects]$ cd blog/
@@ -85,19 +91,25 @@ To https://github.com/[USER]/blog.git
 [user@machine blog]$ 
 
 </pre>
-<div>After adding some splendid functionality, we push it to our fork and issue
-a pull request. Some kind soul will then merge it into the upstream :)</div>
+<div>
+    After adding some splendid functionality, we push it to our fork and issue
+a pull request. Some kind soul will then merge it into the upstream :)
+</div>
 
 <h2>2. Travis</h2>
-<div>We want continuous integration and we want it now! :) Travis is here to save
+<div>
+    We want continuous integration and we want it now! :) Travis is here to save
 us, a quick solution easily hookable to github. For our use case it is free
 and from our past experiences .. simply fast. Just go to
 https://travis-ci.org , you can use your github account to sign in and then
 pick your repo that you wish and switch the hook on as seen on one of our
-fabulous screenshots</div>
-<img src="static/09.png"/>
-<div>You can further configure travis with .travis.yml config file in the root of
-your project. In our case it is quite simple:</div>
+fabulous screenshots
+</div>
+<img src="/img/09.png" />
+<div>
+    You can further configure travis with .travis.yml config file in the root of
+your project. In our case it is quite simple:
+</div>
 <pre>
 
 sudo: false
@@ -108,18 +120,20 @@ node_js:
 </pre>
 <h2>3. Azure</h2>
 <div>All we need is web app, so we create one on azure portal</div>
-<img src="static/10.png"/>
-<div>Give it a name and we have to hook it on our github repo. At this point we've had
+<img src="/img/10.png" />
+<div>
+    Give it a name and we have to hook it on our github repo. At this point we've had
 some authentication issues (our repo was not visible under the account
 somehow), we've switched to the beta azure portal portal.azure.com and there
 under Continuous Deployment (under web app blade Deployment>big wheel "Set up
 continuous deployment") and there we've chosen github and setup authorization
-after which we were able to choose project and branch </div>
-<img src="static/13.png"/>
-<br/>
+after which we were able to choose project and branch
+</div>
+<img src="/img/13.png" />
+<br />
 <div>Our first deployment</div>
-<img src="static/14.png"/>
-<div>And Hello to the World</div> 
-<img src="static/15.png"/>
-<br/>
+<img src="/img/14.png" />
+<div>And Hello to the World</div>
+<img src="/img/15.png" />
+<br />
 <div>Finally, our heading is local pub a beer or so and discuss plans for the next session ;] (no screenshot from that unfortunately)</div>
