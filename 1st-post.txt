@@ -1,0 +1,125 @@
+<div>To all fellow comrades javascripters, WE ARE ALIVE ! ;]</div>
+<div>Our movement has grown into stage, where we need to throw ourselves into the water and gradually learn to swim in the web (hopefully without drowning).
+And thus has begun our javascript jurney through life, space and
+everything:</div>
+
+<h1>Session 1: Project setup = github + travis + azure</h1>
+
+<div>You may ask why would we choose this setup .. and the answer would be quite pragmatic .. johny has used it before, it has worked well and we had only two hours for the setup :) (including discussions and our "not so clever" questions).</div>
+
+<h2>1. GitHub</h2>
+<div>The idea is fairly simple. Instead of our previous kinda lame setup of everyone being able to commit to the repo, we want to go "the fork way" and allow the project to grow in many ways while controlling the core. Therefore we want to create an organization, which would have reasonable amount of administrators that can merge pull requests without additional delays. Basically, we are all equals, but these guys are even more equal ;]</div>
+<div>We chose free plan </div>
+<img src="static/02.png"/>
+<div>Made the repo public, chose license [Unlicese]</div> 
+<img src="static/03.png"/>
+<div>And added administrators.</div>
+<br/>
+<div>We all forked the repo to our personal github repositories and cloned to local
+versions:</div>
+<pre>
+
+[user@machine projects]$ git clone https://github.com/[USER]/blog.git                                                                                                      
+Cloning into 'blog'...
+remote: Counting objects: 5, done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 5 (delta 0), reused 5 (delta 0), pack-reused 0
+Unpacking objects: 100% (5/5), done.
+Checking connectivity... done.
+
+</pre>
+<div>Let us check if git has created two remotes (orignal organizations repo
++ users fork) or just one (users fork)</div>
+<pre>
+
+[user@machine projects]$ cd blog/
+
+[user@machine blog]$ git remote
+origin
+
+</pre>
+<div>In this case, there is only one remote (because i'm not using official github client), we need to setup second remote to be able to synchronize fork and original repo. We will call the original repo 'upstream'</div>
+<pre>
+
+[user@machine blog]$ git remote add upstream https://github.com/KPJS/blog.git
+
+[user@machine blog]$ git remote -v
+origin  https://github.com/[USER]/blog.git (fetch)
+origin  https://github.com/[USER]/blog.git (push)
+upstream  https://github.com/KPJS/blog.git (fetch)
+upstream  https://github.com/KPJS/blog.git (push)
+
+</pre>
+<div>Now it is time to synchronize our fork (and local version) with upstream repo:</div>
+<pre>
+
+[user@machine blog]$ git pull upstream master
+remote: Counting objects: 4, done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 4 (delta 2), reused 2 (delta 0), pack-reused 0
+Unpacking objects: 100% (4/4), done.
+From https://github.com/KPJS/blog
+ * branch            master     -> FETCH_HEAD
+ * [new branch]      master     -> upstream/master
+Updating 785ea7c..1949ab3
+Fast-forward
+ package.json | 6 ++++++
+ 1 file changed, 6 insertions(+)
+ create mode 100644 package.json
+
+[user@machine blog]$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 2 commits.
+  (use "git push" to publish your local commits)
+nothing to commit, working directory clean
+
+[user@machine blog]$ git push
+Username for 'https://github.com': [USER]
+Password for 'https://[USER]@github.com': 
+Counting objects: 4, done.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 486 bytes | 0 bytes/s, done.
+Total 4 (delta 2), reused 0 (delta 0)
+To https://github.com/[USER]/blog.git
+   785ea7c..1949ab3  master -> master
+[user@machine blog]$ 
+
+</pre>
+<div>After adding some splendid functionality, we push it to our fork and issue
+a pull request. Some kind soul will then merge it into the upstream :)</div>
+
+<h2>2. Travis</h2>
+<div>We want continuous integration and we want it now! :) Travis is here to save
+us, a quick solution easily hookable to github. For our use case it is free
+and from our past experiences .. simply fast. Just go to
+https://travis-ci.org , you can use your github account to sign in and then
+pick your repo that you wish and switch the hook on as seen on one of our
+fabulous screenshots</div>
+<img src="static/09.png"/>
+<div>You can further configure travis with .travis.yml config file in the root of
+your project. In our case it is quite simple:</div>
+<pre>
+
+sudo: false
+language: node_js
+node_js:
+  - "0.12"
+
+</pre>
+<h2>3. Azure</h2>
+<div>All we need is web app, so we create one on azure portal</div>
+<img src="static/10.png"/>
+<div>Give it a name and we have to hook it on our github repo. At this point we've had
+some authentication issues (our repo was not visible under the account
+somehow), we've switched to the beta azure portal portal.azure.com and there
+under Continuous Deployment (under web app blade Deployment>big wheel "Set up
+continuous deployment") and there we've chosen github and setup authorization
+after which we were able to choose project and branch </div>
+<img src="static/13.png"/>
+<br/>
+<div>Our first deployment</div>
+<img src="static/14.png"/>
+<div>And Hello to the World</div> 
+<img src="static/15.png"/>
+<br/>
+<div>Finally, our heading is local pub a beer or so and discuss plans for the next session ;] (no screenshot from that unfortunately)</div>
