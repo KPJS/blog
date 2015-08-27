@@ -1,27 +1,40 @@
 var port = process.env.PORT || 1337;
 var http = require('http');
-var templateStart = "<html><head><meta charset=\"UTF-8\"></head><body><div>";
-var templateEnd = "</div></body></html>";
 var fs = require('fs');
-http.createServer(function (req, res) {
-  if(/.png$/.test(req.url)) {
-    res.writeHead(200, {'Content-Type': 'image/png'});
-    readFile('.' + req.url, function(content) {
-      res.end(content);
-    });
-  } else {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    readFile('1st-post.txt', function(content) {
-      res.end(templateStart + content + templateEnd);
-    });
-  }
-}).listen(port);
-console.log('Server running on '+ port);
+var hbs = require('hbs');
+var express = require('express');
 
-function readFile(path, callback) {
-  fs.readFile(path, function(err, content) {
-    if(err)
-      console.log(err);
-    callback(content);
-  });
-}
+var app = express();
+app.engine('html', hbs.__express);
+app.set('view engine', 'html');
+app.use(express.static('static'));
+
+app.get('/', function (req, res) {
+    res.setHeader('Content-Type', 'text/html; charset=UTF-8');
+    res.setHeader('Content-Language', 'sk');
+    
+    fs.readdir('blogs', function (err, files) {
+        if (!err) {
+            res.render('index.html', { blogs: files });
+        } else {
+            res.status(500).send('Ultimate failure');
+        }
+    });
+});
+
+app.get('/blogs/:filename', function (req, res) {
+    res.setHeader('Content-Type', 'text/html; charset=UTF-8');
+    res.setHeader('Content-Language', 'sk');
+    
+    fs.readFile('blogs/' + req.params.filename, function (err, file) {
+        if (!err) {
+            res.render('blog.html', { body: file, title: req.params.filename });
+        } else {
+            res.status(404).send('Blog not found');
+        }
+    });
+});
+
+app.listen(port);
+console.log('Server running on ' + port);
+
