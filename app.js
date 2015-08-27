@@ -1,7 +1,7 @@
 var port = process.env.PORT || 1337;
 var http = require('http');
-var templateStart = "</div></body></html>";
-var templateEnd = "<html><head><meta charset=\"UTF-8\"></head><body><div>";
+var templateStart = "<html><head><meta charset=\"UTF-8\"></head><body><div>";
+var templateEnd = "</div></body></html>";
 var fs = require('fs');
 http.createServer(function (req, res) {
   if(/.png$/.test(req.url)) {
