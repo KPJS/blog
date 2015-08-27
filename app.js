@@ -1,27 +1,19 @@
-var port = process.env.PORT || 1337;
-var http = require('http');
-var templateStart = "<html><head><meta charset=\"UTF-8\"></head><body><div>";
-var templateEnd = "</div></body></html>";
-var fs = require('fs');
-http.createServer(function (req, res) {
-  if(/.png$/.test(req.url)) {
-    res.writeHead(200, {'Content-Type': 'image/png'});
-    readFile('.' + req.url, function(content) {
-      res.end(content);
-    });
-  } else {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    readFile('1st-post.txt', function(content) {
-      res.end(templateStart + content + templateEnd);
-    });
-  }
-}).listen(port);
-console.log('Server running on '+ port);
+'use strict';
 
-function readFile(path, callback) {
-  fs.readFile(path, function(err, content) {
-    if(err)
-      console.log(err);
-    callback(content);
-  });
-}
+var express = require('express');
+var http = require('http');
+var path = require('path');
+var handlebars = require('hbs');
+var app = express();
+require('./router')(app);
+
+app.set('port', 3000);
+
+app.engine('handlebars', handlebars.__express);
+app.set('view engine', 'handlebars');
+
+app.use(express.static(path.join(__dirname, 'static')));
+
+http.createServer(app).listen(app.get('port'), function() {
+	console.log('KPJS blog server listening on port ' + app.get('port'));
+});
