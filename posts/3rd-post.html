@@ -1,0 +1,74 @@
+<h1>Session 3: Error handling and logging with Mr Winston</h1>
+
+<div>First things first. Last time we've ended up with several different solutions and one won the match. The rest poor loosers, need to deal with their huge shame and get the winning solution which we will build on further. But how do we do that ? Git and a bit of googling has shown us a solution:</div>
+<pre>
+git fetch upstream
+git branch backup
+git checkout upstream/master -B master
+git push --force origin/master
+</pre>
+<div>Like this we have a backup branch of personal solution and master branch will have the solution that has won.</div>
+<br />
+<div>Now .. we continue .. and this time, we've chosen a different path. Instead of fighting against each other, we chose one victim that writes and all others shout at him what he should do.</div>
+<div>We want every request that failed to find a correct handler, to result in page not found, therefore after all the route handlers we add:</div>
+<pre>
+app.use(function(req, res, next) {
+    var error = new Error("Page not found");
+    error.statusCode = 404;
+    next(error);
+});
+</pre>
+<div>And now we need to treat all the errors that were risen by previous flow:</div>
+<pre>
+app.use(function(err, req, res, next) {
+    res.status(err.statusCode);
+    res.render('error.html', { title: err.message, errorCode: err.statusCode });
+});
+</pre>
+<div>Like this, we set the response status code and show an error page that will know what kind of error has occured.</div>
+<div>Another thing that can happen in our use cases is that a post is not found (perhaps user has manually altered the url, or we have some dead links). For this we alter the route for showing posts and add error handling to it:</div>
+<pre>
+app.get('/posts/:file', function(req, res, next) {
+    fs.readFile('posts/'+ req.params.file, function(err, content){
+        if (err) {
+            var error = new Error("Post not found");
+            error.statusCode = 404;
+            return next(error);
+        }
+
+        res.render('post.html', {title: req.params.file, content: content });
+    });
+});
+</pre>
+<div>Here in case of an error while reading the file, we foreward an error (a 404 page not found) and skip to the next step of request handling (ommitting the rendering of post). In our case this will go to the error handler, which is exactly what we want.</div>
+<div>Now we have full blown error handling and with some hocus-pocus on the error template, it even looks quite nice (checkout https://github.com/KPJS/blog/ for details)</div>
+
+<div>Errors are nice, but we want to be able to read them later .. therefore, we welcome Winston who will do just that.</div>
+<div>Reference and quick setup:</div>
+<pre>
+var winston = require('winston');
+
+var logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.File)({
+      name: 'info-file',
+      filename: 'requests.log',
+      level: 'info'
+    }),
+    new (winston.transports.File)({
+      name: 'error-file',
+      filename: 'error.log',
+      level: 'error'
+    })
+  ]
+});
+</pre>
+<div>This will allow us to log into two different files - error and info, just in case that we would want more or less details.</div>
+<div>Now we can log the error message in our fantastic error handler with a simple one-liner addition:</div>
+<pre>
+app.use(function(err, req, res, next) {
+    logger.error("Error: " + err.message, { path: req.path, stackTrace: err.stack });
+    ...
+});
+</pre>
+<div>See you next time .. unit testing to come</div>
