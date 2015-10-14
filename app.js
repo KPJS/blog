@@ -17,9 +17,9 @@ transports: [
 
 var server = require("./server")(logger);
 
-var startCallback = function(err) {    
+var startCallback = function(err, url) {
 		if (!err) {
-			console.log('Server running on '+ this.address().port);
+			console.log('Server running on '+ url);
 		} else {
 			console.log('Zle je');
 		}
