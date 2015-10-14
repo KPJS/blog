@@ -1,7 +1,6 @@
 {
   "name": "KPJS-blog",
   "version": "0.0.0",
-  "engine": "^4.1.1",
   "main": "app.js",
   "dependencies": {
     "express": "^4.13.3",
@@ -13,5 +12,8 @@
   },
   "scripts" : {
     "test": "mocha tests/ --reporter spec"
+  },
+  "engines":{
+      "node": "^4.1.1"
   }
 }
