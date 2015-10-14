@@ -1,7 +1,7 @@
 {
   "name": "KPJS-blog",
   "version": "0.0.0",
-  "engine": "0.12.x",
+  "engine": "^4.1.1",
   "main": "app.js",
   "dependencies": {
     "express": "^4.13.3",
