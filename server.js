@@ -42,14 +42,14 @@ function start(startCallback, logger) {
 		res.render('error.html', { title: err.message, errorCode: err.statusCode });
 	});
 	
-	var srv = app.listen(port, function(err) {
+	var url = app.listen(port, function(err) {
 		if (err) {
-			logger.info('Server initialization failed')
+			logger.info('Server initialization failed');
 		}
 		else {
 			logger.info('Server started');
 		}
-		startCallback(err, srv);
+		startCallback(err, url);
 	});
 }
 
@@ -75,7 +75,7 @@ module.exports = function(logger) {
 				}
 				
 				startCallback(err, srvadr ? "localhost:" + srvadr.port : null);
-			}, logger)
+			}, logger);
 		}, 
 		stop: function() { stop(server, logger); }
 	};
