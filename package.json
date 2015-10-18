@@ -8,12 +8,14 @@
     "winston": "^1.0.1"
   },
   "devDependencies": {
+    "jscs": "^2.3.3",
+    "jshint": "^2.8.0",
     "mocha": "^2.3.3"
   },
-  "scripts" : {
+  "scripts": {
     "test": "mocha tests/ --reporter spec"
   },
-  "engines":{
-      "node": "4.x.x"
+  "engines": {
+    "node": "4.x.x"
   }
 }
