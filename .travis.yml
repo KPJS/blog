@@ -1,4 +1,10 @@
 sudo: false
 language: node_js
 node_js:
-  - "0.12"
+- '0.12'
+env:
+  global:
+  - FTP_ADDRESS=104.41.201.75
+  - FTP_USER=ftpuser
+  - secure: KLB9VQdcaYStkNPFu3JUcI4h9kumRBsM/KeoHmsA8ORa7EE53IgUN2oJ5dfdqgPKWfHAwJiCJgSP/Oaezj/Z5Pm5aox3+hd3d4C2sz+V7uzZ809X+c6/hYGlpu67vwepfrQ5xEVjqSTbOCz63Tce99ZrAGYf7xkngNMuAiCZzAAuJu+U2H1B1n4m5BWO07LeX+dlpkLqSiKR5ZAPdCsUyWQIXhgSA/xrxC52uKJSInggfIZ1fcDoKOy+Z/bgugWR2n1yYcEjtwJYXhTz3cD+AMvP2me1mbktJPlPPfPyccyjN62rA8Fkaerm+PcNdlNmHsRfJxHTMNacvvxodHYgor8d6fWXV/T93XT1eEH5PIqaCHRG20OJRTJGdLEQEwas4i3b9k5XVQKFyAtY2v9KIdaWTZmaRM4lNqM8Xoxu5xL5x7DF+Q0DhDdjs6Xn+1UeQoBSxGtMhyQAQ0SS4e6MK/Iruhtu9NRWIHtjO7sZ8gWi4P+4hHh1XyI2WkhEi9xcDvAUOboFuxZJl3GjJ8i5Aa/4qBUlbeIQBpnb3CRfrhrm5jmnF0HoFFfGoJUanzX2K8eSG6Di39hm9N3ntFQO07uemAP25R6M1i48ad4b0umw9FUBXKVyM3LxtMg5+P0LsC10rzYPcFyLR5/jAepXsb7oGcBrObZ7POGc9KX7pNc=
+after_success: gulp deploy --address $FTP_ADDRESS --user $FTP_USER --password $FTP_PASSWORD
