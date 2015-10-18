@@ -57,6 +57,7 @@ function start(startCallback, logger) {
 function stop(server, logger) {
 	if (server) {
 		server.close();
+		server = null;
 		logger.info('Server stopped');
 	}
 }
