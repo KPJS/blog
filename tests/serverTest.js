@@ -30,4 +30,13 @@ describe('Server initialization', function() {
 			
 		});
 	});
+	
+	it('Server should be stopped', function(done) {
+		server.start(function(err) {
+			server.stop();
+			server.stop();
+			assert.equal(err, null, 'There should be no error');
+			done();
+		});
+	});
 });
