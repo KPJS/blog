@@ -5,7 +5,7 @@ var minimist = require('minimist');
 var args = minimist(process.argv.slice(2));
 
 gulp.task('deploy', function() {
-  var remotePath = '/deploy_project/';
+  var remotePath = '/kpjs_deploy/';
   var conn = ftp.create({
     host: args.address,
     user: args.user,
