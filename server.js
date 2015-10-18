@@ -75,7 +75,7 @@ module.exports = function(logger) {
 					var srvadr = server.address();
 				}
 				
-				startCallback(err, srvadr ? "localhost:" + srvadr.port : null);
+				startCallback(err, srvadr ? srvadr.address + ":" + srvadr.port : null);
 			}, logger);
 		}, 
 		stop: function() { stop(server, logger); }
