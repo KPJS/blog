@@ -1,5 +1,6 @@
 function start(startCallback, logger) {
 	var port = process.env.PORT || 1337;
+	var ipaddress = process.env.IPADDRESS || '127.0.0.1';
 
 	var express = require('express');
 	var hbs = require('hbs');
@@ -42,7 +43,7 @@ function start(startCallback, logger) {
 		res.render('error.html', { title: err.message, errorCode: err.statusCode });
 	});
 	
-	var url = app.listen(port, function(err) {
+	var url = app.listen(port, ipaddress, function(err) {
 		if (err) {
 			logger.info('Server initialization failed');
 		}
