@@ -17,6 +17,6 @@
     "test": "mocha tests/ --reporter spec"
   },
   "engines": {
-    "node": "4.x.x"
+    "node": "4.1.x"
   }
 }
