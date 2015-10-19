@@ -19,7 +19,7 @@ var server = require("./server")(logger);
 
 var startCallback = function(err, url) {
 		if (!err) {
-			console.log('Server running on '+ url);
+			console.log('Server running on ' + url);
 		} else {
 			console.log('Zle je');
 		}
