@@ -30,7 +30,7 @@ function start(startCallback, logger) {
 			res.render('post.html', { title: req.params.file, content: content });
 		});
 	});
-	
+
 	app.use(function(req, res, next) {
 		var error = new Error("Page not found");
 		error.statusCode = 404;
@@ -47,7 +47,7 @@ function start(startCallback, logger) {
 			logger.info('Server initialization failed');
 		}
 		else {
-			logger.info('Server started');
+			logger.info('Server listening');
 		}
 		startCallback(err, server);
 	});
@@ -71,8 +71,7 @@ module.exports = function(logger) {
 					return startCallback(err);
 				}
 				server = srv;
-				var addr = server.address();
-				startCallback(null, addr.address + ":" + addr.port);
+				startCallback(null, server.address());
 			}, logger);
 		},
 		stop: function() { stop(server, logger); }
