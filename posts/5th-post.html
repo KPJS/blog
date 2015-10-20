@@ -1,0 +1,60 @@
+<h1>Despair and hope</h1>
+<p>As mentioned in previous post we had some hard time on last session - our online version was down, so Vaclav created alternative hosting
+(<a href="/posts/4th-Azure virtual machine hosting.html">more here</a>).
+This prevented the rage of our fellow readers but the problem was still there..</p>
+
+<h2>Ressurection of the dead</h2>
+<p>After some desperate digging into Azures logs and not being able to find any familiar messages
+I came to conclusion that our app is not crashing, it is not even launched. So I took one more look into deploymnet log (althought all
+deployments stated 'successful') and there it was - small, yet crucial detail:</p>
+<pre>
+Using server.js as startup script
+</pre>
+<p>The thing is, that when you deploy node app to Azure and don't specify startup script explicitly, Azure makes some 'clever' assumptions
+on what your application's entry poin might be. It first tries <i>server.js</i>, then <i>app.js</i> and then it failes.</p>
+<p>Until last session this was fine, because our entry point was <i>app.js</i> and there was no <i>server.js</i>.
+However, on our last session, we separated server initialization code from <i>app.js</i> into separate module <i>server.js</i> so it coud be tested
+(because last session was about testing). This resulted into <i>server.js</i> taking precedence as app entry point, effectively killing our blog on Azure</p>
+<p>After realizing this, the fix was piece of cake - we just need to specify startup scrip explicitly as <i>app.js</i> and world will be in
+balance again. This is easy to do - we just need to include standard node start script info into <i>package.json</i> - you can see that in
+<a href="https://github.com/KPJS/blog/commit/026d5c59fead235698360004e80457ab715353f5" target="_blank">this commit</a>.</p>
+<p>Now our blog was online again and we could move to another matters.</p>
+
+<h2>Everything's shiny</h2>
+<p>Another enhancement we had in mind was conserning deployment. If you recall our firs session (<a href="/posts/1st-post.html">1st post</a>) we
+hooked up Azure and Travis to our <a href="https://github.com/KPJS/blog">github repo</a>. As a result everytime somebody <u>git push</u>es to our repo (or pull request is merged) 2 things
+are triggered (independent from each other):
+<ul>
+  <li>Azure deployment</li>
+  <li>Travis CI build</li>
+</ul>
+which is fine for amateurs, but we want something better. Would it not be beautiful if Azure deployment was only performed after successful Travis buld?</p>
+<p>First step in achieving this is to disconnect Azure from our GitHub repo. We do that in Azure management portal for our web app,
+where we click 'Disconnect from GitHub'</p>
+<img src="/post5/azureDisconnect.png" alt="disconnect github screen">
+<p>this takes a moment, but once finished we need to connect our app somewhere to deploy from that Travis can use. The solution is to connect to
+local git repository (not local as on our computer, but local as Azure's local). This is done in the same area as we used to disconnect from GitHub,
+but now when we are disconnected we have again an option to 'Set up deployment from source control',</p>
+<img src="/post5/azureSetup1.png" alt="setup repo deployment screen">
+<p>but this time we select 'Local Git repository'.</p>
+<img src="/post5/azureSetup2.png" alt="select local git dialog">
+<p>After a while Azure will create fresh git repository, that we will use to publish our changes to.</p>
+<img src="/post5/azureSetup3.png" alt="repo created mesage">
+<p>To do that we need to setup deploymet account on Azure (account that can <u>git push</u> to this local repo) and setup Travis to
+push into this repo using given deploymnet account after successful build.</p>
+<p>Deployment user creation is done again on main/welcome screen of our web app by clicking 'Setup new deployment credentials'
+(if we havent set any yet). If you already set up deployment credentials you can use those. If you forgot them,
+on the same spot you will have an option 'Reset your deployment credentials'.</p>
+<img src="/post5/azureSetup4.png" alt="deployment credentials dialog">
+<p>Now our Azure setup is finished, time to move on to Travis. We need to tell Travis that it should deploy our app to Azure.
+This is done by adding 'deploy' configuration node to <i>.travis.yml</i> as specified in documentation
+<a href="http://docs.travis-ci.com/user/deployment/azure-web-apps/" target="_blank">here</a>.</p>
+<p>Its possible to enter web app name and deployment credentials directly into <i>.travis.yml</i>, but this is not very wise,
+as they will be visible in pain text. Instead we set them using enviromnet variables of our build.</p>
+<p>This is done on <a href="https://travis-ci.org/">Travis site</a> for our repo, where we select 'Settings' on the right side</p>
+<img src="/post5/travis.png" alt="travis env variables screen">
+<p>Our <i>.travis.yml</i> file than contains only the following</p>
+<img src="/post5/travisConfigFile.png" alt="travis econfig file">
+<p>With this setup Travis will <u>push</u> our GitHub changes to Azure's repo after successful build and we should see deployments
+stacking up on Azure management portal</p>
+<img src="/post5/deploymentsAzure.png" alt="azure deployments screen">
