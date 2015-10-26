@@ -1,0 +1,133 @@
+<div>Comrades, Vaclav is speaking.</div>
+<h2>The night is dark and full of terrors</h2>
+<div>In my last post (<a href="/posts/4th-Azure virtual machine hosting.html">link</a>) I was describing how to setup an alternative hosting place for our blog site. The solution consists of Azure Virtual Machine, IIS FTP Server and couple of scripts. Wait! FTP? FTP is so 90’s! The main problem is security. FTP is sending our passwords as old good plain text. Definitely not cool! The solution could be just to switch from FTP to the FTPS which is natively supported by IIS but we wouldn’t be accepted by cool Linux kids from neighborhood. We need something different!!</div>
+<h2>Don’t trust anybody, life is safer that way </h2>
+<div>We are going to base our solution on SSH and Git (Hey Linuxanians, are you happy now?). Let’s describe whole deployment process from developer’s local machine to the web server. </div>
+</br>
+<div>The story begins in the Mr. Developer’s machine where the new amazing commit has been raised and the new code has been pushed to the fork repository on Github.com. Mr. Developer is going to create “pull request” to the standalone GitHub repository. Pull request will be merged by someone who has appropriate rights to do it. After merge the new code is sent to Travis CI system. Travis will start up new virtual machine, setup environment and run tests using new code. If everything is fine, Travis will connect to the deployment’s machine SSH server and it will trigger deployment script there. The deployment script will run “git pull” command which will download a new code to the deployment’s machine Git repository. The last step will be done by Git post-merge hook which will execute “npm install” command to install all required packages.</div>
+<br/>
+<div>So let’s summarize:</div>
+<ul style="list-style-type:disc">
+<li>Commit to local repository</li>
+<li>Push to the fork repository</li>
+<li>Pull request to the standalone repository</li>
+<li>Merge “Pull request” to the standalone repository</li>
+<li>Run Travis CI virtual machine using new code</li>
+<li>Travis connecting deployment server through SSH</li>
+<li>Running deployment script on the deployment server</li>
+</ul>
+</br>
+</br>
+<h4>Image 01: Deployment structure</h4>
+<img src="/post6/Layers.jpg"/>
+</br>
+<h2>Azure virtual machine setup</h2>
+<div>We will  need clean Azure virtual machine. I was describing how to create it in my previous blog post. You can find more information <a href="/posts/4th-Azure virtual machine hosting.html">here</a>. The next thing is to create SSH endpoint for our brand new virtual machine. So let’s go to the Azure portal. We need to go to the virtual machine endpoints screen (Virtual Machines button -> Virtual Machine instance -> Endpoints). Here we need to click the “Add” button. We can leave “Add a stand-alone endpoint” option and click on the right arrow button. On the second screen we can select SSH predefined option in the Name dropbox. Click “ok” and endpoint will be configured.</div>
+</br>
+</br>
+<h4>Image 02: Endpoints configuration</h4>
+<img src="/post6/Endpoints.jpg"/>
+</br>
+<div>Good. Now we need to install necessary things on our server. Let’s connect to our virtual machine. I prefer to use “chocolatey” to setup things. You can find more information about choco <a href="https://chocolatey.org/">here</a>.</div>
+<br/>
+<div>Open powershell and enter following commands:</div>
+<pre>
+choco install git
+choco install nodejs
+choco install winsshd
+</pre>
+<div>After this process we have ready Git, Node.js and Windows SSH server. Our new SSH server provides functionality to open appropriate port (SSH – 22). Open SSH server management window and click on “Easy Settings” button. There is dropdown called “Open Windows Firewall”. Change its value to “Open port(s) to any computer” and “Save changes”.</div>
+</br>
+</br>
+<h4>Image 03: Open SSH port (firewall)</h4>
+<img src="/post6/SshServerEasySettings.jpg"/>
+</br>
+<div>SSH Server is ready but we need somebody who will be able to connect it. So let’s create new user for that. I was describing how to add new windows account in my previous blog post <a href="/posts/4th-Azure virtual machine hosting.html">here</a>.</div>
+</br>
+</br>
+<h4>Image 04: Create new windows account</h4>
+<img src="/post6/NewUser.jpg"/>
+</br>
+<div>Now we need to create new directory for our source code. We will create directory “blog” under “c:\www” path. We need to configure access rights for Tyrions user account.</div>
+</br>
+</br>
+<h4>Image 05: Directory permissions</h4>
+<img src="/post6/DirPermissions.jpg"/>
+</br>
+<div>Everything is prepared for a little test now. Go to another computer and run Putty. Putty is windows SSH client. It’s free and it’s easy to download it from the internet. So let’s open it and try to connect to our server. You can find IP address on the virtual machine’s desktop. Use the public one. Use Tyrion’s credentials for username and password.</div>
+</br>
+</br>
+<h4>Image 06: Putty client</h4>
+<img src="/post6/Putty.jpg"/>
+</br>
+<div>Now go back to the virtual machine. Open Powershell and navigate to the “c:\www\blog” directory. Execute: git clone[standalone github repository address]</div>
+</br>
+<div>This command will download source code from standalone github repository to our folder. We are almost done here. The last thing which needs to be done is post-merge hook. This hook will run “npm install” command to install all necessary packages after source code download. Let’s open “.git” directory here (it’s hidden). Open Hooks subdirectory. Crete new “post-merge” file:</div>
+<pre>
+#!/bin/sh
+npm install
+</pre>
+<div>Now we need to create deployment script which will be executed by Travis. Open default user directory (c:\users\tyrion) and create new “deploy.ps1” file there:</div>
+<pre>
+echo deploy script
+cd c:\www\blog
+git pull
+echo done
+</pre>
+<br/>
+<div>Done! Our deployment server is configured.</div>
+<h2>Travis configuration</h2>
+<div>We are going to use gulp script as after_success Travis operation. For this script we will need to install a couple of things. Let’s add them to our package.json file:</div>
+<pre>
+"gulp": "^3.9.0",
+"gulp-util": "^3.0.6",
+"minimist": "^1.2.0",
+"simple-ssh": "^0.8.6"
+</pre>
+</br>
+<div>gulpfile.js executes SSH communication to our server and runs deploy.ps1 script:</div>
+<pre>
+var SSH = require('simple-ssh');
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var minimist = require('minimist');
+var args = minimist(process.argv.slice(2));
+
+var ssh = new SSH({
+    host: args.address,
+    user: args.user,
+    pass: args.password
+});
+
+gulp.task('deploy', function(done) {
+
+ssh.exec('powershell -file deploy.ps1', {
+    out: function(stdout) {
+        console.log(stdout);
+    },
+    err: function(stderr) {
+        console.log(stderr); // this-does-not-exist: command not found
+    },
+	exit: function(code) {
+        console.log("EXIT: " + code);
+    }
+})
+.start();
+
+});
+</pre>
+</br>
+<div>And finally our .travis.yml file will look like:</div>
+<pre>
+sudo: false
+language: node_js
+node_js:
+- '4.1'
+after_success: gulp deploy --address $SSH_ADDRESS --user $SSH_USER --password $SSH_PASSWORD
+</pre>
+</br>
+<div>Finally we need to setup Travis variables. Open Travis website, log in, go to repository settings and add SSH variables.</div>
+</br>
+</br>
+<h4>Image 07: Travis environment variables</h4>
+<img src="/post6/TravisVars.jpg"/>

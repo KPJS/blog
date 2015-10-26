@@ -1,65 +1,59 @@
-<html>
-	<head>
-		<meta charset="UTF-8"/>
-		<title>Azure virtual machine hosting</title>
-	</head>
-	<body>
-		<div>Commrades, Vaclav is speaking.</div>
-		<h2>winter is coming::..</h2>
+		<div>Comrades, Vaclav is speaking.</div>
+		<h2>Winter is coming</h2>
 		<div>The last session brought us some bad news. Through the session Johny rashly merged my last poisoned pull request. An application stopped with an error message. The fix was easy but we noticed problem after a deployment. The blog app worked just fine locally but this was not a case on Azure (we are using Azure as a hosting site for our node application). We did a quick analysis and realized that there is a problem with node.js version. Azure doesn’t support version which is requested by our Blog. We were not able to solve this problem until the end of the session. The app is currently off-line and winter is coming.</div>
-		<h2>does the dead frighten you?::..</h2>
+		<h2>Does the dead frighten you?</h2>
 		<div>Our app was dead and we were without a solution. I decided to use different approach. My plan was to create the Azure virtual machine, install node.js and run our Blog there. The problem was how to copy source code from github to the virtual machine automatically. This blog post will tell you the story.</div>
-		<h2>create azure virtual machine::..</h2>
+		<h2>Create azure virtual machine</h2>
 		<div>The first step was to activate my Azure MSDN subscription and log into Azure web portal. It was easy to locate a button for Virtual Machines there. I needed to create a new one so I clicked on the big new button in the bottom. I chose Compute->Virtual Machine->From Gallery option. Let’s follow my steps:</div>
 		
 		</br>
 		</br>
 		<h4>Image 01: Creating new virtual machine</h4>
-		<img src="/AzureNewVM.jpg" style="width: 70%;"/>
+		<img src="/post4/AzureNewVM.jpg"/>
 
 		</br>
 		</br>
 		<h4>Image 02: Choose operating system</h4>
-		<img src="/AzureNewVMServer.jpg" style="width: 70%;"/>
+		<img src="/post4/AzureNewVMServer.jpg"/>
 		
 		</br>
 		</br>
 		<h4>Image 03: Virtual machine configuration</h4>
-		<img src="/AzureNewVMConfiguration.jpg" style="width: 70%;"/>
+		<img src="/post4/AzureNewVMConfiguration.jpg"/>
 		
 		</br>
 		</br>
 		<h4>Image 04: Virtual machine endpoint configuration</h4>
-		<img src="/AzureNewVMConfiguration2.jpg" style="width: 70%;"/>
+		<img src="/post4/AzureNewVMConfiguration2.jpg"/>
 
 		<div>As you could see I chose Windows Server and what is important I preset FTP and HTTP endpoints.</div>
-		<h2>setup iis::..</h2>
+		<h2>Setup iis</h2>
 		<div>If you are following me you will ask how to connect to our brand new virtual machine. It’s quite easy. We will use remote desktop. It is as easy as to click on the connect button on Azure Virtual Machine screen.</div>
 		
 		</br>
 		</br>
 		<h4>Image 05: Connecting to the virtual machine</h4>
-		<img src="/AzureVMConnect.jpg" style="width: 70%;"/>
+		<img src="/post4/AzureVMConnect.jpg"/>
 
 		<div>After this step we are inside the virtual machine and we have some work for the Server Manager. We need to install IIS. Go into Server Manager and then click on Manage->Add Roles and Features window. Server Manager will open a wizard window for you. Let’s go into server roles and choose Web Server (IIS). Here we need only two role services. FTP Server (FTP Service) and Management Tools (IIS Management Console).</div>
 		
 		</br>
 		</br>
 		<h4>Image 06: IIS installation</h4>
-		<img src="/AzureVMIIS1.jpg" style="width: 50%;"/>
+		<img src="/post4/AzureVMIIS1.jpg"/>
 		
 		</br>
 		</br>
 		<h4>Image 07: FTP server installation</h4>
-		<img src="/AzureVMIIS2.jpg" style="width: 50%;"/>
+		<img src="/post4/AzureVMIIS2.jpg"/>
 
-		<h2>setup ftp::..</h2>
+		<h2>Setup ftp</h2>
 		<div>We will need ftp user so let’s create him. In Server Manager click on Tools -> Computer management and add user as you can see on the picture below.</div>
 		
 		</br>
 		</br>
 		<h4>Image 08: New user</h4>
-		<img src="/AzureVMFTPUser.jpg" style="width: 70%;"/>
+		<img src="/post4/AzureVMFTPUser.jpg"/>
 
 		<div>Good. Now let’s go into IIS. In Server Manager click on Tools -> IIS Manager. In Connections panel right click on KPJSBLOGVM node and choose Add FTP Site. In the “Add FTP Site window” choose some fancy FTP site name for example “kpjs_deploy” and physical path – for example “C:\inetpub\ftproot\kpjs_deploy”. In next window choose offered IP address and click to “No SSL” (nobody ain't got time for that). In the last window choose Basic authentication and allow access to all users with read/write permissions. Click finish. Finally our FTP server is alive!</div>
 		<div>NOTE: Don’t forget to add “ftpuser” to “kpjs_deploy” folder permissions. Give him read/write access rights.</div>
@@ -67,19 +61,19 @@
 		</br>
 		</br>
 		<h4>Image 09: Add new FTP site context menu</h4>
-		<img src="/AzureVMAddFTP.jpg" style="width: 30%;"/>
+		<img src="/post4/AzureVMAddFTP.jpg"/>
 		
 		</br>
 		</br>
 		<h4>Image 10: Add FTP Site binding</h4>
-		<img src="/AzureVMAddFTP2.jpg" style="width: 50%;"/>
+		<img src="/post4/AzureVMAddFTP2.jpg"/>
 		
 		<div>Now we will use another computer for connecting to the FTP server. I’m going to use FileZilla as FTP client application. Using FileZilla is pretty straight forward. There are four textboxes in the main window. The host, username, password and port number. Let’s fill this stuff. Host value is public IP (Public IP is written on the virtual machine desktop) of our virtual machine, username is “ftpuser”, password is password :-) and port is “21”. Click Quickconnect. Here we go. We have got first error.</div>
 		
 		</br>
 		</br>
 		<h4>Image 11: It is not possible to connect the FTP server</h4>
-		<img src="/AzureVMFileZillaError.jpg"/>
+		<img src="/post4/AzureVMFileZillaError.jpg"/>
 
 		<div>Ok, we need to fix this. Open IIS and go to the kpjs_deploy site. Here open FTP Firewall Support and enter Public IP there (Public IP is written on the virtual machine desktop). Then we need to go to the top node KPJSBLOGVM and open FTP Firewall Support from this place. There is “Data Channel Port Range” text box. Enter “5000-5000” range there. Don’t forget to click the Apply button. Finally we need to restart FTP service. Why do we need to do this? What is the problem about? You can get detailed explanation here: </div>
 		<a href="http://grantcurell.com/2013/12/31/failed-to-retrieve-directory-listing-filezilla-connecting-to-iis-behind-nat/">LINK</a>
@@ -88,16 +82,16 @@
 		</br>
 		</br>
 		<h4>Image 12: Configure new endpoint</h4>
-		<img src="/AzureVMFtpDataEndpoint.jpg"/>
+		<img src="/post4/AzureVMFtpDataEndpoint.jpg"/>
 		
 		<div>Let’s go back to FileZilla and retry to connect. This time we are successful. Connection to the FTP server is established.</div>
 		
 		</br>
 		</br>
 		<h4>Image 13: Connection successful</h4>
-		<img src="/AzureVMFileZilla2.jpg"/>
+		<img src="/post4/AzureVMFileZilla2.jpg"/>
 
-		<h2>setup travis::..</h2>
+		<h2>Setup travis</h2>
 		<div>We are using Travis continues integration system. So we need to tell Travis to copy source code of our blog app to our virtual machine somehow. Let’s look into Travis documentation: </div>
 		<a href="http://docs.travis-ci.com/user/deployment/custom/">LINK</a>
 		<div>So we need to add “after_success” node to the .travis.yml. There is one problem. Documentation mentioned “curl” command to copy file from Travis. This is not the best solution for us because “curl” can copy only one specified file. We have a lot of files and we don’t want to write down the name of each of them. So we need to find another solution. We are going to use Gulp. Gulp is a fast and intuitive streaming build tool built on Node.js. Check 
@@ -174,11 +168,11 @@ after_success: gulp deploy --address $FTP_ADDRESS --user $FTP_USER --password $F
 		</br>
 		</br>
 		<h4>Image 14: Travis output</h4>
-		<img src="/AzureVMTravisOutput.jpg"/>
+		<img src="/post4/AzureVMTravisOutput.jpg"/>
 
 		<div>The picture above shows that everything is copied to the virtual machine. We are ready for the last step. </div>
 		
-		<h2>run it::..</h2>
+		<h2>Run it</h2>
 		<div>The source code is there. We need to run it. We will install two new things on our virtual machine. Node.js and nodemon. I prefer to use chocolatey (<a href="https://chocolatey.org/">LINK</a>) to install stuff so let’s use it.</div>
 		<pre>
 C:\Users\vaclav>choco install nodejs.install
@@ -235,6 +229,4 @@ re@1.2.1, latest-version@1.0.1)
 		</br>
 		</br>
 		<h4>Image 15: Result</h4>
-		<img src="/AzureVMResult.jpg"/>
-	</body>
-</html>
+		<img src="/post4/AzureVMResult.jpg"/>
