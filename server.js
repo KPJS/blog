@@ -1,9 +1,8 @@
-function start(startCallback, logger) {
+function start(startCallback, logger, mongo) {
 	var port = process.env.PORT || 1337;
 
 	var express = require('express');
 	var hbs = require('hbs');
-	var fs = require('fs');
 
 	var app = express();
 	app.set('view engine', 'html');
@@ -15,19 +14,24 @@ function start(startCallback, logger) {
 		next();
 	});
 
-	app.get('/', function(req, res) {
-		fs.readdir('posts', function(err, files){
-			res.render('index.html', { posts: files });
+	app.get('/', function(req, res, next) {
+		mongo.collection('posts').find().toArray(function(err, items) {
+			if (err) {
+				var error = new Error("Could not retrieve posts");
+				error.statusCode = 500;
+				return next(error);
+			}
+			res.render('index.html', { posts: items.map(function(i) { return i.title; }) });
 		});
 	});
-	app.get('/posts/:file', function(req, res, next) {
-		fs.readFile('posts/' + req.params.file, function(err, content){
+	app.get('/posts/:title', function(req, res, next) {
+		mongo.collection('posts').findOne({ title: req.params.title }, function(err, item) {
 			if (err) {
 				var error = new Error("Post not found");
 				error.statusCode = 404;
 				return next(error);
 			}
-			res.render('post.html', { title: req.params.file, content: content });
+			res.render('post.html', { title: item.title, content: item.content });
 		});
 	});
 
@@ -45,11 +49,12 @@ function start(startCallback, logger) {
 	var server = app.listen(port, function(err) {
 		if (err) {
 			logger.info('Server initialization failed');
+			startCallback(err);
 		}
 		else {
 			logger.info('Server listening');
+			startCallback(null, server);
 		}
-		startCallback(err, server);
 	});
 }
 
@@ -61,7 +66,10 @@ function stop(server, logger) {
 	}
 }
 
-module.exports = function(logger) {
+module.exports = function(logger, db) {
+	if(!logger || !db) {
+		throw "Missing dependency";
+	}
 	var server;
 
 	return {
@@ -72,7 +80,7 @@ module.exports = function(logger) {
 				}
 				server = srv;
 				startCallback(null, server.address());
-			}, logger);
+			}, logger, db);
 		},
 		stop: function() { stop(server, logger); }
 	};
