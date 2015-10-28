@@ -1,6 +1,5 @@
-function start(startCallback, logger, mongo) {
+function start(logger, mongo, callback) {
 	var port = process.env.PORT || 1337;
-
 	var express = require('express');
 	var hbs = require('hbs');
 
@@ -15,15 +14,16 @@ function start(startCallback, logger, mongo) {
 	});
 
 	app.get('/', function(req, res, next) {
-		mongo.collection('posts').find().toArray(function(err, items) {
+		mongo.collection('posts').find().sort({ publishDate: -1 }).toArray(function(err, items) {
 			if (err) {
 				var error = new Error("Could not retrieve posts");
 				error.statusCode = 500;
 				return next(error);
 			}
-			res.render('index.html', { posts: items.map(function(i) { return i.title; }) });
+			res.render('index.html', { posts: items.map(function(i) { return { title: i.title, uri: encodeURIComponent(i.title) }; }) });
 		});
 	});
+
 	app.get('/posts/:title', function(req, res, next) {
 		mongo.collection('posts').findOne({ title: req.params.title }, function(err, item) {
 			if (err) {
@@ -35,12 +35,13 @@ function start(startCallback, logger, mongo) {
 		});
 	});
 
-	app.use(function(req, res, next) {
+	app.use(function(req, res, next) { // handler for all other paths
 		var error = new Error("Page not found");
 		error.statusCode = 404;
 		next(error);
 	});
-	app.use(function(err, req, res, next) {
+
+	app.use(function(err, req, res, next) { // error handler
 		logger.error("Error: " + err.message, { path: req.path, stackTrace: err.stack });
 		res.status(err.statusCode);
 		res.render('error.html', { title: err.message, errorCode: err.statusCode });
@@ -48,12 +49,12 @@ function start(startCallback, logger, mongo) {
 
 	var server = app.listen(port, function(err) {
 		if (err) {
-			logger.info('Server initialization failed');
-			startCallback(err);
+			logger.error('Server initialization failed', err);
+			callback(err);
 		}
 		else {
-			logger.info('Server listening');
-			startCallback(null, server);
+			logger.info('Server started');
+			callback(null, server);
 		}
 	});
 }
@@ -66,22 +67,28 @@ function stop(server, logger) {
 	}
 }
 
-module.exports = function(logger, db) {
-	if(!logger || !db) {
-		throw "Missing dependency";
+module.exports = function(logger, mongo) {
+	if(!logger) {
+		throw "Missing logger";
 	}
+	if(!mongo) {
+		throw "Missing mongo";
+	}
+
 	var server;
 
 	return {
 		start: function(startCallback) {
-			start(function(err, srv) {
+			start(logger, mongo, function(err, srv) {
 				if (err) {
 					return startCallback(err);
 				}
 				server = srv;
 				startCallback(null, server.address());
-			}, logger, db);
+			});
 		},
-		stop: function() { stop(server, logger); }
+		stop: function() {
+			stop(server, logger);
+		}
 	};
 };
