@@ -14,18 +14,18 @@ function start(logger, mongo, callback) {
 	});
 
 	app.get('/', function(req, res, next) {
-		mongo.collection('posts').find().sort({ publishDate: -1 }).toArray(function(err, items) {
+		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
 			if (err) {
 				var error = new Error("Could not retrieve posts");
 				error.statusCode = 500;
 				return next(error);
 			}
-			res.render('index.html', { posts: items.map(function(i) { return { title: i.title, uri: encodeURIComponent(i.title) }; }) });
+			res.render('index.html', { posts: items.map(function(i) { return { title: i.title, uri: i.uri, date: i.publishDate }; }) });
 		});
 	});
 
-	app.get('/posts/:title', function(req, res, next) {
-		mongo.collection('posts').findOne({ title: req.params.title }, function(err, item) {
+	app.get('/posts/:uri', function(req, res, next) {
+		mongo.collection('posts').findOne({ uri: req.params.uri }, { title: 1, content: 1 }, function(err, item) {
 			if (err) {
 				var error = new Error("Post not found");
 				error.statusCode = 404;
