@@ -1,7 +1,7 @@
 var winston = require('winston');
 var mongoClient = require('mongodb').MongoClient;
 
-var mongoConnStr = process.env.SQLAZURECONNSTR_MONGOLABS_BLOG || "mongodb://localhost:27017/blog";
+var mongoConnStr = process.env.CUSTOMCONNSTR_MONGOLABS_BLOG || "mongodb://localhost:27017/blog";
 
 var logger = new (winston.Logger)({
   transports: [
