@@ -1,10 +1,10 @@
 {
   "name": "KPJS-blog",
   "version": "0.0.0",
-  "main": "app.js",
   "dependencies": {
     "express": "^4.13.3",
     "hbs": "^3.1.0",
+    "mongodb": "^2.0.47",
     "winston": "^1.0.1"
   },
   "devDependencies": {
@@ -18,5 +18,13 @@
   },
   "engines": {
     "node": "4.1.x"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KPJS/blog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KPJS/blog/issues"
+  },
+  "license": "Unlicense"
 }

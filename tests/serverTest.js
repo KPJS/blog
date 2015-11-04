@@ -1,6 +1,20 @@
 var assert = require('assert');
-var dummyLogger = { error: function() {}, info: function() {} };
-var server = require('../server')(dummyLogger);
+
+var fakeLogger = { error: function() {}, info: function() {} };
+var fakePosts = [{ title: "first", content: "first content" }, { title: "second", content: "second content" }];
+var fakeMongo = { collection: function(){
+	return {
+		toArray: function(callback){
+			return callback(null, fakePosts);
+		},
+		findOne: function(query, projection, callback){
+			return callback(null, fakePosts[0]);
+		},
+		find: function() { return this; },
+		sort: function() { return this; }
+	};
+}};
+var server = require('../server')(fakeLogger, fakeMongo);
 
 describe('Server initialization', function() {
 	afterEach(function() { server.stop(); });
@@ -24,6 +38,17 @@ describe('Server initialization', function() {
 			var http = require('http');
 
 			http.get('http://localhost:' + addr.port, function(res) {
+				assert.equal(res.statusCode, 200);
+				done();
+			});
+		});
+	});
+
+	it('Post call, 200 is returned', function(done) {
+		server.start(function(err, addr) {
+			var http = require('http');
+
+			http.get('http://localhost:' + addr.port + "/posts/qwerty", function(res) {
 				assert.equal(res.statusCode, 200);
 				done();
 			});

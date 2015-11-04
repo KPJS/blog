@@ -1,9 +1,7 @@
-function start(startCallback, logger) {
+function start(logger, mongo, callback) {
 	var port = process.env.PORT || 1337;
-
 	var express = require('express');
 	var hbs = require('hbs');
-	var fs = require('fs');
 
 	var app = express();
 	app.set('view engine', 'html');
@@ -15,28 +13,35 @@ function start(startCallback, logger) {
 		next();
 	});
 
-	app.get('/', function(req, res) {
-		fs.readdir('posts', function(err, files){
-			res.render('index.html', { posts: files });
+	app.get('/', function(req, res, next) {
+		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
+			if (err) {
+				var error = new Error("Could not retrieve posts");
+				error.statusCode = 500;
+				return next(error);
+			}
+			res.render('index.html', { posts: items.map(function(i) { return { title: i.title, uri: i.uri, date: i.publishDate }; }) });
 		});
 	});
-	app.get('/posts/:file', function(req, res, next) {
-		fs.readFile('posts/' + req.params.file, function(err, content){
+
+	app.get('/posts/:uri', function(req, res, next) {
+		mongo.collection('posts').findOne({ uri: req.params.uri }, { title: 1, content: 1 }, function(err, item) {
 			if (err) {
 				var error = new Error("Post not found");
 				error.statusCode = 404;
 				return next(error);
 			}
-			res.render('post.html', { title: req.params.file, content: content });
+			res.render('post.html', { title: item.title, content: item.content });
 		});
 	});
 
-	app.use(function(req, res, next) {
+	app.use(function(req, res, next) { // handler for all other paths
 		var error = new Error("Page not found");
 		error.statusCode = 404;
 		next(error);
 	});
-	app.use(function(err, req, res, next) {
+
+	app.use(function(err, req, res, next) { // error handler
 		logger.error("Error: " + err.message, { path: req.path, stackTrace: err.stack });
 		res.status(err.statusCode);
 		res.render('error.html', { title: err.message, errorCode: err.statusCode });
@@ -44,12 +49,13 @@ function start(startCallback, logger) {
 
 	var server = app.listen(port, function(err) {
 		if (err) {
-			logger.info('Server initialization failed');
+			logger.error('Server initialization failed', err);
+			callback(err);
 		}
 		else {
-			logger.info('Server listening');
+			logger.info('Server started');
+			callback(null, server);
 		}
-		startCallback(err, server);
 	});
 }
 
@@ -61,19 +67,28 @@ function stop(server, logger) {
 	}
 }
 
-module.exports = function(logger) {
+module.exports = function(logger, mongo) {
+	if(!logger) {
+		throw "Missing logger";
+	}
+	if(!mongo) {
+		throw "Missing mongo";
+	}
+
 	var server;
 
 	return {
 		start: function(startCallback) {
-			start(function(err, srv) {
+			start(logger, mongo, function(err, srv) {
 				if (err) {
 					return startCallback(err);
 				}
 				server = srv;
 				startCallback(null, server.address());
-			}, logger);
+			});
 		},
-		stop: function() { stop(server, logger); }
+		stop: function() {
+			stop(server, logger);
+		}
 	};
 };
