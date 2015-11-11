@@ -2,15 +2,47 @@ function start(logger, mongo, callback) {
 	var port = process.env.PORT || 1337;
 	var express = require('express');
 	var hbs = require('hbs');
+	var passport = require('passport');
+	var twitterStrategy = require('passport-twitter').Strategy;
 
 	var app = express();
 	app.set('view engine', 'html');
 	app.engine('html', hbs.__express);
 	app.use(express.static('static'));
+	
+	passport.use(new twitterStrategy({
+		consumerKey: 'KEY VAR',
+		consumerSecret: 'SECRET VAR',
+		callbackURL: 'http://127.0.0.1:1337/login/twitter/callback'
+	},
+	function(token, tokenSecret, profile, cb) {
+		return cb(null, profile);
+	}));
+
+	passport.serializeUser(function(user, cb) {
+		cb(null, user);
+	});
+	
+	passport.deserializeUser(function(obj, cb) {
+		cb(null, obj);
+	});
+	
+	app.use(require('cookie-parser')());
+	app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+	app.use(passport.initialize());
+	app.use(passport.session());
 
 	app.use(function(req, res, next) {
 		logger.info("Request for " + req.path);
 		next();
+	});
+
+	app.get('/login/twitter', passport.authenticate('twitter'));
+
+	app.get('/login/twitter/callback', 
+	passport.authenticate('twitter', { failureRedirect: '/login/twitter' }),
+	function(req, res) {
+		res.redirect('/');
 	});
 
 	app.get('/', function(req, res, next) {
@@ -44,7 +76,7 @@ function start(logger, mongo, callback) {
 	app.use(function(err, req, res, next) { // error handler
 		logger.error("Error: " + err.message, { path: req.path, stackTrace: err.stack });
 		res.status(err.statusCode);
-		res.render('error.html', { title: err.message, errorCode: err.statusCode });
+		res.render('error.html', { title: err.message });
 	});
 
 	var server = app.listen(port, function(err) {
