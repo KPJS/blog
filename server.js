@@ -2,16 +2,56 @@ function start(logger, mongo, callback) {
 	var port = process.env.PORT || 1337;
 	var express = require('express');
 	var hbs = require('hbs');
+	var session = require('express-session');
+
+	var passport = require('passport');
+	var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+	passport.use(new GoogleStrategy({
+			clientID: process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+			callbackURL: "http://localhost:1337/login/google/callback"
+		},
+		function(token, tokenSecret, profile, done) {
+			process.nextTick(function() {
+				// To keep the example simple, the user's Google profile is returned to
+				// represent the logged-in user.  In a typical application, you would want
+				// to associate the Google account with a user record in your database,
+				// and return that user instead.
+				return done(null, profile);
+			});
+		}
+	));
+
+	passport.serializeUser(function(user, done) {
+		done(null, user);
+	});
+
+	passport.deserializeUser(function(obj, done) {
+		done(null, obj);
+	});
 
 	var app = express();
 	app.set('view engine', 'html');
 	app.engine('html', hbs.__express);
 	app.use(express.static('static'));
+	app.use(session({ secret: 'keyboard cat' }));
+	app.use(passport.initialize());
+	app.use(passport.session());
 
 	app.use(function(req, res, next) {
 		logger.info("Request for " + req.path);
 		next();
 	});
+
+	app.get('/login/google', passport.authenticate('google', { scope: 'https://www.googleapis.com/auth/plus.login' }));
+	app.get('/logout', function(req, res){
+		req.logout();
+		res.redirect('/');
+	});
+	app.get('/login/google/callback',
+		passport.authenticate('google', { failureRedirect: '/googleFail', successRedirect: '/' })
+  );
+	app.get('/googleFail', function(req, res){ res.end('google login failed'); });
 
 	app.get('/', function(req, res, next) {
 		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
@@ -20,7 +60,7 @@ function start(logger, mongo, callback) {
 				error.statusCode = 500;
 				return next(error);
 			}
-			res.render('index.html', { posts: items.map(function(i) { return { title: i.title, uri: i.uri, date: i.publishDate }; }) });
+			res.render('index.html', { user: req.user, posts: items.map(function(i) { return { title: i.title, uri: i.uri, date: i.publishDate }; }) });
 		});
 	});
 
@@ -43,8 +83,9 @@ function start(logger, mongo, callback) {
 
 	app.use(function(err, req, res, next) { // error handler
 		logger.error("Error: " + err.message, { path: req.path, stackTrace: err.stack });
+		err.statusCode = err.statusCode || 500;
 		res.status(err.statusCode);
-		res.render('error.html', { title: err.message, errorCode: err.statusCode });
+		res.render('error.html', { message: err.message, errorCode: err.statusCode });
 	});
 
 	var server = app.listen(port, function(err) {
