@@ -3,56 +3,62 @@ function start(logger, mongo, callback) {
 	var express = require('express');
 	var hbs = require('hbs');
 	var passport = require('passport');
-	var twitterStrategy = require('passport-twitter').Strategy;
+	var TwitterStrategy = require('passport-twitter').Strategy;
 
 	var app = express();
 	app.set('view engine', 'html');
 	app.engine('html', hbs.__express);
 	app.use(express.static('static'));
-	
-	passport.use(new twitterStrategy({
-		consumerKey: 'KEY VAR',
-		consumerSecret: 'SECRET VAR',
+	app.use(require('cookie-parser')());
+	app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+	app.use(passport.initialize());
+	app.use(passport.session());
+
+	passport.use(new TwitterStrategy({
+		consumerKey: 's9tMLfSKmjwrxDmZOwRcLHrP0',
+		consumerSecret: 'zn0epoq6lysmpFqjHpzTMbkVaCmc0po2SU0M4cwewgjwYGKMzo',
 		callbackURL: 'http://127.0.0.1:1337/login/twitter/callback'
 	},
 	function(token, tokenSecret, profile, cb) {
 		return cb(null, profile);
 	}));
 
+	// Serialize user into session
 	passport.serializeUser(function(user, cb) {
 		cb(null, user);
 	});
 	
+	// Serialize user from session
 	passport.deserializeUser(function(obj, cb) {
 		cb(null, obj);
 	});
 	
-	app.use(require('cookie-parser')());
-	app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
-	app.use(passport.initialize());
-	app.use(passport.session());
-
+	
 	app.use(function(req, res, next) {
 		logger.info("Request for " + req.path);
 		next();
 	});
 
+	app.get('/', function(req, res) {
+		res.render('login.html');
+	});
+
 	app.get('/login/twitter', passport.authenticate('twitter'));
 
 	app.get('/login/twitter/callback', 
-	passport.authenticate('twitter', { failureRedirect: '/login/twitter' }),
+	passport.authenticate('twitter', { failureRedirect: '/' }),
 	function(req, res) {
-		res.redirect('/');
+		res.redirect('/bloglist');
 	});
 
-	app.get('/', function(req, res, next) {
+	app.get('/bloglist', function(req, res, next) {
 		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
 			if (err) {
 				var error = new Error("Could not retrieve posts");
 				error.statusCode = 500;
 				return next(error);
 			}
-			res.render('index.html', { posts: items.map(function(i) { return { title: i.title, uri: i.uri, date: i.publishDate }; }) });
+			res.render('bloglist.html', { posts: items.map(function(i) { return { title: i.title, uri: i.uri, date: i.publishDate }; }) });
 		});
 	});
 
@@ -75,8 +81,9 @@ function start(logger, mongo, callback) {
 
 	app.use(function(err, req, res, next) { // error handler
 		logger.error("Error: " + err.message, { path: req.path, stackTrace: err.stack });
+		if(!err.statusCode)	{ err.statusCode = 500; }
 		res.status(err.statusCode);
-		res.render('error.html', { title: err.message });
+		res.render('error.html', { title: err.message, errorCode: err.statusCode });
 	});
 
 	var server = app.listen(port, function(err) {
