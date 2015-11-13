@@ -15,8 +15,8 @@ function start(logger, mongo, callback) {
 	app.use(passport.session());
 
 	passport.use(new TwitterStrategy({
-		consumerKey: 's9tMLfSKmjwrxDmZOwRcLHrP0',
-		consumerSecret: 'zn0epoq6lysmpFqjHpzTMbkVaCmc0po2SU0M4cwewgjwYGKMzo',
+		consumerKey: 'secret',
+		consumerSecret: 'secret',
 		callbackURL: 'http://127.0.0.1:1337/login/twitter/callback'
 	},
 	function(token, tokenSecret, profile, cb) {
