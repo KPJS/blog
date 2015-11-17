@@ -34,7 +34,7 @@ function start(logger, mongo, callback) {
 	app.set('view engine', 'html');
 	app.engine('html', hbs.__express);
 	app.use(express.static('static'));
-	app.use(session({ secret: 'keyboard cat' }));
+	app.use(session({ secret: 'keyboard cat', name: 'kpjs.blog.session', resave: false, saveUninitialized: false }));
 	app.use(passport.initialize());
 	app.use(passport.session());
 
