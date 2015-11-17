@@ -9,7 +9,7 @@ function start(logger, mongo, callback) {
 	passport.use(new GoogleStrategy({
 			clientID: process.env.GOOGLE_CLIENT_ID,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-			callbackURL: "http://localhost:1337/login/google/callback"
+			callbackURL: 'http://' + (process.env.NODE_ENV === 'production' ? 'kpjs.azurewebsites.net' : 'localhost:1337') + '/login/google/callback'
 		},
 		function(token, tokenSecret, profile, done) {
 			process.nextTick(function() {
