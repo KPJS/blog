@@ -4,22 +4,45 @@ module.exports.setup = function(expressApp){
     throw 'Missing express app';
   }
 
+  var url = 'http://' + (process.env.NODE_ENV === 'production' ? 'kpjs.azurewebsites.net' : 'localhost:1337');
   var session = require('express-session');
   var FileStore = require('session-file-store')(session);
   var passport = require('passport');
   var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+  var GithubStrategy = require('passport-github').Strategy;
+  var TwitterStrategy = require('passport-twitter').Strategy;
 
   passport.use(new GoogleStrategy({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: 'http://' + (process.env.NODE_ENV === 'production' ? 'kpjs.azurewebsites.net' : 'localhost:1337') + '/login/google/callback'
+      callbackURL: url + '/login/google/callback'
     },
     function(token, tokenSecret, profile, done) {
       process.nextTick(function() {
-        // To keep the example simple, the user's Google profile is returned to
-        // represent the logged-in user.  In a typical application, you would want
-        // to associate the Google account with a user record in your database,
-        // and return that user instead.
+        return done(null, profile);
+      });
+    }
+  ));
+
+  passport.use(new GithubStrategy({
+      clientID: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      callbackURL: url + '/login/github/callback'
+    },
+    function(accessToken, refreshToken, profile, done){
+      process.nextTick(function() {
+        return done(null, profile);
+      });
+    }
+  ));
+
+  passport.use(new TwitterStrategy({
+      consumerKey: process.env.TWITTER_CLIENT_ID,
+      consumerSecret: process.env.TWITTER_CLIENT_SECRET,
+      callbackURL: url + '/login/twitter/callback'
+    },
+    function(accessToken, refreshToken, profile, done){
+      process.nextTick(function() {
         return done(null, profile);
       });
     }
@@ -38,14 +61,24 @@ module.exports.setup = function(expressApp){
 	expressApp.use(passport.session());
 
   expressApp.get('/login/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/userinfo.email'] }));
-	expressApp.get('/logout', function(req, res){
+  expressApp.get('/login/github', passport.authenticate('github'));
+  expressApp.get('/login/twitter', passport.authenticate('twitter'));
+
+	expressApp.get('/login/google/callback',
+		passport.authenticate('google', { failureRedirect: '/loginFail', successRedirect: '/' })
+  );
+  expressApp.get('/login/github/callback',
+    passport.authenticate('github', { failureRedirect: '/loginFail', successRedirect: '/' })
+  );
+  expressApp.get('/login/twitter/callback',
+    passport.authenticate('twitter', { failureRedirect: '/loginFail', successRedirect: '/' })
+  );
+
+  expressApp.get('/logout', function(req, res){
 		req.logout();
 		req.session.regenerate(function(err){
 			res.redirect('/');
 		});
 	});
-	expressApp.get('/login/google/callback',
-		passport.authenticate('google', { failureRedirect: '/googleFail', successRedirect: '/' })
-  );
-	expressApp.get('/googleFail', function(req, res){ res.end('google login failed'); });
+	expressApp.get('/loginFail', function(req, res){ res.end('login failed'); });
 };
