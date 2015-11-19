@@ -44,10 +44,12 @@ function start(logger, mongo, callback) {
 		next();
 	});
 
-	app.get('/login/google', passport.authenticate('google', { scope: 'https://www.googleapis.com/auth/plus.login' }));
+	app.get('/login/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/userinfo.email'] }));
 	app.get('/logout', function(req, res){
 		req.logout();
-		res.redirect('/');
+		req.session.destroy(function(err){
+			res.redirect('/');
+		});
 	});
 	app.get('/login/google/callback',
 		passport.authenticate('google', { failureRedirect: '/googleFail', successRedirect: '/' })
