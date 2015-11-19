@@ -1,4 +1,4 @@
-function start(logger, mongo, callback) {
+function start(logger, mongo, authenticator, callback) {
 	var port = process.env.PORT || 1337;
 	var express = require('express');
 	var hbs = require('hbs');
@@ -13,6 +13,8 @@ function start(logger, mongo, callback) {
 		next();
 	});
 
+	authenticator.setup(app);
+
 	app.get('/', function(req, res, next) {
 		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
 			if (err) {
@@ -20,7 +22,7 @@ function start(logger, mongo, callback) {
 				error.statusCode = 500;
 				return next(error);
 			}
-			res.render('index.html', { posts: items.map(function(i) { return { title: i.title, uri: i.uri, date: i.publishDate }; }) });
+			res.render('index.html', { user: req.user, posts: items.map(function(i) { return { title: i.title, uri: i.uri, date: i.publishDate }; }) });
 		});
 	});
 
@@ -43,8 +45,9 @@ function start(logger, mongo, callback) {
 
 	app.use(function(err, req, res, next) { // error handler
 		logger.error("Error: " + err.message, { path: req.path, stackTrace: err.stack });
+		err.statusCode = err.statusCode || 500;
 		res.status(err.statusCode);
-		res.render('error.html', { title: err.message, errorCode: err.statusCode });
+		res.render('error.html', { message: err.message, errorCode: err.statusCode });
 	});
 
 	var server = app.listen(port, function(err) {
@@ -67,19 +70,22 @@ function stop(server, logger) {
 	}
 }
 
-module.exports = function(logger, mongo) {
+module.exports = function(logger, mongo, authenticator) {
 	if(!logger) {
 		throw "Missing logger";
 	}
 	if(!mongo) {
 		throw "Missing mongo";
 	}
+	if(!authenticator) {
+		throw "Missing authenticator";
+	}
 
 	var server;
 
 	return {
 		start: function(startCallback) {
-			start(logger, mongo, function(err, srv) {
+			start(logger, mongo, authenticator, function(err, srv) {
 				if (err) {
 					return startCallback(err);
 				}
