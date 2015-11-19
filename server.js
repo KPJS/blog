@@ -1,60 +1,19 @@
-function start(logger, mongo, callback) {
+function start(logger, mongo, authenticator, callback) {
 	var port = process.env.PORT || 1337;
 	var express = require('express');
 	var hbs = require('hbs');
-	var session = require('express-session');
-	var FileStore = require('session-file-store')(session);
-
-	var passport = require('passport');
-	var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-	passport.use(new GoogleStrategy({
-			clientID: process.env.GOOGLE_CLIENT_ID,
-			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-			callbackURL: 'http://' + (process.env.NODE_ENV === 'production' ? 'kpjs.azurewebsites.net' : 'localhost:1337') + '/login/google/callback'
-		},
-		function(token, tokenSecret, profile, done) {
-			process.nextTick(function() {
-				// To keep the example simple, the user's Google profile is returned to
-				// represent the logged-in user.  In a typical application, you would want
-				// to associate the Google account with a user record in your database,
-				// and return that user instead.
-				return done(null, profile);
-			});
-		}
-	));
-
-	passport.serializeUser(function(user, done) {
-		done(null, user);
-	});
-
-	passport.deserializeUser(function(obj, done) {
-		done(null, obj);
-	});
 
 	var app = express();
 	app.set('view engine', 'html');
 	app.engine('html', hbs.__express);
 	app.use(express.static('static'));
-	app.use(session({ secret: 'keyboard cat', name: 'kpjs.blog.session', resave: true, saveUninitialized: true, store: new FileStore() }));
-	app.use(passport.initialize());
-	app.use(passport.session());
 
 	app.use(function(req, res, next) {
 		logger.info("Request for " + req.path);
 		next();
 	});
 
-	app.get('/login/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/userinfo.email'] }));
-	app.get('/logout', function(req, res){
-		req.logout();
-		req.session.destroy(function(err){
-			res.redirect('/');
-		});
-	});
-	app.get('/login/google/callback',
-		passport.authenticate('google', { failureRedirect: '/googleFail', successRedirect: '/' })
-  );
-	app.get('/googleFail', function(req, res){ res.end('google login failed'); });
+	authenticator.setup(app);
 
 	app.get('/', function(req, res, next) {
 		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
@@ -111,19 +70,22 @@ function stop(server, logger) {
 	}
 }
 
-module.exports = function(logger, mongo) {
+module.exports = function(logger, mongo, authenticator) {
 	if(!logger) {
 		throw "Missing logger";
 	}
 	if(!mongo) {
 		throw "Missing mongo";
 	}
+	if(!authenticator) {
+		throw "Missing authenticator";
+	}
 
 	var server;
 
 	return {
 		start: function(startCallback) {
-			start(logger, mongo, function(err, srv) {
+			start(logger, mongo, authenticator, function(err, srv) {
 				if (err) {
 					return startCallback(err);
 				}
