@@ -13,8 +13,9 @@ var fakeMongo = { collection: function(){
 		find: function() { return this; },
 		sort: function() { return this; }
 	};
-}};
-var server = require('../server')(fakeLogger, fakeMongo);
+} };
+var fakeAuth = { setup: function(){} };
+var server = require('../server')(fakeLogger, fakeMongo, fakeAuth);
 
 describe('Server initialization', function() {
 	afterEach(function() { server.stop(); });

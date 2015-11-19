@@ -40,7 +40,7 @@ module.exports.setup = function(expressApp){
   expressApp.get('/login/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/userinfo.email'] }));
 	expressApp.get('/logout', function(req, res){
 		req.logout();
-		req.session.destroy(function(err){
+		req.session.regenerate(function(err){
 			res.redirect('/');
 		});
 	});
