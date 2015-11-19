@@ -34,3 +34,6 @@ node_modules
 
 #Visual Studio Code folder
 .vscode/
+
+#session file storage
+sessions

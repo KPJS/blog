@@ -3,6 +3,7 @@ function start(logger, mongo, callback) {
 	var express = require('express');
 	var hbs = require('hbs');
 	var session = require('express-session');
+	var FileStore = require('session-file-store')(session);
 
 	var passport = require('passport');
 	var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
@@ -34,7 +35,7 @@ function start(logger, mongo, callback) {
 	app.set('view engine', 'html');
 	app.engine('html', hbs.__express);
 	app.use(express.static('static'));
-	app.use(session({ secret: 'keyboard cat', name: 'kpjs.blog.session', resave: false, saveUninitialized: false }));
+	app.use(session({ secret: 'keyboard cat', name: 'kpjs.blog.session', resave: true, saveUninitialized: true, store: new FileStore() }));
 	app.use(passport.initialize());
 	app.use(passport.session());
 
