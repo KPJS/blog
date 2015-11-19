@@ -15,8 +15,8 @@ function start(logger, mongo, callback) {
 	app.use(passport.session());
 
 	passport.use(new TwitterStrategy({
-		consumerKey: 'secret',
-		consumerSecret: 'secret',
+		consumerKey: 'eqi8dOHHJwTYv8ZwlObPC5tti',
+		consumerSecret: 'wS17bJvnYM2LGxzn0YLVHEKtHf5GyPKtMHpKVDeb2yjKNPbgp9',
 		callbackURL: 'http://127.0.0.1:1337/login/twitter/callback'
 	},
 	function(token, tokenSecret, profile, cb) {
@@ -39,26 +39,14 @@ function start(logger, mongo, callback) {
 		next();
 	});
 
-	app.get('/', function(req, res) {
-		res.render('login.html');
-	});
-
-	app.get('/login/twitter', passport.authenticate('twitter'));
-
-	app.get('/login/twitter/callback', 
-	passport.authenticate('twitter', { failureRedirect: '/' }),
-	function(req, res) {
-		res.redirect('/bloglist');
-	});
-
-	app.get('/bloglist', function(req, res, next) {
+	app.get('/', function(req, res, next) {
 		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
 			if (err) {
 				var error = new Error("Could not retrieve posts");
 				error.statusCode = 500;
 				return next(error);
 			}
-			res.render('bloglist.html', { posts: items.map(function(i) { return { title: i.title, uri: i.uri, date: i.publishDate }; }) });
+			res.render('index.html', { user: req.user, posts: items.map(function(i) { return { title: i.title, uri: i.uri, date: i.publishDate }; }) });
 		});
 	});
 
@@ -73,6 +61,19 @@ function start(logger, mongo, callback) {
 		});
 	});
 
+	app.get('/login/twitter', passport.authenticate('twitter'));
+
+	app.get('/login/twitter/callback', 
+	passport.authenticate('twitter', { failureRedirect: '/' }),
+	function(req, res) {
+		res.redirect('/');
+	});
+
+	app.get('/logout', function(req, res){
+		req.logout();
+		res.redirect('/');
+	});
+
 	app.use(function(req, res, next) { // handler for all other paths
 		var error = new Error("Page not found");
 		error.statusCode = 404;
@@ -81,9 +82,9 @@ function start(logger, mongo, callback) {
 
 	app.use(function(err, req, res, next) { // error handler
 		logger.error("Error: " + err.message, { path: req.path, stackTrace: err.stack });
-		if(!err.statusCode)	{ err.statusCode = 500; }
+		err.statusCode = err.statusCode || 500;
 		res.status(err.statusCode);
-		res.render('error.html', { title: err.message, errorCode: err.statusCode });
+		res.render('error.html', { message: err.message, errorCode: err.statusCode });
 	});
 
 	var server = app.listen(port, function(err) {

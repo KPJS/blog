@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>KPJS blog</title>
+    </head>
+    <body>
+        {{#if user}}
+        <img src="{{user.photos.[0].value}}" alt="avatar"> <i>{{user.displayName}}</i> (<a href="/logout">logout</a>)
+        {{else}}
+        <i>not logged in</i> (<a href="/login/twitter">login with Twitter</a>)
+        {{/if}}
+        <ul>
+            {{#each posts}}<li><a href="posts/{{uri}}">{{title}}</a>({{date}})</li>{{/each}}    
+        </ul>
+    </body>
+</html>
