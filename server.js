@@ -2,12 +2,38 @@ function start(logger, mongo, callback) {
 	var port = process.env.PORT || 1337;
 	var express = require('express');
 	var hbs = require('hbs');
+	var passport = require('passport');
+	var TwitterStrategy = require('passport-twitter').Strategy;
 
 	var app = express();
 	app.set('view engine', 'html');
 	app.engine('html', hbs.__express);
 	app.use(express.static('static'));
+	app.use(require('cookie-parser')());
+	app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+	app.use(passport.initialize());
+	app.use(passport.session());
 
+	passport.use(new TwitterStrategy({
+		consumerKey: 'eqi8dOHHJwTYv8ZwlObPC5tti',
+		consumerSecret: 'wS17bJvnYM2LGxzn0YLVHEKtHf5GyPKtMHpKVDeb2yjKNPbgp9',
+		callbackURL: 'http://127.0.0.1:1337/login/twitter/callback'
+	},
+	function(token, tokenSecret, profile, cb) {
+		return cb(null, profile);
+	}));
+
+	// Serialize user into session
+	passport.serializeUser(function(user, cb) {
+		cb(null, user);
+	});
+	
+	// Serialize user from session
+	passport.deserializeUser(function(obj, cb) {
+		cb(null, obj);
+	});
+	
+	
 	app.use(function(req, res, next) {
 		logger.info("Request for " + req.path);
 		next();
@@ -20,7 +46,7 @@ function start(logger, mongo, callback) {
 				error.statusCode = 500;
 				return next(error);
 			}
-			res.render('index.html', { posts: items.map(function(i) { return { title: i.title, uri: i.uri, date: i.publishDate }; }) });
+			res.render('index.html', { user: req.user, posts: items.map(function(i) { return { title: i.title, uri: i.uri, date: i.publishDate }; }) });
 		});
 	});
 
@@ -35,6 +61,19 @@ function start(logger, mongo, callback) {
 		});
 	});
 
+	app.get('/login/twitter', passport.authenticate('twitter'));
+
+	app.get('/login/twitter/callback', 
+	passport.authenticate('twitter', { failureRedirect: '/' }),
+	function(req, res) {
+		res.redirect('/');
+	});
+
+	app.get('/logout', function(req, res){
+		req.logout();
+		res.redirect('/');
+	});
+
 	app.use(function(req, res, next) { // handler for all other paths
 		var error = new Error("Page not found");
 		error.statusCode = 404;
@@ -43,8 +82,9 @@ function start(logger, mongo, callback) {
 
 	app.use(function(err, req, res, next) { // error handler
 		logger.error("Error: " + err.message, { path: req.path, stackTrace: err.stack });
+		err.statusCode = err.statusCode || 500;
 		res.status(err.statusCode);
-		res.render('error.html', { title: err.message, errorCode: err.statusCode });
+		res.render('error.html', { message: err.message, errorCode: err.statusCode });
 	});
 
 	var server = app.listen(port, function(err) {
