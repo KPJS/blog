@@ -37,18 +37,21 @@ function start(logger, mongo, authenticator, callback) {
 		});
 	});
 
-	app.use(function(req, res, next) { // handler for all other paths
+	// handler for all other paths
+	app.use(function(req, res, next) {
 		var error = new Error("Page not found");
 		error.statusCode = 404;
 		next(error);
 	});
 
-	app.use(function(err, req, res, next) { // error handler
+	// error handler
+	app.use(function(err, req, res, next) { // jshint ignore:line
 		logger.error("Error: " + err.message, { path: req.path, stackTrace: err.stack });
 		err.statusCode = err.statusCode || 500;
 		res.status(err.statusCode);
 		res.render('error.html', { message: err.message, errorCode: err.statusCode });
 	});
+
 
 	var server = app.listen(port, function(err) {
 		if (err) {

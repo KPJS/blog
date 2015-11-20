@@ -1,3 +1,4 @@
+/* jshint -W071 */ //ignore 'function has too many statements' jshint warning
 module.exports.setup = function(expressApp){
   if(!expressApp)
   {
@@ -76,7 +77,7 @@ module.exports.setup = function(expressApp){
 
   expressApp.get('/logout', function(req, res){
 		req.logout();
-		req.session.regenerate(function(err){
+		req.session.regenerate(function(){
 			res.redirect('/');
 		});
 	});

@@ -20,7 +20,9 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "mocha tests/ --reporter spec"
+    "pretest": "jshint --verbose *.js",
+    "test": "mocha tests/ --reporter spec",
+    "posttest": "jscs --verbose *.js"
   },
   "engines": {
     "node": "4.1.x"
