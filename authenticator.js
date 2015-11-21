@@ -61,7 +61,7 @@ module.exports.setup = function(expressApp){
 	expressApp.use(passport.initialize());
 	expressApp.use(passport.session());
 
-  expressApp.get('/login/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/userinfo.email'] }));
+  expressApp.get('/login/google', passport.authenticate('google', { scope: 'profile' }));
   expressApp.get('/login/github', passport.authenticate('github'));
   expressApp.get('/login/twitter', passport.authenticate('twitter'));
 
