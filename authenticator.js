@@ -16,7 +16,8 @@ module.exports.setup = function(expressApp){
   passport.use(new GoogleStrategy({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: url + '/login/google/callback'
+      callbackURL: url + '/login/google/callback',
+      state: true
     },
     function(token, tokenSecret, profile, done) {
       process.nextTick(function() {
@@ -28,7 +29,8 @@ module.exports.setup = function(expressApp){
   passport.use(new GithubStrategy({
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: url + '/login/github/callback'
+      callbackURL: url + '/login/github/callback',
+      state: true
     },
     function(accessToken, refreshToken, profile, done){
       process.nextTick(function() {
@@ -40,7 +42,8 @@ module.exports.setup = function(expressApp){
   passport.use(new TwitterStrategy({
       consumerKey: process.env.TWITTER_CLIENT_ID,
       consumerSecret: process.env.TWITTER_CLIENT_SECRET,
-      callbackURL: url + '/login/twitter/callback'
+      callbackURL: url + '/login/twitter/callback',
+      state: true
     },
     function(accessToken, refreshToken, profile, done){
       process.nextTick(function() {
