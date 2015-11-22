@@ -4,19 +4,19 @@
   "dependencies": {
     "express": "^4.13.3",
     "express-session": "^1.12.1",
-    "hbs": "^3.1.0",
-    "mongodb": "^2.0.47",
+    "hbs": "^4.0.0",
+    "mongodb": "^2.0.49",
     "passport": "^0.3.2",
     "passport-google-oauth": "^0.2.0",
     "passport-github": "^1.0.0",
     "passport-twitter": "^1.0.3",
     "session-file-store": "0.0.22",
-    "winston": "^1.0.1"
+    "winston": "^2.1.1"
   },
   "devDependencies": {
-    "jscs": "^2.3.3",
+    "jscs": "^2.6.0",
     "jshint": "^2.8.0",
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.4"
   },
   "scripts": {
     "start": "node app.js",
