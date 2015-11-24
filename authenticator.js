@@ -23,7 +23,7 @@ module.exports.setup = function(expressApp, mongo){
       callbackURL: url + '/login/google/callback',
       state: true
     },
-    authCallback
+    authCallback(function(p) { return p.photos[0].value; })
   ));
 
   passport.use(new GithubStrategy({
@@ -32,7 +32,9 @@ module.exports.setup = function(expressApp, mongo){
       callbackURL: url + '/login/github/callback',
       state: true
     },
-    authCallback
+    //jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+    authCallback(function(p) { return p._json.avatar_url; })
+    //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   ));
 
   passport.use(new TwitterStrategy({
@@ -41,17 +43,19 @@ module.exports.setup = function(expressApp, mongo){
       callbackURL: url + '/login/twitter/callback',
       state: true
     },
-    authCallback
+    authCallback(function(p) { return p.photos[0].value; })
   ));
 
-  function authCallback(token, tokenSecret, profile, done) {
-    mongo.collection('users').findAndModify({ provider: profile.provider, providerId: profile.id }, [], { $setOnInsert: { name: profile.displayName } }, { new: true, upsert: true },
-      function(err, item){
-        if(err){
-          return done(err);
-        }
-        return done(null, { id: item.value._id, name: item.value.name, avatarUrl: profile.photos[0].value });
-      });
+  function authCallback(avatarCallback){
+    return function(token, tokenSecret, profile, done) {
+      mongo.collection('users').findAndModify({ provider: profile.provider, providerId: profile.id }, [], { $setOnInsert: { name: profile.displayName } }, { new: true, upsert: true },
+        function(err, item){
+          if(err){
+            return done(err);
+          }
+          return done(null, { id: item.value._id, name: item.value.name, avatarUrl: avatarCallback(profile) });
+        });
+    };
   }
 
   passport.serializeUser(function(user, done) {
