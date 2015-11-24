@@ -1,10 +1,15 @@
 /* jshint -W071 */ //ignore 'function has too many statements' jshint warning
-module.exports.setup = function(expressApp){
+module.exports.setup = function(expressApp, mongo) {
   if(!expressApp)
   {
     throw 'Missing express app';
   }
+  if (!mongo)
+  {
+    throw 'Missing Mongo database';
+  }
 
+  var userRepository = require("./userRepository")(mongo);
   var url = 'http://' + (process.env.NODE_ENV === 'production' ? 'kpjs.azurewebsites.net' : 'localhost:1337');
   var session = require('express-session');
   var FileStore = require('session-file-store')(session);
@@ -21,7 +26,9 @@ module.exports.setup = function(expressApp){
     },
     function(token, tokenSecret, profile, done) {
       process.nextTick(function() {
-        return done(null, profile);
+        userRepository.findAndInsertUser(profile, function(user) { 
+          return done(null, {id:user.id, name:user.name, avatarUrl:profile.photos[0].value}); 
+          });      
       });
     }
   ));
@@ -34,7 +41,9 @@ module.exports.setup = function(expressApp){
     },
     function(accessToken, refreshToken, profile, done){
       process.nextTick(function() {
-        return done(null, profile);
+        userRepository.findAndInsertUser(profile, function(user) { 
+          return done(null, {id:user.id, name:user.name, avatarUrl:profile.photos[0].value}); 
+          });      
       });
     }
   ));
@@ -47,7 +56,9 @@ module.exports.setup = function(expressApp){
     },
     function(accessToken, refreshToken, profile, done){
       process.nextTick(function() {
-        return done(null, profile);
+        userRepository.findAndInsertUser(profile, function(user) { 
+          return done(null, {id:user.id, name:user.name, avatarUrl:profile.photos[0].value}); 
+          });      
       });
     }
   ));
