@@ -25,11 +25,9 @@ module.exports.setup = function(expressApp, mongo) {
       state: true
     },
     function(token, tokenSecret, profile, done) {
-      process.nextTick(function() {
-        userRepository.findAndInsertUser(profile, function(user) { 
-          return done(null, {id:user.id, name:user.name, avatarUrl:profile.photos[0].value}); 
-          });      
-      });
+        userRepository.findAndInsertUser(profile, function(user) {
+          return done(null, { id: user.id, name: user.name, avatarUrl: profile.photos[0].value });
+          });
     }
   ));
 
@@ -39,12 +37,10 @@ module.exports.setup = function(expressApp, mongo) {
       callbackURL: url + '/login/github/callback',
       state: true
     },
-    function(accessToken, refreshToken, profile, done){
-      process.nextTick(function() {
-        userRepository.findAndInsertUser(profile, function(user) { 
-          return done(null, {id:user.id, name:user.name, avatarUrl:profile.photos[0].value}); 
-          });      
-      });
+    function(accessToken, refreshToken, profile, done) {
+        userRepository.findAndInsertUser(profile, function(user) {
+          return done(null, { id: user.id, name: user.name, avatarUrl: profile.photos[0].value });
+          });
     }
   ));
 
@@ -55,11 +51,9 @@ module.exports.setup = function(expressApp, mongo) {
       state: true
     },
     function(accessToken, refreshToken, profile, done){
-      process.nextTick(function() {
-        userRepository.findAndInsertUser(profile, function(user) { 
-          return done(null, {id:user.id, name:user.name, avatarUrl:profile.photos[0].value}); 
-          });      
-      });
+        userRepository.findAndInsertUser(profile, function(user) {
+          return done(null, { id: user.id, name: user.name, avatarUrl: profile.photos[0].value });
+          });
     }
   ));
 
