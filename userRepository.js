@@ -7,16 +7,17 @@ module.exports = function(mongo) {
 		findAndInsertUser: function(authProfile, dbUserCallback) {
 			mongo.collection("users").findAndModify(
 				{ providerId: authProfile.id },
-				[],               
-				{ $set: { 
+				[],
+				{ $set: {
 							name: authProfile.displayName,
 							provider: authProfile.provider,
-							providerId: authProfile.id 
-						}},
+							providerId: authProfile.id
+						}
+				},
 				{ new: true, upsert: true },
 				function(err,result) {
 					dbUserCallback(result.value);
-				});		
+				});
 		}
 	};
 };
