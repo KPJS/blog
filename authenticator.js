@@ -25,7 +25,8 @@ module.exports.setup = function(expressApp, mongo) {
       state: true
     },
     function(token, tokenSecret, profile, done) {
-        userRepository.findAndInsertUser(profile, function(user) {
+        userRepository.findAndInsertUser(profile, function(err, user) {
+          if (err) { done(err); }
           return done(null, { id: user.id, name: user.name, avatarUrl: profile.photos[0].value });
           });
     }
@@ -38,8 +39,11 @@ module.exports.setup = function(expressApp, mongo) {
       state: true
     },
     function(accessToken, refreshToken, profile, done) {
-        userRepository.findAndInsertUser(profile, function(user) {
-          return done(null, { id: user.id, name: user.name, avatarUrl: profile.photos[0].value });
+        userRepository.findAndInsertUser(profile, function(err, user) {
+          if (err) { done(err); }
+          //jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+          return done(null, { id: user.id, name: user.name, avatarUrl: profile._json.avatar_url });
+          //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
           });
     }
   ));
@@ -51,7 +55,8 @@ module.exports.setup = function(expressApp, mongo) {
       state: true
     },
     function(accessToken, refreshToken, profile, done){
-        userRepository.findAndInsertUser(profile, function(user) {
+        userRepository.findAndInsertUser(profile, function(err, user) {
+          if (err) { done(err); }
           return done(null, { id: user.id, name: user.name, avatarUrl: profile.photos[0].value });
           });
     }
