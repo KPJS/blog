@@ -1,8 +1,12 @@
 /* jshint -W071 */ //ignore 'function has too many statements' jshint warning
-module.exports.setup = function(expressApp){
+module.exports.setup = function(expressApp, mongo){
   if(!expressApp)
   {
     throw 'Missing express app';
+  }
+  if(!mongo)
+  {
+    throw 'Missing mongo';
   }
 
   var url = 'http://' + (process.env.NODE_ENV === 'production' ? 'kpjs.azurewebsites.net' : 'localhost:1337');
@@ -19,11 +23,7 @@ module.exports.setup = function(expressApp){
       callbackURL: url + '/login/google/callback',
       state: true
     },
-    function(token, tokenSecret, profile, done) {
-      process.nextTick(function() {
-        return done(null, profile);
-      });
-    }
+    authCallback(function(p) { return p.photos[0].value; })
   ));
 
   passport.use(new GithubStrategy({
@@ -32,11 +32,9 @@ module.exports.setup = function(expressApp){
       callbackURL: url + '/login/github/callback',
       state: true
     },
-    function(accessToken, refreshToken, profile, done){
-      process.nextTick(function() {
-        return done(null, profile);
-      });
-    }
+    //jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+    authCallback(function(p) { return p._json.avatar_url; })
+    //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   ));
 
   passport.use(new TwitterStrategy({
@@ -45,12 +43,20 @@ module.exports.setup = function(expressApp){
       callbackURL: url + '/login/twitter/callback',
       state: true
     },
-    function(accessToken, refreshToken, profile, done){
-      process.nextTick(function() {
-        return done(null, profile);
-      });
-    }
+    authCallback(function(p) { return p.photos[0].value; })
   ));
+
+  function authCallback(avatarCallback){
+    return function(token, tokenSecret, profile, done) {
+      mongo.collection('users').findAndModify({ provider: profile.provider, providerId: profile.id }, [], { $setOnInsert: { name: profile.displayName } }, { new: true, upsert: true },
+        function(err, item){
+          if(err){
+            return done(err);
+          }
+          return done(null, { id: item.value._id, name: item.value.name, avatarUrl: avatarCallback(profile) });
+        });
+    };
+  }
 
   passport.serializeUser(function(user, done) {
     done(null, user);

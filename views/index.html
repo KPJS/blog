@@ -6,7 +6,7 @@
     </head>
     <body>
         {{#if user}}
-        <img src="{{user.photos.[0].value}}" alt="avatar"> <i>{{user.displayName}}</i> (<a href="/logout">logout</a>)
+        <img src="{{user.avatarUrl}}" alt="avatar" height="50"> <i>{{user.name}}</i> (<a href="/logout">logout</a>)
         {{else}}
         <i>not logged in</i> (<a href="/login/google">Google login</a> <a href="/login/github">Github login</a> <a href="/login/twitter">Twitter login</a>)
         {{/if}}

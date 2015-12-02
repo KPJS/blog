@@ -13,7 +13,7 @@ function start(logger, mongo, authenticator, callback) {
 		next();
 	});
 
-	authenticator.setup(app);
+	authenticator.setup(app, mongo);
 
 	app.get('/', function(req, res, next) {
 		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
