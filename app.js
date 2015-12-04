@@ -13,7 +13,8 @@ var logger = new (winston.Logger)({
       new (winston.transports.File)({
         name: 'error-file',
         filename: 'error.log',
-        level: 'error'
+        level: 'error',
+        handleExceptions: true
       })
   ]
 });

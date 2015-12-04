@@ -52,14 +52,13 @@ function start(logger, mongo, authenticator, callback) {
 		res.render('error.html', { message: err.message, errorCode: err.statusCode });
 	});
 
-
 	var server = app.listen(port, function(err) {
 		if (err) {
 			logger.error('Server initialization failed', err);
 			callback(err);
 		}
 		else {
-			logger.info('Server started');
+			logger.info('Server listening');
 			callback(null, server);
 		}
 	});
