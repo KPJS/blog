@@ -26,7 +26,7 @@
     "posttest": "jscs --verbose *.js"
   },
   "engines": {
-    "node": "4.1.x"
+    "node": "4.2.x"
   },
   "repository": {
     "type": "git",
