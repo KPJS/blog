@@ -1,5 +1,4 @@
-/* jshint -W071 */ //ignore 'function has too many statements' jshint warning
-module.exports.setup = function(expressApp, mongo, logger){
+module.exports.setup = function(expressApp, mongo){
   if(!expressApp)
   {
     throw 'Missing express app';
@@ -10,8 +9,6 @@ module.exports.setup = function(expressApp, mongo, logger){
   }
 
   var url = 'http://' + (process.env.NODE_ENV === 'production' ? 'kpjs.azurewebsites.net' : 'localhost:1337');
-  var session = require('express-session');
-  var FileStore = require('session-file-store')(session);
   var passport = require('passport');
   var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
   var GithubStrategy = require('passport-github').Strategy;
@@ -76,17 +73,13 @@ module.exports.setup = function(expressApp, mongo, logger){
   passport.deserializeUser(function(obj, done) {
     done(null, obj);
   });
-
-  expressApp.use(session({
-    secret: 'kPjS s3cr3t',
-    name: 'kpjs.blog.session',
-    resave: true,
-    saveUninitialized: true,
-    store: new FileStore({ ttl: 1800, reapInterval: 1800, logFn: logger.info })
-  }));
 	expressApp.use(passport.initialize());
 	expressApp.use(passport.session());
 
+  setupAuthRoutes(expressApp, passport);
+};
+
+function setupAuthRoutes(expressApp, passport){
   expressApp.get('/login/google', passport.authenticate('google', { scope: 'profile' }));
   expressApp.get('/login/github', passport.authenticate('github'));
   expressApp.get('/login/twitter', passport.authenticate('twitter'));
@@ -112,4 +105,4 @@ module.exports.setup = function(expressApp, mongo, logger){
 		});
 	});
 	expressApp.get('/loginFail', function(req, res){ res.end('login failed'); });
-};
+}
