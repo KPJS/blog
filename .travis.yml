@@ -4,5 +4,3 @@ node_js:
   - "4.1"
 deploy:
   provider: azure_web_apps
-env:
-  - GOOGLE_CLIENT_ID=dummyId GOOGLE_CLIENT_SECRET=dummySecret
