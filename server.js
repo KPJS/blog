@@ -13,6 +13,16 @@ function start(logger, mongo, authenticator, callback) {
 		next();
 	});
 
+	var session = require('express-session');
+	var FileStore = require('session-file-store')(session);
+	app.use(session({
+		secret: 'kPjS s3cr3t',
+		name: 'kpjs.blog.session',
+		resave: true,
+		saveUninitialized: true,
+		store: new FileStore({ ttl: 1800, reapInterval: 1800, logFn: logger.info })
+	}));
+
 	authenticator.setup(app, mongo);
 
 	app.get('/', function(req, res, next) {
