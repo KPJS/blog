@@ -1,5 +1,5 @@
 /* jshint -W071 */ //ignore 'function has too many statements' jshint warning
-module.exports.setup = function(expressApp, mongo){
+module.exports.setup = function(expressApp, mongo, logger){
   if(!expressApp)
   {
     throw 'Missing express app';
@@ -77,7 +77,13 @@ module.exports.setup = function(expressApp, mongo){
     done(null, obj);
   });
 
-  expressApp.use(session({ secret: 'keyboard cat', name: 'kpjs.blog.session', resave: true, saveUninitialized: true, store: new FileStore() }));
+  expressApp.use(session({
+    secret: 'kPjS s3cr3t',
+    name: 'kpjs.blog.session',
+    resave: true,
+    saveUninitialized: true,
+    store: new FileStore({ ttl: 1800, reapInterval: 1800, logFn: logger.info })
+  }));
 	expressApp.use(passport.initialize());
 	expressApp.use(passport.session());
 
