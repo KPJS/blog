@@ -7,8 +7,9 @@
     "hbs": "^4.0.0",
     "mongodb": "^2.0.49",
     "passport": "^0.3.2",
-    "passport-google-oauth": "^0.2.0",
+    "passport-facebook": "^2.0.0",
     "passport-github": "^1.0.0",
+    "passport-google-oauth": "^0.2.0",
     "passport-twitter": "^1.0.3",
     "session-file-store": "0.0.22",
     "winston": "^2.1.1"

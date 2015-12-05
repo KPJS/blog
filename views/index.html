@@ -8,7 +8,7 @@
         {{#if user}}
         <img src="{{user.avatarUrl}}" alt="avatar" height="50"> <i>{{user.name}}</i> (<a href="/logout">logout</a>)
         {{else}}
-        <i>not logged in</i> (<a href="/login/google">Google login</a> <a href="/login/github">Github login</a> <a href="/login/twitter">Twitter login</a>)
+        <i>not logged in</i> (<a href="/login/google">Google login</a> <a href="/login/github">Github login</a> <a href="/login/twitter">Twitter login</a> <a href="/login/facebook">Facebook login</a>)
         {{/if}}
         <ul>
             {{#each posts}}<li><a href="posts/{{uri}}">{{title}}</a> ({{date}})</li>{{/each}}
