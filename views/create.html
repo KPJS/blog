@@ -1,0 +1,26 @@
+<!DOCTYPE html>                                                                                                                                                           
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Create new post</title>
+    </head>
+    <body>
+        <form method="post">
+            <div>
+                Title: <input name="title" value="{{post.title}}" />
+            </div>
+            {{#if post}}
+            {{#if post.exists}}
+            <div style="color: red">Post with this url already exits</div>
+            {{/if}}
+            <div>
+                Url: <input name="url" value="{{post.url}}" />
+            </div>
+            {{/if}}
+            <div>
+                Content: <textarea name="content" cols="80" rows="25">{{post.content}}</textarea>
+            </div>
+            <input type="submit" />
+        </form>
+    </body>
+</html>
