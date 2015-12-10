@@ -8,6 +8,9 @@ function start(logger, mongo, authenticator, postsController, callback) {
 	app.engine('html', hbs.__express);
 	app.use(express.static('static'));
 
+	var bodyParser = require('body-parser');
+	app.use(bodyParser.urlencoded({ extended: false }));
+
 	app.use(function(req, res, next) {
 		logger.info("Request for " + req.path);
 		next();
