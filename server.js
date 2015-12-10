@@ -1,4 +1,4 @@
-function start(logger, mongo, authenticator, callback) {
+function start(logger, mongo, authenticator, postsController, callback) {
 	var port = process.env.PORT || 1337;
 	var express = require('express');
 	var hbs = require('hbs');
@@ -47,6 +47,8 @@ function start(logger, mongo, authenticator, callback) {
 		});
 	});
 
+	registerPostControllerRoutes(app, postsController);
+
 	// handler for all other paths
 	app.use(function(req, res, next) {
 		var error = new Error("Page not found");
@@ -82,7 +84,23 @@ function stop(server, logger) {
 	}
 }
 
-module.exports = function(logger, mongo, authenticator) {
+function registerPostControllerRoutes(app, postsController) {
+	app.get('/edit/:uri', verifyAuth, postsController.getEditRouteHandler);
+	app.post('/edit/:uri', verifyAuth, postsController.postEditGetRouteHandler);
+	app.get('/create', verifyAuth, postsController.getCreateRouteHandler);
+	app.post('/create', verifyAuth, postsController.postCreateRouteHandler);
+}
+
+function verifyAuth(req, res, next) {
+	if(!req.isAuthenticated()){
+		var error = new Error("Not logged in");
+		error.statusCode = 401;
+		return next(error);
+	}
+	next();
+}
+
+module.exports = function(logger, mongo, authenticator, postsController) {
 	if(!logger) {
 		throw "Missing logger";
 	}
@@ -92,12 +110,15 @@ module.exports = function(logger, mongo, authenticator) {
 	if(!authenticator) {
 		throw "Missing authenticator";
 	}
+	if(!postsController) {
+		throw "Missing postsController";
+	}
 
 	var server;
 
 	return {
 		start: function(startCallback) {
-			start(logger, mongo, authenticator, function(err, srv) {
+			start(logger, mongo, authenticator, postsController, function(err, srv) {
 				if (err) {
 					return startCallback(err);
 				}
