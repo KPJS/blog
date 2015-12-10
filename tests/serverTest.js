@@ -15,7 +15,13 @@ var fakeMongo = { collection: function(){
 	};
 } };
 var fakeAuth = { setup: function(){} };
-var server = require('../server')(fakeLogger, fakeMongo, fakeAuth);
+var fekePostsController = {
+	getEditRouteHandler: function(req, res){},
+	postEditGetRouteHandler: function(req, res){},
+	getCreateRouteHandler: function(req, res){},
+	postCreateRouteHandler: function(req, res){}
+};
+var server = require('../server')(fakeLogger, fakeMongo, fakeAuth, fekePostsController);
 
 describe('Server initialization', function() {
 	afterEach(function() { server.stop(); });
