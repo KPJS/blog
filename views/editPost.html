@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Edit: {{title}}</title>
+    </head>
+    <body>
+        <img src="{{user.avatarUrl}}" alt="avatar" height="50"> <i>{{user.name}}</i> (<a href="/logout">logout</a>)
+        <form action="" method="post">
+          <table>
+            <tr>
+              <td>Title</td>
+              <td><input type="text" name="title" value="{{title}}"></td>
+            </tr>
+            <tr>
+              <td>Content</td>
+              <td><textarea name="content" cols="100" rows="50">{{content}}</textarea></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><input type="submit" name="save" value="Save"></td>
+            </tr>
+          </table>
+        </form>
+    </body>
+</html>
