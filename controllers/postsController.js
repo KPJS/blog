@@ -33,7 +33,7 @@ module.exports = function(mongo) {
     res.render('create.html', {});
   }
 
-  function postCreateRouteHandler(req, res) {
+  function postCreateRouteHandler(req, res, next) {
     var url = req.body.url;
     var title = req.body.title;
     var content = req.body.content;
@@ -45,7 +45,9 @@ module.exports = function(mongo) {
       if(count > 0){
         res.render('create.html', { post: { url: url, title: title, content: content, exists: true } });
       } else {
-        mongo.collection('posts').insert([{ title: title, uri: url, content: content, user_id: new ObjectID(req.user.id), publishDate: new Date() }], function(err, result){
+        mongo.collection('posts').insert([{ title: title, uri: url, content: content, user_id: new ObjectID(req.user.id), publishDate: new Date() }],// jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
+        function(err){
+          if(err){ return next(err); }
           res.redirect('/posts/' + url);
         });
       }
