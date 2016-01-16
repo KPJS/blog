@@ -2,13 +2,14 @@ function start(logger, mongo, authenticator, postsController, callback) {
 	var port = process.env.PORT || 1337;
 	var express = require('express');
 	var hbs = require('hbs');
-        var bodyParser = require('body-parser');
 
 	var app = express();
 	app.set('view engine', 'html');
 	app.engine('html', hbs.__express);
 	app.use(express.static('static'));
-        app.use(bodyParser.urlencoded({ extended: false }));
+
+	var bodyParser = require('body-parser');
+	app.use(bodyParser.urlencoded({ extended: false }));
 
 	app.use(function(req, res, next) {
 		logger.info("Request for " + req.path);
