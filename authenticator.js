@@ -79,6 +79,15 @@ module.exports.setup = function(expressApp, mongo){
   setupAuthRoutes(expressApp, passport);
 };
 
+module.exports.ensureAuthenticated = function(req, res, next){
+	if(!req.isAuthenticated()){
+		var error = new Error("Not logged in");
+		error.statusCode = 401;
+		return next(error);
+	}
+	next();
+};
+
 function setupAuthRoutes(expressApp, passport){
   expressApp.get('/login/google', passport.authenticate('google', { scope: 'profile' }));
   expressApp.get('/login/github', passport.authenticate('github'));

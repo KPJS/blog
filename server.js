@@ -50,7 +50,7 @@ function start(logger, mongo, authenticator, postsController, callback) {
 		});
 	});
 
-	registerPostControllerRoutes(app, postsController);
+	registerPostControllerRoutes(app, authenticator.ensureAuthenticated, postsController);
 
 	// handler for all other paths
 	app.use(function(req, res, next) {
@@ -87,20 +87,11 @@ function stop(server, logger) {
 	}
 }
 
-function registerPostControllerRoutes(app, postsController) {
+function registerPostControllerRoutes(app, verifyAuth, postsController) {
 	app.get('/edit/:uri', verifyAuth, postsController.getEditRouteHandler);
-	app.post('/edit/:uri', verifyAuth, postsController.postEditGetRouteHandler);
+	app.post('/edit/:uri', verifyAuth, postsController.postEditRouteHandler);
 	app.get('/create', verifyAuth, postsController.getCreateRouteHandler);
 	app.post('/create', verifyAuth, postsController.postCreateRouteHandler);
-}
-
-function verifyAuth(req, res, next) {
-	if(!req.isAuthenticated()){
-		var error = new Error("Not logged in");
-		error.statusCode = 401;
-		return next(error);
-	}
-	next();
 }
 
 module.exports = function(logger, mongo, authenticator, postsController) {

@@ -5,7 +5,7 @@ module.exports = function(mongo) {
 
   return {
     getEditRouteHandler: getEditRouteHandler,
-    postEditGetRouteHandler: postEditGetRouteHandler,
+    postEditRouteHandler: postEditRouteHandler,
     getCreateRouteHandler: getCreateRouteHandler,
     postCreateRouteHandler: postCreateRouteHandler
   };
@@ -21,7 +21,7 @@ module.exports = function(mongo) {
 		});
   }
 
-  function postEditGetRouteHandler(req, res, next) {
+  function postEditRouteHandler(req, res, next) {
     mongo.collection('posts').findAndModify({ uri: req.params.uri }, [], { $set: { title: req.body.title, content: req.body.content } }, { new: true },
       function(err){
         if(err){ return next(err); }
