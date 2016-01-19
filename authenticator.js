@@ -1,8 +1,4 @@
-module.exports.setup = function(expressApp, mongo){
-  if(!expressApp)
-  {
-    throw 'Missing express app';
-  }
+module.exports = function(mongo) {
   if(!mongo)
   {
     throw 'Missing mongo';
@@ -54,6 +50,19 @@ module.exports.setup = function(expressApp, mongo){
     authCallback(function(p) { return p.photos[0].value; })
   ));
 
+  passport.serializeUser(function(user, done) {
+    done(null, user);
+  });
+
+  passport.deserializeUser(function(obj, done) {
+    done(null, obj);
+  });
+
+  return {
+    setup: setup,
+    ensureAuthenticated: ensureAuthenticated
+  };
+
   function authCallback(avatarCallback){
     return function(token, tokenSecret, profile, done) {
       mongo.collection('users').findAndModify({ provider: profile.provider, providerId: profile.id }, [], { $setOnInsert: { name: profile.displayName } }, { new: true, upsert: true },
@@ -66,52 +75,44 @@ module.exports.setup = function(expressApp, mongo){
     };
   }
 
-  passport.serializeUser(function(user, done) {
-    done(null, user);
-  });
+  function setup(expressApp){
+    if(!expressApp)
+    {
+      throw 'Missing express app';
+    }
+    expressApp.use(passport.initialize());
+    expressApp.use(passport.session());
+    expressApp.get('/login/google', passport.authenticate('google', { scope: 'profile' }));
+    expressApp.get('/login/github', passport.authenticate('github'));
+    expressApp.get('/login/twitter', passport.authenticate('twitter'));
+    expressApp.get('/login/facebook', passport.authenticate('facebook'));
+    expressApp.get('/login/google/callback',
+      passport.authenticate('google', { failureRedirect: '/loginFail', successRedirect: '/' })
+    );
+    expressApp.get('/login/github/callback',
+      passport.authenticate('github', { failureRedirect: '/loginFail', successRedirect: '/' })
+    );
+    expressApp.get('/login/twitter/callback',
+      passport.authenticate('twitter', { failureRedirect: '/loginFail', successRedirect: '/' })
+    );
+    expressApp.get('/login/facebook/callback',
+      passport.authenticate('facebook', { failureRedirect: '/loginFail', successRedirect: '/' })
+    );
+    expressApp.get('/logout', function(req, res){
+      req.logout();
+      req.session.regenerate(function(){
+         res.redirect('/');
+       });
+     });
+     expressApp.get('/loginFail', function(req, res){ res.end('login failed'); });
+  }
 
-  passport.deserializeUser(function(obj, done) {
-    done(null, obj);
-  });
-	expressApp.use(passport.initialize());
-	expressApp.use(passport.session());
-
-  setupAuthRoutes(expressApp, passport);
+  function ensureAuthenticated(req, res, next){
+    if(!req.isAuthenticated()){
+      var error = new Error("Not logged in");
+      error.statusCode = 401;
+      return next(error);
+    }
+    next();
+  }
 };
-
-module.exports.ensureAuthenticated = function(req, res, next){
-	if(!req.isAuthenticated()){
-		var error = new Error("Not logged in");
-		error.statusCode = 401;
-		return next(error);
-	}
-	next();
-};
-
-function setupAuthRoutes(expressApp, passport){
-  expressApp.get('/login/google', passport.authenticate('google', { scope: 'profile' }));
-  expressApp.get('/login/github', passport.authenticate('github'));
-  expressApp.get('/login/twitter', passport.authenticate('twitter'));
-  expressApp.get('/login/facebook', passport.authenticate('facebook'));
-
-	expressApp.get('/login/google/callback',
-		passport.authenticate('google', { failureRedirect: '/loginFail', successRedirect: '/' })
-  );
-  expressApp.get('/login/github/callback',
-    passport.authenticate('github', { failureRedirect: '/loginFail', successRedirect: '/' })
-  );
-  expressApp.get('/login/twitter/callback',
-    passport.authenticate('twitter', { failureRedirect: '/loginFail', successRedirect: '/' })
-  );
-  expressApp.get('/login/facebook/callback',
-    passport.authenticate('facebook', { failureRedirect: '/loginFail', successRedirect: '/' })
-  );
-
-  expressApp.get('/logout', function(req, res){
-		req.logout();
-		req.session.regenerate(function(){
-			res.redirect('/');
-		});
-	});
-	expressApp.get('/loginFail', function(req, res){ res.end('login failed'); });
-}
