@@ -27,29 +27,6 @@ function start(logger, mongo, authenticator, postsController, callback) {
 	}));
 
 	authenticator.setup(app, mongo);
-
-	app.get('/', function(req, res, next) {
-		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
-			if (err) {
-				var error = new Error("Could not retrieve posts");
-				error.statusCode = 500;
-				return next(error);
-			}
-			res.render('index.html', { user: req.user, posts: items.map(function(i) { return { title: i.title, uri: i.uri, date: i.publishDate }; }) });
-		});
-	});
-
-	app.get('/posts/:uri', function(req, res, next) {
-		mongo.collection('posts').findOne({ uri: req.params.uri }, { title: 1, content: 1 }, function(err, item) {
-			if (err) {
-				var error = new Error("Post not found");
-				error.statusCode = 404;
-				return next(error);
-			}
-			res.render('post.html', { title: item.title, content: item.content });
-		});
-	});
-
 	registerPostControllerRoutes(app, authenticator.ensureAuthenticated, postsController);
 
 	// handler for all other paths
@@ -88,6 +65,8 @@ function stop(server, logger) {
 }
 
 function registerPostControllerRoutes(app, verifyAuth, postsController) {
+	app.get('/', postsController.getRootRouteHandler);
+	app.get('/posts/:uri', postsController.getReadRouteHandler);
 	app.get('/edit/:uri', verifyAuth, postsController.getEditRouteHandler);
 	app.post('/edit/:uri', verifyAuth, postsController.postEditRouteHandler);
 	app.get('/create', verifyAuth, postsController.getCreateRouteHandler);
