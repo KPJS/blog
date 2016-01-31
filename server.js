@@ -1,4 +1,4 @@
-function start(logger, authenticator, postsController, callback) {
+function start(logger, authenticationController, postsController, callback) {
 	var port = process.env.PORT || 1337;
 	var express = require('express');
 	var hbs = require('hbs');
@@ -26,8 +26,8 @@ function start(logger, authenticator, postsController, callback) {
 		store: new FileStore({ ttl: 1800, reapInterval: 1800, logFn: logger.info })
 	}));
 
-	authenticator.setup(app);
-	registerPostControllerRoutes(app, authenticator.ensureAuthenticated, postsController);
+	authenticationController.setup(app);
+	registerPostControllerRoutes(app, authenticationController.ensureAuthenticated, postsController);
 
 	// handler for all other paths
 	app.use(function(req, res, next) {
@@ -73,12 +73,12 @@ function registerPostControllerRoutes(app, verifyAuth, postsController) {
 	app.post('/create', verifyAuth, postsController.postCreateRouteHandler);
 }
 
-module.exports = function(logger, authenticator, postsController) {
+module.exports = function(logger, authenticationController, postsController) {
 	if(!logger) {
 		throw "Missing logger";
 	}
-	if(!authenticator) {
-		throw "Missing authenticator";
+	if(!authenticationController) {
+		throw "Missing authenticationController";
 	}
 	if(!postsController) {
 		throw "Missing postsController";
@@ -88,7 +88,7 @@ module.exports = function(logger, authenticator, postsController) {
 
 	return {
 		start: function(startCallback) {
-			start(logger, authenticator, postsController, function(err, srv) {
+			start(logger, authenticationController, postsController, function(err, srv) {
 				if (err) {
 					return startCallback(err);
 				}
