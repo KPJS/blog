@@ -27,6 +27,7 @@ function start(logger, mongo, authenticator, postsController, usersController, c
 	}));
 
 	authenticator.setup(app, mongo);
+<<<<<<< HEAD
 
 	app.get('/', function(req, res, next) {
 		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
@@ -51,6 +52,8 @@ function start(logger, mongo, authenticator, postsController, usersController, c
 	});
 
 	registerUserControllerRoutes(app, authenticator.ensureAuthenticated, usersController);
+=======
+>>>>>>> upstream/master
 	registerPostControllerRoutes(app, authenticator.ensureAuthenticated, postsController);
 
 	// handler for all other paths
@@ -93,6 +96,8 @@ function registerUserControllerRoutes(app, verifyAuth, usersController) {
 }
 
 function registerPostControllerRoutes(app, verifyAuth, postsController) {
+	app.get('/', postsController.getRootRouteHandler);
+	app.get('/posts/:uri', postsController.getReadRouteHandler);
 	app.get('/edit/:uri', verifyAuth, postsController.getEditRouteHandler);
 	app.post('/edit/:uri', verifyAuth, postsController.postEditRouteHandler);
 	app.get('/create', verifyAuth, postsController.getCreateRouteHandler);

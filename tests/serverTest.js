@@ -2,20 +2,15 @@ var assert = require('assert');
 
 var fakeLogger = { error: function() {}, info: function() {} };
 var fakePosts = [{ title: "first", content: "first content" }, { title: "second", content: "second content" }];
-var fakeMongo = { collection: function(){
-	return {
-		toArray: function(callback){
-			return callback(null, fakePosts);
-		},
-		findOne: function(query, projection, callback){
-			return callback(null, fakePosts[0]);
-		},
-		find: function() { return this; },
-		sort: function() { return this; }
-	};
-} };
+var fakeMongo = {};
 var fakeAuth = { setup: function(){}, ensureAuthenticated: function(req, res, next){ next(); } };
 var fekePostsController = {
+	getRootRouteHandler: function(req, res){
+		res.end("root - GET");
+	},
+	getReadRouteHandler: function(req, res){
+		res.end("read post - GET");
+	},
 	getEditRouteHandler: function(req, res){
 		res.end("edit post - GET");
 	},
