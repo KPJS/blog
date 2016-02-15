@@ -24,7 +24,7 @@ var fekePostsController = {
 		res.end("create post - POST");
 	}
 };
-var server = require('../server')(fakeLogger, fakeMongo, fakeAuth, fekePostsController);
+var server = require('../server')(fakeLogger, fakeAuth, fekePostsController);
 
 describe('Server initialization', function() {
 	afterEach(function() { server.stop(); });
@@ -87,7 +87,7 @@ describe('Server initialization', function() {
 
 	it('Edit call NO AUTH - GET, 401 is returned', function(done) {
 		var fakeAuth2 = { setup: function(){}, ensureAuthenticated: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); } };
-		var server2 = require('../server')(fakeLogger, fakeMongo, fakeAuth2, fekePostsController);
+		var server2 = require('../server')(fakeLogger, fakeAuth2, fekePostsController);
 		server2.start(function(err, addr) {
 			var http = require('http');
 			fakeAuth.ensureAuthenticated = function(req, res, next){ next(new Error("bad")); };

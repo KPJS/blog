@@ -1,4 +1,4 @@
-function start(logger, mongo, authenticator, postsController, usersController, callback) {
+function start(logger, authenticationController, postsController, usersController, callback) {
 	var port = process.env.PORT || 1337;
 	var express = require('express');
 	var hbs = require('hbs');
@@ -26,35 +26,9 @@ function start(logger, mongo, authenticator, postsController, usersController, c
 		store: new FileStore({ ttl: 1800, reapInterval: 1800, logFn: logger.info })
 	}));
 
-	authenticator.setup(app, mongo);
-<<<<<<< HEAD
-
-	app.get('/', function(req, res, next) {
-		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
-			if (err) {
-				var error = new Error("Could not retrieve posts");
-				error.statusCode = 500;
-				return next(error);
-			}
-			res.render('index.html', { user: req.user, posts: items.map(function(i) { return { title: i.title, uri: i.uri, date: i.publishDate }; }) });
-		});
-	});
-
-	app.get('/posts/:uri', function(req, res, next) {
-		mongo.collection('posts').findOne({ uri: req.params.uri }, { title: 1, content: 1 }, function(err, item) {
-			if (err) {
-				var error = new Error("Post not found");
-				error.statusCode = 404;
-				return next(error);
-			}
-			res.render('post.html', { title: item.title, content: item.content });
-		});
-	});
-
-	registerUserControllerRoutes(app, authenticator.ensureAuthenticated, usersController);
-=======
->>>>>>> upstream/master
+	authenticationController.setup(app);
 	registerPostControllerRoutes(app, authenticator.ensureAuthenticated, postsController);
+	registerUserControllerRoutes(app, authenticator.ensureAuthenticated, usersController);
 
 	// handler for all other paths
 	app.use(function(req, res, next) {
@@ -104,15 +78,12 @@ function registerPostControllerRoutes(app, verifyAuth, postsController) {
 	app.post('/create', verifyAuth, postsController.postCreateRouteHandler);
 }
 
-module.exports = function(logger, mongo, authenticator, postsController, usersController) {
+module.exports = function(logger, authenticationController, postsController, usersController) {
 	if(!logger) {
 		throw "Missing logger";
 	}
-	if(!mongo) {
-		throw "Missing mongo";
-	}
-	if(!authenticator) {
-		throw "Missing authenticator";
+	if(!authenticationController) {
+		throw "Missing authenticationController";
 	}
 	if(!postsController) {
 		throw "Missing postsController";
@@ -125,7 +96,7 @@ module.exports = function(logger, mongo, authenticator, postsController, usersCo
 
 	return {
 		start: function(startCallback) {
-			start(logger, mongo, authenticator, postsController, usersController, function(err, srv) {
+		    start(logger, authenticationController, postsController, usersController, function (err, srv) {
 				if (err) {
 					return startCallback(err);
 				}
