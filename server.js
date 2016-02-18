@@ -1,4 +1,4 @@
-function start(logger, authenticationController, postsController, callback) {
+function start(logger, authenticationController, postsController, usersController, callback) {
 	var port = process.env.PORT || 1337;
 	var express = require('express');
 	var hbs = require('hbs');
@@ -28,6 +28,7 @@ function start(logger, authenticationController, postsController, callback) {
 
 	authenticationController.setup(app);
 	registerPostControllerRoutes(app, authenticationController.ensureAuthenticated, postsController);
+	registerUserControllerRoutes(app, authenticationController.ensureAuthenticated, usersController);
 
 	// handler for all other paths
 	app.use(function(req, res, next) {
@@ -64,6 +65,10 @@ function stop(server, logger) {
 	}
 }
 
+function registerUserControllerRoutes(app, verifyAuth, usersController) {
+	app.get('/users', verifyAuth, usersController.getAllUsersRouteHandler);
+}
+
 function registerPostControllerRoutes(app, verifyAuth, postsController) {
 	app.get('/', postsController.getRootRouteHandler);
 	app.get('/posts/:uri', postsController.getReadRouteHandler);
@@ -73,7 +78,7 @@ function registerPostControllerRoutes(app, verifyAuth, postsController) {
 	app.post('/create', verifyAuth, postsController.postCreateRouteHandler);
 }
 
-module.exports = function(logger, authenticationController, postsController) {
+module.exports = function(logger, authenticationController, postsController, usersController) {
 	if(!logger) {
 		throw "Missing logger";
 	}
@@ -83,12 +88,15 @@ module.exports = function(logger, authenticationController, postsController) {
 	if(!postsController) {
 		throw "Missing postsController";
 	}
+	if(!usersController) {
+		throw "Missing usersController";
+	}
 
 	var server;
 
 	return {
 		start: function(startCallback) {
-			start(logger, authenticationController, postsController, function(err, srv) {
+            start(logger, authenticationController, postsController, usersController, function(err, srv){
 				if (err) {
 					return startCallback(err);
 				}

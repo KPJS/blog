@@ -37,7 +37,8 @@ mongoClient.connect(mongoConnStr, function(err, db) {
       console.info('Connected to mongo, starting server...');
       var authenticationController = require('./controllers/authenticationController')(db);
       var postsController = require('./controllers/postsController')(db);
-      var server = require("./server")(logger, authenticationController, postsController);
+      var usersController = require('./controllers/usersController')(db);
+      var server = require("./server")(logger, authenticationController, postsController, usersController);
       server.start(startCallback);
     }
 });
