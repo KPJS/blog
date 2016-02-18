@@ -4,7 +4,7 @@ var fakeLogger = { error: function() {}, info: function() {} };
 var fakePosts = [{ title: "first", content: "first content" }, { title: "second", content: "second content" }];
 var fakeMongo = {};
 var fakeAuth = { setup: function(){}, ensureAuthenticated: function(req, res, next){ next(); } };
-var fekePostsController = {
+var fakePostsController = {
 	getRootRouteHandler: function(req, res){
 		res.end("root - GET");
 	},
@@ -24,7 +24,12 @@ var fekePostsController = {
 		res.end("create post - POST");
 	}
 };
-var server = require('../server')(fakeLogger, fakeAuth, fekePostsController);
+var fakeUsersController = {
+    getAllUsersRouteHandler: function(req, res){
+        res.end("User list");
+    }
+};
+var server = require('../server')(fakeLogger, fakeAuth, fakePostsController, fakeUsersController);
 
 describe('Server initialization', function() {
 	afterEach(function() { server.stop(); });
@@ -87,7 +92,7 @@ describe('Server initialization', function() {
 
 	it('Edit call NO AUTH - GET, 401 is returned', function(done) {
 		var fakeAuth2 = { setup: function(){}, ensureAuthenticated: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); } };
-		var server2 = require('../server')(fakeLogger, fakeAuth2, fekePostsController);
+		var server2 = require('../server')(fakeLogger, fakeAuth2, fakePostsController, fakeUsersController);
 		server2.start(function(err, addr) {
 			var http = require('http');
 			fakeAuth.ensureAuthenticated = function(req, res, next){ next(new Error("bad")); };
