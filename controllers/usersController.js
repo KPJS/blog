@@ -21,13 +21,13 @@ module.exports = function(mongo) {
 
 	function getUserRouteHandler(req, res, next) {
     var ObjectID = require('mongodb').ObjectID;
-		mongo.collection('users').findOne({ _id: new ObjectID(req.params.id) }, { name: 1, provider: 1, _id: 1}, function(err, item){
+		mongo.collection('users').findOne({ _id: new ObjectID(req.params.id) }, { name: 1, provider: 1, _id: 1 }, function(err, item){
 			if(err){
 				var error = new Error("User not found");
 				error.statusCode = 404;
 				return next(error);
 			}
 			res.render('userDetail.html', { user: req.user, userName: item.name, userProvider: item.provider, userRank: 1, userId: item._id });
-		})
+		});
 	}
 };
