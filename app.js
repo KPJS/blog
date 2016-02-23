@@ -14,7 +14,7 @@ var logger = new (winston.Logger)({
         name: 'error-file',
         filename: 'error.log',
         level: 'error',
-        handleExceptions: true
+        handleExceptions: false
       })
   ]
 });
