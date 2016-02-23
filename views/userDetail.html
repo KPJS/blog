@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Detail of {{userDetail.name}} (via {{userDetail.provider}})</title>
+    </head>
+    <body>
+        <img src="{{user.avatarUrl}}" alt="avatar" height="50"> <i>{{user.name}}</i> (<a href="/logout">logout</a>)
+        <table>
+          <tr>
+            <td>Id</td><td>{{userDetail._id}}</td>
+            </tr>
+            <tr>
+            <td>Name</td><td>{{userDetail.name}}</td>
+          </tr>
+          <tr>
+            <td>Provider</td><td>{{userDetail.provider}}</td>
+          </tr>
+          <tr>
+            <td>ProviderId</td><td>{{userDetail.providerId}}</td>
+          </tr>
+        </table>
+    </body>
+</html>

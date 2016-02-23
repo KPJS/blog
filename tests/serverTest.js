@@ -26,7 +26,10 @@ var fakePostsController = {
 };
 var fakeUsersController = {
     getAllUsersRouteHandler: function(req, res){
-        res.end("User list");
+        res.end("Users list");
+    },
+		getUserDetailRouteHandler: function(req, res){
+        res.end("User detail");
     }
 };
 var server = require('../server')(fakeLogger, fakeAuth, fakePostsController, fakeUsersController);
@@ -95,7 +98,7 @@ describe('Server initialization', function() {
 		var server2 = require('../server')(fakeLogger, fakeAuth2, fakePostsController, fakeUsersController);
 		server2.start(function(err, addr) {
 			var http = require('http');
-			fakeAuth.ensureAuthenticated = function(req, res, next){ next(new Error("bad")); };
+
 			http.get('http://localhost:' + addr.port + "/edit/qwerty", function(res) {
 				assert.equal(res.statusCode, 401);
 				server2.stop();
@@ -103,4 +106,16 @@ describe('Server initialization', function() {
 			});
 		});
 	});
+
+	it('List users call - GET, 200 is returned', function(done) {
+		server.start(function(err, addr) {
+			var http = require('http');
+
+			http.get('http://localhost:' + addr.port + "/users", function(res) {
+				assert.equal(res.statusCode, 200);
+				done();
+			});
+		});
+	});
+
 });
