@@ -1,8 +1,6 @@
 var assert = require('assert');
 
 var fakeLogger = { error: function() {}, info: function() {} };
-var fakePosts = [{ title: "first", content: "first content" }, { title: "second", content: "second content" }];
-var fakeMongo = {};
 var fakeAuth = { setup: function(){}, ensureAuthenticated: function(req, res, next){ next(); } };
 var fakePostsController = {
 	getRootRouteHandler: function(req, res){
@@ -25,9 +23,15 @@ var fakePostsController = {
 	}
 };
 var fakeUsersController = {
-    getAllUsersRouteHandler: function(req, res){
-        res.end("User list");
-    }
+	getAllUsersRouteHandler: function(req, res){
+		res.end("Users list - GET");
+	},
+	getUserDetailRouteHandler: function(req, res){
+		res.end("User detail - GET");
+	},
+	postUserDetailRouteHandler: function(req, res){
+		res.end("User detail - POST");
+	}
 };
 var server = require('../server')(fakeLogger, fakeAuth, fakePostsController, fakeUsersController);
 
@@ -95,10 +99,21 @@ describe('Server initialization', function() {
 		var server2 = require('../server')(fakeLogger, fakeAuth2, fakePostsController, fakeUsersController);
 		server2.start(function(err, addr) {
 			var http = require('http');
-			fakeAuth.ensureAuthenticated = function(req, res, next){ next(new Error("bad")); };
+
 			http.get('http://localhost:' + addr.port + "/edit/qwerty", function(res) {
 				assert.equal(res.statusCode, 401);
 				server2.stop();
+				done();
+			});
+		});
+	});
+
+	it('List users call - GET, 200 is returned', function(done) {
+		server.start(function(err, addr) {
+			var http = require('http');
+
+			http.get('http://localhost:' + addr.port + "/users", function(res) {
+				assert.equal(res.statusCode, 200);
 				done();
 			});
 		});
