@@ -8,7 +8,7 @@
         <img src="{{user.avatarUrl}}" alt="avatar" height="50"> <i>{{user.name}}</i> (<a href="/logout">logout</a>)
         <table>
           <tr>
-            <td>Id</td><td>{{userDetail._id}}</td>
+            <td>Id</td><td>{{userDetail.id}}</td>
             </tr>
             <tr>
             <td>Name</td><td>{{userDetail.name}}</td>
@@ -18,6 +18,20 @@
           </tr>
           <tr>
             <td>ProviderId</td><td>{{userDetail.providerId}}</td>
+          </tr>
+          <tr>
+            <td>Roles</td><td>
+              <form action="" method="post">
+                {{#each userDetail.permissions}}
+                  <label>
+                    <input type="checkbox" name="permissions" value="{{@key}}" {{#if this}}checked{{/if}} />
+                    {{@key}}
+                  </label>
+                {{/each}}
+                <input type="reset" value="Undo changes"/>
+                <input type="submit" value="Update permissions"/>
+              </form>
+              </td>
           </tr>
         </table>
     </body>

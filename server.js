@@ -68,6 +68,7 @@ function stop(server, logger) {
 function registerUserControllerRoutes(app, verifyAuth, usersController) {
 	app.get('/users', verifyAuth, usersController.getAllUsersRouteHandler);
 	app.get('/users/:id', verifyAuth, usersController.getUserDetailRouteHandler);
+	app.post('/users/:id', verifyAuth, usersController.postUserDetailRouteHandler);
 }
 
 function registerPostControllerRoutes(app, verifyAuth, postsController) {
@@ -97,7 +98,7 @@ module.exports = function(logger, authenticationController, postsController, use
 
 	return {
 		start: function(startCallback) {
-            start(logger, authenticationController, postsController, usersController, function(err, srv){
+			start(logger, authenticationController, postsController, usersController, function(err, srv){
 				if (err) {
 					return startCallback(err);
 				}

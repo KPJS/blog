@@ -1,8 +1,6 @@
 var assert = require('assert');
 
 var fakeLogger = { error: function() {}, info: function() {} };
-var fakePosts = [{ title: "first", content: "first content" }, { title: "second", content: "second content" }];
-var fakeMongo = {};
 var fakeAuth = { setup: function(){}, ensureAuthenticated: function(req, res, next){ next(); } };
 var fakePostsController = {
 	getRootRouteHandler: function(req, res){
@@ -25,12 +23,15 @@ var fakePostsController = {
 	}
 };
 var fakeUsersController = {
-    getAllUsersRouteHandler: function(req, res){
-        res.end("Users list");
-    },
-		getUserDetailRouteHandler: function(req, res){
-        res.end("User detail");
-    }
+	getAllUsersRouteHandler: function(req, res){
+		res.end("Users list - GET");
+	},
+	getUserDetailRouteHandler: function(req, res){
+		res.end("User detail - GET");
+	},
+	postUserDetailRouteHandler: function(req, res){
+		res.end("User detail - POST");
+	}
 };
 var server = require('../server')(fakeLogger, fakeAuth, fakePostsController, fakeUsersController);
 
@@ -117,5 +118,4 @@ describe('Server initialization', function() {
 			});
 		});
 	});
-
 });

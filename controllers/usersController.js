@@ -3,9 +3,16 @@ module.exports = function(mongo) {
     throw "Missing mongo";
   }
 
+  var permissionFlags = {
+    read: 1, //0001, default
+    write: 2,//0010
+    admin: 4 //0100
+  };
+
   return {
     getAllUsersRouteHandler: getAllUsersRouteHandler,
-    getUserDetailRouteHandler: getUserDetailRouteHandler
+    getUserDetailRouteHandler: getUserDetailRouteHandler,
+    postUserDetailRouteHandler: postUserDetailRouteHandler
   };
 
   function getAllUsersRouteHandler(req, res, next) {
@@ -27,7 +34,41 @@ module.exports = function(mongo) {
         error.statusCode = 404;
         return next(error);
       }
-      res.render('userDetail.html', { user: req.user, userDetail: item });
+      res.render('userDetail.html', { user: req.user, userDetail: toViewModel(item) });
     });
+  }
+
+  function toViewModel(dbRecord) {
+    return {
+      id: dbRecord._id,
+      name: dbRecord.name,
+      provider: dbRecord.provider,
+      providerId: dbRecord.providerId,
+      permissions: {
+        read: dbRecord.permissionsMask & permissionFlags.read,
+        write: dbRecord.permissionsMask & permissionFlags.write,
+        admin: dbRecord.permissionsMask & permissionFlags.admin
+      }
+    };
+  }
+
+  function postUserDetailRouteHandler(req, res, next) {
+    var ObjectID = require('mongodb').ObjectID;
+    mongo.collection('users').findAndModify({ _id: new ObjectID(req.params.id) }, [], { $set: { permissionsMask: toMask(req.body.permissions) } }, { new: true },
+      function(err, item){
+        if(err){ return next(err); }
+        res.render('userDetail.html', { user: req.user, userDetail: toViewModel(item.value) });
+      });
+  }
+
+  function toMask(permissions){
+    if(!Array.isArray(permissions)){//only single permission
+      return permissionFlags[permissions];
+    }
+    var mask = 0;
+    permissions.forEach(function(item){
+      mask |= permissionFlags[item];
+    });
+    return mask;
   }
 };
