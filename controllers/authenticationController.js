@@ -127,7 +127,9 @@ module.exports = function(mongo) {
   function ensureRoleReguestHandlerWrapper(role){
     return function(req, res, next){
       if(!req.isAuthenticated()){
-        return notLoggedIn(next);
+        var error = new Error("Not logged in");
+        error.statusCode = 401;
+        return next(error);
       }
       verifyRole(req.user.id, role, function(err, hasRole){
         if(err){
@@ -147,19 +149,19 @@ module.exports = function(mongo) {
 
   function ensureOwner(req, res, next){
     if(!req.isAuthenticated()){
-      return notLoggedIn(next);
+      var error = new Error("Not logged in");
+      error.statusCode = 401;
+      return next(error);
     }
     var ObjectID = require('mongodb').ObjectID;
+    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     mongo.collection('posts').count({ users_id: new ObjectID(req.user.id), uri: req.params.uri }, function(err, count){
-      if(count > 0)
+      if(count > 0){
         return next();
-      return notLoggedIn(next);
+      }
+      var error = new Error("Not authorized");
+      error.statusCode = 403;
+      return next(error);
     });
-  }
-
-  function notLoggedIn(next){
-    var error = new Error("Not logged in");
-    error.statusCode = 401;
-    return next(error);
   }
 };

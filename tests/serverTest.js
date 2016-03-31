@@ -3,6 +3,7 @@ var assert = require('assert');
 var fakeLogger = { error: function() {}, info: function() {} };
 var fakeAuth = {
 	setup: function(){},
+	ensureOwner: function(req, res, next){ next(); },
 	ensureZombie: function(req, res, next){ next(); },
 	ensureCitizen: function(req, res, next){ next(); },
 	ensureRuler: function(req, res, next){ next(); } };
@@ -101,6 +102,7 @@ describe('Server initialization', function() {
 	it('Edit post call NO AUTH - GET, 401 is returned', function(done) {
 		var fakeAuth2 = {
 			setup: function(){},
+			ensureOwner: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
 			ensureZombie: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
 			ensureCitizen: function(req, res, next){ next(); },
 			ensureRuler: function(req, res, next){ next(); }
