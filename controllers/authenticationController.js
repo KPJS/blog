@@ -59,16 +59,10 @@ module.exports = function(mongo) {
 
   return {
     setup: setup,
-<<<<<<< HEAD
-    ensureAuthenticated: ensureAuthenticated,
-    ensureOwner: ensureOwner
-||||||| merged common ancestors
-    ensureAuthenticated: ensureAuthenticated
-=======
+    ensureOwner: ensureOwner,
     ensureZombie: ensureRoleReguestHandlerWrapper(0),
     ensureCitizen: ensureRoleReguestHandlerWrapper(1),
     ensureRuler: ensureRoleReguestHandlerWrapper(2)
->>>>>>> master
   };
 
   function authCallback(avatarCallback){
