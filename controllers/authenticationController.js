@@ -59,7 +59,8 @@ module.exports = function(mongo) {
 
   return {
     setup: setup,
-    ensureAuthenticated: ensureAuthenticated
+    ensureAuthenticated: ensureAuthenticated,
+    ensureOwner: ensureOwner
   };
 
   function authCallback(avatarCallback){
@@ -108,10 +109,30 @@ module.exports = function(mongo) {
 
   function ensureAuthenticated(req, res, next){
     if(!req.isAuthenticated()){
-      var error = new Error("Not logged in");
-      error.statusCode = 401;
-      return next(error);
+      return notLoggedIn(next);
     }
     next();
+  }
+
+  function ensureOwner(req, res, next){
+    if(!req.isAuthenticated()){
+      return notLoggedIn(next);
+    }
+    var ObjectID = require('mongodb').ObjectID;
+    console.log(req.params.uri);
+    console.log(req.user.id);
+    mongo.collection('posts').count({ users_id: new ObjectID(req.user.id), uri: req.params.uri }, function(err, count){
+      console.log(count);
+      console.log(err);
+      if(count > 0)
+        return next();
+      return notLoggedIn(next);
+    });
+  }
+
+  function notLoggedIn(next){
+    var error = new Error("Not logged in");
+    error.statusCode = 401;
+    return next(error);
   }
 };

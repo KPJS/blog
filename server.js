@@ -32,7 +32,7 @@ function start(logger, authenticationController, postsController, usersControlle
 	}));
 
 	authenticationController.setup(app);
-	registerPostControllerRoutes(app, authenticationController.ensureAuthenticated, postsController);
+	registerPostControllerRoutes(app, authenticationController.ensureAuthenticated, authenticationController.ensureOwner, postsController);
 	registerUserControllerRoutes(app, authenticationController.ensureAuthenticated, usersController);
 
 	// handler for all other paths
@@ -76,11 +76,11 @@ function registerUserControllerRoutes(app, verifyAuth, usersController) {
 	app.post('/users/:id', verifyAuth, usersController.postUserRouteHandler);
 }
 
-function registerPostControllerRoutes(app, verifyAuth, postsController) {
+function registerPostControllerRoutes(app, verifyAuth, verifyOwner, postsController) {
 	app.get('/', postsController.getRootRouteHandler);
 	app.get('/posts/:uri', postsController.getReadRouteHandler);
-	app.get('/edit/:uri', verifyAuth, postsController.getEditRouteHandler);
-	app.post('/edit/:uri', verifyAuth, postsController.postEditRouteHandler);
+	app.get('/edit/:uri', verifyOwner, postsController.getEditRouteHandler);
+	app.post('/edit/:uri', verifyOwner, postsController.postEditRouteHandler);
 	app.get('/create', verifyAuth, postsController.getCreateRouteHandler);
 	app.post('/create', verifyAuth, postsController.postCreateRouteHandler);
 }
