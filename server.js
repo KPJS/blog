@@ -2,6 +2,11 @@ function start(logger, authenticationController, postsController, usersControlle
 	var port = process.env.PORT || 1337;
 	var express = require('express');
 	var hbs = require('hbs');
+	hbs.registerHelper('select', function(selected, options) {
+    return options.fn(this).replace(
+        new RegExp(' value=\"' + selected + '\"'),
+        '$& selected="selected"');
+	});
 
 	var app = express();
 	app.set('view engine', 'html');
@@ -67,6 +72,8 @@ function stop(server, logger) {
 
 function registerUserControllerRoutes(app, verifyAuth, usersController) {
 	app.get('/users', verifyAuth, usersController.getAllUsersRouteHandler);
+	app.get('/users/:id', verifyAuth, usersController.getUserRouteHandler);
+	app.post('/users/:id', verifyAuth, usersController.postUserRouteHandler);
 }
 
 function registerPostControllerRoutes(app, verifyAuth, postsController) {

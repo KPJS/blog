@@ -7,7 +7,7 @@
     <body>
         <img src="{{user.avatarUrl}}" alt="avatar" height="50"> <i>{{user.name}}</i> (<a href="/logout">logout</a>)
         <ul>
-            {{#each users}}<li>{{name}}</li>{{/each}}
+            {{#each users}}<li><a href="/users/{{_id}}">{{name}} ({{provider}})</a></li>{{/each}}
         </ul>
     </body>
 </html>

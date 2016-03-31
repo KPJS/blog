@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>User detail</title>
+    </head>
+    <body>
+        <img src="{{user.avatarUrl}}" alt="avatar" height="50"> <i>{{user.name}}</i> (<a href="/logout">logout</a>)
+        <form action='' method='post'>
+            <input type='hidden' name="userId" value='{{userId}}' />
+            <div>{{userName}} ({{userProvider}})</div>
+            <div>
+                <select name='role'>
+            	{{#select role}}
+            		<option value="0">zombie</option>
+            		<option value="1">citizen</option>
+            		<option value="2">ruler</option>
+            	{{/select}}
+                </select>
+            </div>
+            <input type='submit' value='update' />
+        </form>
+    </body>
+</html>
