@@ -59,8 +59,16 @@ module.exports = function(mongo) {
 
   return {
     setup: setup,
+<<<<<<< HEAD
     ensureAuthenticated: ensureAuthenticated,
     ensureOwner: ensureOwner
+||||||| merged common ancestors
+    ensureAuthenticated: ensureAuthenticated
+=======
+    ensureZombie: ensureRoleReguestHandlerWrapper(0),
+    ensureCitizen: ensureRoleReguestHandlerWrapper(1),
+    ensureRuler: ensureRoleReguestHandlerWrapper(2)
+>>>>>>> master
   };
 
   function authCallback(avatarCallback){
@@ -107,11 +115,40 @@ module.exports = function(mongo) {
      expressApp.get('/loginFail', function(req, res){ res.end('login failed'); });
   }
 
-  function ensureAuthenticated(req, res, next){
-    if(!req.isAuthenticated()){
-      return notLoggedIn(next);
-    }
-    next();
+  function verifyRole(userId, role, callback){
+    var ObjectID = require('mongodb').ObjectID;
+    mongo.collection('users').findOne({ _id: new ObjectID(userId) }, { role: 1 }, function(err, item){
+      if(err){
+        return callback(err);
+      }
+      if(item.role >= role){
+        callback(null, true);
+      }
+      else{
+        callback(null, false);
+      }
+    });
+  }
+
+  function ensureRoleReguestHandlerWrapper(role){
+    return function(req, res, next){
+      if(!req.isAuthenticated()){
+        return notLoggedIn(next);
+      }
+      verifyRole(req.user.id, role, function(err, hasRole){
+        if(err){
+          return next(err);
+        }
+        if(hasRole){
+          next();
+        }
+        else{
+          var error = new Error("Not authorized");
+          error.statusCode = 403;
+          next(error);
+        }
+      });
+    };
   }
 
   function ensureOwner(req, res, next){
@@ -119,11 +156,7 @@ module.exports = function(mongo) {
       return notLoggedIn(next);
     }
     var ObjectID = require('mongodb').ObjectID;
-    console.log(req.params.uri);
-    console.log(req.user.id);
     mongo.collection('posts').count({ users_id: new ObjectID(req.user.id), uri: req.params.uri }, function(err, count){
-      console.log(count);
-      console.log(err);
       if(count > 0)
         return next();
       return notLoggedIn(next);
