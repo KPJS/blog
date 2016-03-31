@@ -59,7 +59,9 @@ module.exports = function(mongo) {
 
   return {
     setup: setup,
-    ensureAuthenticated: ensureAuthenticated
+    ensureZombie: ensureRoleReguestHandlerWrapper(0),
+    ensureCitizen: ensureRoleReguestHandlerWrapper(1),
+    ensureRuler: ensureRoleReguestHandlerWrapper(2)
   };
 
   function authCallback(avatarCallback){
@@ -106,12 +108,41 @@ module.exports = function(mongo) {
      expressApp.get('/loginFail', function(req, res){ res.end('login failed'); });
   }
 
-  function ensureAuthenticated(req, res, next){
-    if(!req.isAuthenticated()){
-      var error = new Error("Not logged in");
-      error.statusCode = 401;
-      return next(error);
-    }
-    next();
+  function verifyRole(userId, role, callback){
+    var ObjectID = require('mongodb').ObjectID;
+    mongo.collection('users').findOne({ _id: new ObjectID(userId) }, { role: 1 }, function(err, item){
+      if(err){
+        return callback(err);
+      }
+      if(item.role >= role){
+        callback(null, true);
+      }
+      else{
+        callback(null, false);
+      }
+    });
+  }
+
+  function ensureRoleReguestHandlerWrapper(role){
+    return function(req, res, next){
+      if(!req.isAuthenticated()){
+        var error = new Error("Not logged in");
+        error.statusCode = 401;
+        return next(error);
+      }
+      verifyRole(req.user.id, role, function(err, hasRole){
+        if(err){
+          return next(err);
+        }
+        if(hasRole){
+          next();
+        }
+        else{
+          var error = new Error("Not authorized");
+          error.statusCode = 403;
+          next(error);
+        }
+      });
+    };
   }
 };

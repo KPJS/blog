@@ -32,8 +32,8 @@ function start(logger, authenticationController, postsController, usersControlle
 	}));
 
 	authenticationController.setup(app);
-	registerPostControllerRoutes(app, authenticationController.ensureAuthenticated, postsController);
-	registerUserControllerRoutes(app, authenticationController.ensureAuthenticated, usersController);
+	registerPostControllerRoutes(app, authenticationController.ensureZombie, postsController);
+	registerUserControllerRoutes(app, authenticationController.ensureRuler, usersController);
 
 	// handler for all other paths
 	app.use(function(req, res, next) {
