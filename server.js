@@ -73,6 +73,7 @@ function stop(server, logger) {
 function registerUserControllerRoutes(app, verifyAuth, usersController) {
 	app.get('/users', verifyAuth, usersController.getAllUsersRouteHandler);
 	app.get('/users/:id', verifyAuth, usersController.getUserRouteHandler);
+	app.post('/users/:id', verifyAuth, usersController.postUserRouteHandler);
 }
 
 function registerPostControllerRoutes(app, verifyAuth, postsController) {

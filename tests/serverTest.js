@@ -28,9 +28,12 @@ var fakeUsersController = {
     getAllUsersRouteHandler: function(req, res){
         res.end("User list");
     },
-    getUserRouteHandler: function(req, res){
-    	res.end("User detail");
-    }
+		getUserRouteHandler: function(req, res){
+			res.end("read user - GET");
+		},
+		postUserRouteHandler: function(req, res){
+			res.end("edit user - POST");
+		}
 };
 var server = require('../server')(fakeLogger, fakeAuth, fakePostsController, fakeUsersController);
 
