@@ -1,9 +1,11 @@
 var assert = require('assert');
 
 var fakeLogger = { error: function() {}, info: function() {} };
-var fakePosts = [{ title: "first", content: "first content" }, { title: "second", content: "second content" }];
-var fakeMongo = {};
-var fakeAuth = { setup: function(){}, ensureAuthenticated: function(req, res, next){ next(); } };
+var fakeAuth = {
+	setup: function(){},
+	ensureZombie: function(req, res, next){ next(); },
+	ensureCitizen: function(req, res, next){ next(); },
+	ensureRuler: function(req, res, next){ next(); } };
 var fakePostsController = {
 	getRootRouteHandler: function(req, res){
 		res.end("root - GET");
@@ -26,7 +28,7 @@ var fakePostsController = {
 };
 var fakeUsersController = {
     getAllUsersRouteHandler: function(req, res){
-        res.end("User list");
+        res.end("User list - GET");
     },
 		getUserRouteHandler: function(req, res){
 			res.end("read user - GET");
@@ -65,7 +67,7 @@ describe('Server initialization', function() {
 		});
 	});
 
-	it('Post call, 200 is returned', function(done) {
+	it('Read post call, 200 is returned', function(done) {
 		server.start(function(err, addr) {
 			var http = require('http');
 
@@ -85,7 +87,7 @@ describe('Server initialization', function() {
 		});
 	});
 
-	it('Edit call - GET, 200 is returned', function(done) {
+	it('Edit post call - GET, 200 is returned', function(done) {
 		server.start(function(err, addr) {
 			var http = require('http');
 
@@ -96,15 +98,30 @@ describe('Server initialization', function() {
 		});
 	});
 
-	it('Edit call NO AUTH - GET, 401 is returned', function(done) {
-		var fakeAuth2 = { setup: function(){}, ensureAuthenticated: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); } };
+	it('Edit post call NO AUTH - GET, 401 is returned', function(done) {
+		var fakeAuth2 = {
+			setup: function(){},
+			ensureZombie: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
+			ensureCitizen: function(req, res, next){ next(); },
+			ensureRuler: function(req, res, next){ next(); }
+		};
 		var server2 = require('../server')(fakeLogger, fakeAuth2, fakePostsController, fakeUsersController);
 		server2.start(function(err, addr) {
 			var http = require('http');
-			fakeAuth.ensureAuthenticated = function(req, res, next){ next(new Error("bad")); };
 			http.get('http://localhost:' + addr.port + "/edit/qwerty", function(res) {
 				assert.equal(res.statusCode, 401);
 				server2.stop();
+				done();
+			});
+		});
+	});
+
+	it('Get users list call - GET, 200 is returned', function(done) {
+		server.start(function(err, addr) {
+			var http = require('http');
+
+			http.get('http://localhost:' + addr.port + "/users", function(res) {
+				assert.equal(res.statusCode, 200);
 				done();
 			});
 		});
