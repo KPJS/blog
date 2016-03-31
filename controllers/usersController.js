@@ -40,7 +40,7 @@ module.exports = function(mongo) {
 				error.statusCode = 404;
 				return next(error);
 			}
-			mongo.collection('users').findAndModify({ _id: new ObjectID(req.params.id) }, [], { $set: { } }, { new: true }, function(err){
+			mongo.collection('users').findAndModify({ _id: new ObjectID(req.params.id) }, [], { $set: { role: req.body.type } }, { new: true }, function(err){
 				if(err){ console.log(err); }
 				// if(err) { return next(err); }
 			});
