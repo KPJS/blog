@@ -32,7 +32,7 @@ function start(logger, authenticationController, postsController, usersControlle
 	}));
 
 	authenticationController.setup(app);
-	registerPostControllerRoutes(app, authenticationController.ensureZombie, authenticationController.ensureOwner, postsController);
+	registerPostControllerRoutes(app, authenticationController.ensureOwner, authenticationController.ensureCitizen, postsController);
 	registerUserControllerRoutes(app, authenticationController.ensureRuler, usersController);
 
 	// handler for all other paths
@@ -70,19 +70,19 @@ function stop(server, logger) {
 	}
 }
 
-function registerUserControllerRoutes(app, verifyAuth, usersController) {
-	app.get('/users', verifyAuth, usersController.getAllUsersRouteHandler);
-	app.get('/users/:id', verifyAuth, usersController.getUserRouteHandler);
-	app.post('/users/:id', verifyAuth, usersController.postUserRouteHandler);
+function registerUserControllerRoutes(app, verifyRuler, usersController) {
+	app.get('/users', verifyRuler, usersController.getAllUsersRouteHandler);
+	app.get('/users/:id', verifyRuler, usersController.getUserRouteHandler);
+	app.post('/users/:id', verifyRuler, usersController.postUserRouteHandler);
 }
 
-function registerPostControllerRoutes(app, verifyAuth, verifyOwner, postsController) {
+function registerPostControllerRoutes(app, verifyOwner, verifyCitizen, postsController) {
 	app.get('/', postsController.getRootRouteHandler);
 	app.get('/posts/:uri', postsController.getReadRouteHandler);
 	app.get('/edit/:uri', verifyOwner, postsController.getEditRouteHandler);
 	app.post('/edit/:uri', verifyOwner, postsController.postEditRouteHandler);
-	app.get('/create', verifyAuth, postsController.getCreateRouteHandler);
-	app.post('/create', verifyAuth, postsController.postCreateRouteHandler);
+	app.get('/create', verifyCitizen, postsController.getCreateRouteHandler);
+	app.post('/create', verifyCitizen, postsController.postCreateRouteHandler);
 }
 
 module.exports = function(logger, authenticationController, postsController, usersController) {

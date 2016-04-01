@@ -1,4 +1,5 @@
 var assert = require('assert');
+var http = require('http');
 
 var fakeLogger = { error: function() {}, info: function() {} };
 var fakeAuth = {
@@ -38,9 +39,10 @@ var fakeUsersController = {
 			res.end("edit user - POST");
 		}
 };
-var server = require('../server')(fakeLogger, fakeAuth, fakePostsController, fakeUsersController);
 
-describe('Server initialization', function() {
+describe('Server initialization tests', function() {
+	var server = require('../server')(fakeLogger, fakeAuth, fakePostsController, fakeUsersController);
+
 	afterEach(function() { server.stop(); });
 
 	it('Server should be started', function(done) {
@@ -57,29 +59,7 @@ describe('Server initialization', function() {
 		});
 	});
 
-	it('Root call, 200 is returned', function(done) {
-		server.start(function(err, addr) {
-			var http = require('http');
-
-			http.get('http://localhost:' + addr.port, function(res) {
-				assert.equal(res.statusCode, 200);
-				done();
-			});
-		});
-	});
-
-	it('Read post call, 200 is returned', function(done) {
-		server.start(function(err, addr) {
-			var http = require('http');
-
-			http.get('http://localhost:' + addr.port + "/posts/qwerty", function(res) {
-				assert.equal(res.statusCode, 200);
-				done();
-			});
-		});
-	});
-
-	it('Server should be stopped', function(done) {
+	it('Server can be stopped multiple times', function(done) {
 		server.start(function(err) {
 			server.stop();
 			server.stop();
@@ -87,11 +67,33 @@ describe('Server initialization', function() {
 			done();
 		});
 	});
+});
 
-	it('Edit post call - GET, 200 is returned', function(done) {
+describe('Route authorization tests [successfull auth]', function() {
+	var server = require('../server')(fakeLogger, fakeAuth, fakePostsController, fakeUsersController);
+
+	afterEach(function() { server.stop(); });
+
+	it('GET root call - 200 is returned', function(done) {
 		server.start(function(err, addr) {
-			var http = require('http');
+			http.get('http://localhost:' + addr.port, function(res) {
+				assert.equal(res.statusCode, 200);
+				done();
+			});
+		});
+	});
 
+	it('GET post call - 200 is returned', function(done) {
+		server.start(function(err, addr) {
+			http.get('http://localhost:' + addr.port + "/posts/qwerty", function(res) {
+				assert.equal(res.statusCode, 200);
+				done();
+			});
+		});
+	});
+
+	it('GET edit post call - 200 is returned', function(done) {
+		server.start(function(err, addr) {
 			http.get('http://localhost:' + addr.port + "/edit/qwerty", function(res) {
 				assert.equal(res.statusCode, 200);
 				done();
@@ -99,31 +101,95 @@ describe('Server initialization', function() {
 		});
 	});
 
-	it('Edit post call NO AUTH - GET, 401 is returned', function(done) {
-		var fakeAuth2 = {
-			setup: function(){},
-			ensureOwner: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
-			ensureZombie: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
-			ensureCitizen: function(req, res, next){ next(); },
-			ensureRuler: function(req, res, next){ next(); }
-		};
-		var server2 = require('../server')(fakeLogger, fakeAuth2, fakePostsController, fakeUsersController);
-		server2.start(function(err, addr) {
-			var http = require('http');
-			http.get('http://localhost:' + addr.port + "/edit/qwerty", function(res) {
-				assert.equal(res.statusCode, 401);
-				server2.stop();
+	it('GET create post call - 200 is returned', function(done) {
+		server.start(function(err, addr) {
+			http.get('http://localhost:' + addr.port + "/create", function(res) {
+				assert.equal(res.statusCode, 200);
 				done();
 			});
 		});
 	});
 
-	it('Get users list call - GET, 200 is returned', function(done) {
+	it('GET users list call - 200 is returned', function(done) {
 		server.start(function(err, addr) {
-			var http = require('http');
-
 			http.get('http://localhost:' + addr.port + "/users", function(res) {
 				assert.equal(res.statusCode, 200);
+				done();
+			});
+		});
+	});
+
+	it('GET user detail call - 200 is returned', function(done) {
+		server.start(function(err, addr) {
+			http.get('http://localhost:' + addr.port + "/users/someUser", function(res) {
+				assert.equal(res.statusCode, 200);
+				done();
+			});
+		});
+	});
+});
+
+describe('Route authorization tests [failed auth]', function() {
+	var fakeAuth2 = {
+		setup: function(){},
+		ensureOwner: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
+		ensureZombie: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
+		ensureCitizen: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
+		ensureRuler: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); }
+	};
+	var server = require('../server')(fakeLogger, fakeAuth2, fakePostsController, fakeUsersController);
+
+	afterEach(function() { server.stop(); });
+
+	it('GET root call [not auth] - 200 is returned', function(done) {
+		server.start(function(err, addr) {
+			http.get('http://localhost:' + addr.port, function(res) {
+				assert.equal(res.statusCode, 200);
+				done();
+			});
+		});
+	});
+
+	it('GET post call [not auth] - 200 is returned', function(done) {
+		server.start(function(err, addr) {
+			http.get('http://localhost:' + addr.port + "/posts/qwerty", function(res) {
+				assert.equal(res.statusCode, 200);
+				done();
+			});
+		});
+	});
+
+	it('GET edit post call [not owner] - 401 is returned', function(done) {
+		server.start(function(err, addr) {
+			http.get('http://localhost:' + addr.port + "/edit/qwerty", function(res) {
+				assert.equal(res.statusCode, 401);
+				done();
+			});
+		});
+	});
+
+	it('GET create post call [not citizen] - 401 is returned', function(done) {
+		server.start(function(err, addr) {
+			http.get('http://localhost:' + addr.port + "/edit/qwerty", function(res) {
+				assert.equal(res.statusCode, 401);
+				done();
+			});
+		});
+	});
+
+	it('GET users list call [not ruler] - 401 is returned', function(done) {
+		server.start(function(err, addr) {
+			http.get('http://localhost:' + addr.port + "/users", function(res) {
+				assert.equal(res.statusCode, 401);
+				done();
+			});
+		});
+	});
+
+	it('GET user detail call [not ruler] - 401 is returned', function(done) {
+		server.start(function(err, addr) {
+			http.get('http://localhost:' + addr.port + "/users/someUser", function(res) {
+				assert.equal(res.statusCode, 401);
 				done();
 			});
 		});
