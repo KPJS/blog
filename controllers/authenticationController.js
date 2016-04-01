@@ -60,9 +60,9 @@ module.exports = function(mongo) {
   return {
     setup: setup,
     ensureOwner: ensureOwner,
-    ensureZombie: ensureRoleReguestHandlerWrapper(0),
-    ensureCitizen: ensureRoleReguestHandlerWrapper(1),
-    ensureRuler: ensureRoleReguestHandlerWrapper(2)
+    ensureZombie: ensureRoleRequestHandlerWrapper(0),
+    ensureCitizen: ensureRoleRequestHandlerWrapper(1),
+    ensureRuler: ensureRoleRequestHandlerWrapper(2)
   };
 
   function authCallback(avatarCallback){
@@ -124,7 +124,7 @@ module.exports = function(mongo) {
     });
   }
 
-  function ensureRoleReguestHandlerWrapper(role){
+  function ensureRoleRequestHandlerWrapper(role){
     return function(req, res, next){
       if(!req.isAuthenticated()){
         var error = new Error("Not logged in");
