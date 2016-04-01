@@ -35,12 +35,21 @@ module.exports = function(mongo) {
   }
 
   function getEditRouteHandler(req, res, next) {
-    mongo.collection('posts').findOne({ uri: req.params.uri }, { title: 1, content: 1 }, function(err, item) {
-			if (err) {
-				var error = new Error("Post not found");
+    mongo.collection('posts').findOne({ uri: req.params.uri }, { title: 1, content: 1, users_id: 1 }, function(err, item) {
+			var error;
+            
+            if (err) {
+				error = new Error("Post not found");
 				error.statusCode = 404;
 				return next(error);
 			}
+            
+            if (item.users_id.toString() !== req.user.id.toString())
+            {
+				error = new Error("Fuck you");
+				error.statusCode = 403;
+				return next(error);
+            }
 			res.render('editPost.html', { user: req.user, title: item.title, content: item.content });
 		});
   }

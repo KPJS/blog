@@ -26,7 +26,6 @@
     "disallowTrailingComma": true,
     "disallowTrailingWhitespace": "ignoreEmptyLines",
     "disallowYodaConditions": true,
-    "requireCamelCaseOrUpperCaseIdentifiers": true,
     "requireCapitalizedConstructors": true,
     "requireCommaBeforeLineBreak": true,
     "requireCurlyBraces": true,
