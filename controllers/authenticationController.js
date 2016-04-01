@@ -59,6 +59,7 @@ module.exports = function(mongo) {
 
   return {
     setup: setup,
+    ensureOwner: ensureOwner,
     ensureZombie: ensureRoleReguestHandlerWrapper(0),
     ensureCitizen: ensureRoleReguestHandlerWrapper(1),
     ensureRuler: ensureRoleReguestHandlerWrapper(2)
@@ -144,5 +145,23 @@ module.exports = function(mongo) {
         }
       });
     };
+  }
+
+  function ensureOwner(req, res, next){
+    if(!req.isAuthenticated()){
+      var error = new Error("Not logged in");
+      error.statusCode = 401;
+      return next(error);
+    }
+    var ObjectID = require('mongodb').ObjectID;
+    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+    mongo.collection('posts').count({ users_id: new ObjectID(req.user.id), uri: req.params.uri }, function(err, count){
+      if(count > 0){
+        return next();
+      }
+      var error = new Error("Not authorized");
+      error.statusCode = 403;
+      return next(error);
+    });
   }
 };
