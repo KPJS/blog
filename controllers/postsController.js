@@ -15,9 +15,7 @@ module.exports = function(mongo) {
   function getRootRouteHandler(req, res, next) {
     mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
 			if (err) {
-				var error = new Error("Could not retrieve posts");
-				error.statusCode = 500;
-				return next(error);
+				return next(err);
 			}
 			res.render('index.html', { user: req.user, posts: items.map(function(i) { return { title: i.title, uri: i.uri, date: i.publishDate }; }) });
 		});
@@ -25,7 +23,8 @@ module.exports = function(mongo) {
 
   function getReadRouteHandler(req, res, next) {
     mongo.collection('posts').findOne({ uri: req.params.uri }, { title: 1, content: 1 }, function(err, item) {
-			if (err) {
+      if (err) { return next(err); }
+			if (!item) {
 				var error = new Error("Post not found");
 				error.statusCode = 404;
 				return next(error);
@@ -36,7 +35,8 @@ module.exports = function(mongo) {
 
   function getEditRouteHandler(req, res, next) {
     mongo.collection('posts').findOne({ uri: req.params.uri }, { title: 1, content: 1 }, function(err, item) {
-			if (err) {
+      if (err) { return next(err); }
+			if (!item) {
 				var error = new Error("Post not found");
 				error.statusCode = 404;
 				return next(error);
@@ -46,11 +46,15 @@ module.exports = function(mongo) {
   }
 
   function postEditRouteHandler(req, res, next) {
-    mongo.collection('posts').findAndModify({ uri: req.params.uri }, [], { $set: { title: req.body.title, content: req.body.content } }, { new: true },
-      function(err){
-        if(err){ return next(err); }
-        res.redirect('/posts/' + req.params.uri);
-      });
+    mongo.collection('posts').findAndModify({ uri: req.params.uri }, [], { $set: { title: req.body.title, content: req.body.content } }, {}, function(err, item){
+      if(err){ return next(err); }
+      if (!item.value) {
+        var error = new Error("Post not found");
+        error.statusCode = 404;
+        return next(error);
+      }
+      res.redirect('/posts/' + req.params.uri);
+    });
   }
 
   function getCreateRouteHandler(req, res) {

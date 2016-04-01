@@ -115,7 +115,7 @@ module.exports = function(mongo) {
       if(err){
         return callback(err);
       }
-      if(item.role >= role){
+      if(item && item.role >= role){
         callback(null, true);
       }
       else{
