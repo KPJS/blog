@@ -73,7 +73,7 @@ module.exports = function(mongo) {
 
 	function authCallback(avatarCallback) {
 		return function(token, tokenSecret, profile, done) {
-			mongo.collection('users').findAndModify({ provider: profile.provider, providerId: profile.id }, [], { $setOnInsert: { name: profile.displayName, role: 0 } }, { new: true, upsert: true },
+			mongo.collection('users').findOneAndUpdate({ provider: profile.provider, providerId: profile.id }, { $setOnInsert: { name: profile.displayName, role: 0 } }, { upsert: true, returnOriginal: false },
 				function(err, item) {
 					if(err) {
 						return done(err);
