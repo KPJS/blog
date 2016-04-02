@@ -77,20 +77,17 @@ module.exports = function(mongo) {
       return next(error);
     }
     var url = req.body.url;
-    var ObjectID = require('mongodb').ObjectID;
     if(!url){
       url = title.replace(/\s+/g, '-');
     }
-    mongo.collection('posts').count({ uri: url }, function(err, count) {
-      if(count > 0){
-        res.render('create.html', { post: { url: url, title: title, content: content, exists: true } });
-      } else {
-        mongo.collection('posts').insert([{ title: title, uri: url, content: content, user_id: new ObjectID(req.user.id), publishDate: new Date() }],// jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
-        function(err){
-          if(err){ return next(err); }
-          res.redirect('/posts/' + url);
-        });
-      }
+    var ObjectID = require('mongodb').ObjectID;
+    mongo.collection('posts').insert({ title: title, uri: url, content: content, user_id: new ObjectID(req.user.id), publishDate: new Date() }, function(err){
+      if(err){
+        if(err.code === 11000) { //duplicate key
+          return res.render('create.html', { post: { url: url, title: title, content: content, exists: true } });
+        }
+        return next(err); }
+      res.redirect('/posts/' + url);
     });
   }
 };
