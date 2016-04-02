@@ -46,7 +46,14 @@ module.exports = function(mongo) {
   }
 
   function postEditRouteHandler(req, res, next) {
-    mongo.collection('posts').findAndModify({ uri: req.params.uri }, [], { $set: { title: req.body.title, content: req.body.content } }, {}, function(err, item){
+    var title = req.body.title;
+    var content = req.body.content;
+    if(!title || !content){
+      var error = new Error("Title and content are mandatory");
+      error.statusCode = 400;
+      return next(error);
+    }
+    mongo.collection('posts').findAndModify({ uri: req.params.uri }, [], { $set: { title: title, content: content } }, {}, function(err, item){
       if(err){ return next(err); }
       if (!item.value) {
         var error = new Error("Post not found");
@@ -62,9 +69,14 @@ module.exports = function(mongo) {
   }
 
   function postCreateRouteHandler(req, res, next) {
-    var url = req.body.url;
     var title = req.body.title;
     var content = req.body.content;
+    if(!title || !content){
+      var error = new Error("Title and content are mandatory");
+      error.statusCode = 400;
+      return next(error);
+    }
+    var url = req.body.url;
     var ObjectID = require('mongodb').ObjectID;
     if(!url){
       url = title.replace(/\s+/g, '-');
