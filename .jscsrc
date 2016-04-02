@@ -24,8 +24,11 @@
     },
     "disallowSpacesInsideParentheses": true,
     "disallowTrailingComma": true,
-    "disallowTrailingWhitespace": "ignoreEmptyLines",
+    "disallowTrailingWhitespace": true,
+		"disallowNewlineBeforeBlockStatements": true,
     "disallowYodaConditions": true,
+		"requireBlocksOnNewline": true,
+		"requireSpaceBeforeBlockStatements": 1,
     "requireCapitalizedConstructors": true,
     "requireCommaBeforeLineBreak": true,
     "requireCurlyBraces": true,
@@ -44,7 +47,7 @@
         "beforeAlternate": true
     },
     "requireSpacesInForStatement": true,
-    "requireSpacesInsideObjectBrackets": "all"
-    //"validateIndentation": 4
-    //"validateQuoteMarks": "\""
+    "requireSpacesInsideObjectBrackets": "all",
+    "validateIndentation": "\t",
+    "validateQuoteMarks": "'"
 }
