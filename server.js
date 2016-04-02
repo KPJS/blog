@@ -3,7 +3,7 @@ function start(logger, authenticationController, postsController, usersControlle
 	var express = require('express');
 	var hbs = require('hbs');
 	hbs.registerHelper('select', function(selected, options) {
-    return options.fn(this).replace(
+		return options.fn(this).replace(
         new RegExp(' value=\"' + selected + '\"'),
         '$& selected="selected"');
 	});
@@ -17,7 +17,7 @@ function start(logger, authenticationController, postsController, usersControlle
 	app.use(bodyParser.urlencoded({ extended: false }));
 
 	app.use(function(req, res, next) {
-		logger.info("Request for " + req.path);
+		logger.info('Request for ' + req.path);
 		next();
 	});
 
@@ -37,14 +37,14 @@ function start(logger, authenticationController, postsController, usersControlle
 
 	// handler for all other paths
 	app.use(function(req, res, next) {
-		var error = new Error("Page not found");
+		var error = new Error('Page not found');
 		error.statusCode = 404;
 		next(error);
 	});
 
 	// error handler
 	app.use(function(err, req, res, next) { // jshint ignore:line
-		logger.error("Error: " + err.message, { path: req.path, stackTrace: err.stack });
+		logger.error('Error: ' + err.message, { path: req.path, stackTrace: err.stack });
 		err.statusCode = err.statusCode || 500;
 		res.status(err.statusCode);
 		res.render('error.html', { message: err.message, errorCode: err.statusCode });
@@ -87,23 +87,23 @@ function registerPostControllerRoutes(app, verifyOwner, verifyCitizen, postsCont
 
 module.exports = function(logger, authenticationController, postsController, usersController) {
 	if(!logger) {
-		throw "Missing logger";
+		throw 'Missing logger';
 	}
 	if(!authenticationController) {
-		throw "Missing authenticationController";
+		throw 'Missing authenticationController';
 	}
 	if(!postsController) {
-		throw "Missing postsController";
+		throw 'Missing postsController';
 	}
 	if(!usersController) {
-		throw "Missing usersController";
+		throw 'Missing usersController';
 	}
 
 	var server;
 
 	return {
 		start: function(startCallback) {
-            start(logger, authenticationController, postsController, usersController, function(err, srv){
+			start(logger, authenticationController, postsController, usersController, function(err, srv) {
 				if (err) {
 					return startCallback(err);
 				}
