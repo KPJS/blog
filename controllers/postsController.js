@@ -60,7 +60,7 @@ module.exports = function(mongo) {
 			error.statusCode = 400;
 			return next(error);
 		}
-		mongo.collection('posts').findAndModify({ uri: req.params.uri }, [], { $set: { title: title, content: content } }, {}, function(err, item) {
+		mongo.collection('posts').findOneAndUpdate({ uri: req.params.uri }, { $set: { title: title, content: content } }, function(err, item) {
 			if(err) {
 				return next(err);
 			}
@@ -90,7 +90,7 @@ module.exports = function(mongo) {
 			url = title.replace(/\s+/g, '-');
 		}
 		var ObjectID = require('mongodb').ObjectID;
-		mongo.collection('posts').insert({ title: title, uri: url, content: content, user_id: new ObjectID(req.user.id), publishDate: new Date() }, function(err) {
+		mongo.collection('posts').insertOne({ title: title, uri: url, content: content, user_id: new ObjectID(req.user.id), publishDate: new Date() }, function(err) {
 			if(err) {
 				if(err.code === 11000) { //duplicate key
 					return res.render('create.html', { post: { url: url, title: title, content: content, exists: true } });
