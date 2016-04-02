@@ -25,9 +25,7 @@ module.exports = function(mongo) {
       callbackURL: url + '/login/github/callback',
       state: true
     },
-    //jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     authCallback(function(p) { return p._json.avatar_url; })
-    //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
   ));
 
   passport.use(new TwitterStrategy({
