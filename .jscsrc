@@ -1,53 +1,53 @@
 {
-    "disallowEmptyBlocks": true,
-    "disallowMixedSpacesAndTabs": true,
-    "disallowMultipleLineStrings": true,
-    "disallowMultipleSpaces": {"allowEOLComments": true},
-    "disallowOperatorBeforeLineBreak": ["+", "."],
-    "disallowPaddingNewlinesInBlocks": true,
-    "disallowSpaceAfterPrefixUnaryOperators": true,
-    "disallowSpaceBeforeComma": true,
-    "disallowSpaceBeforePostfixUnaryOperators": true,
-    "disallowSpaceBeforeSemicolon": true,
-    "disallowSpacesInAnonymousFunctionExpression": {
-        "beforeOpeningRoundBrace": true
-    },
-    "disallowSpacesInCallExpression": true,
-    "disallowSpacesInFunctionExpression": {
-        "beforeOpeningRoundBrace": true
-    },
-    "disallowSpacesInFunction": {
-        "beforeOpeningRoundBrace": true
-    },
-    "disallowSpacesInNamedFunctionExpression": {
-        "beforeOpeningRoundBrace": true
-    },
-    "disallowSpacesInsideParentheses": true,
-    "disallowTrailingComma": true,
-    "disallowTrailingWhitespace": true,
-		"disallowNewlineBeforeBlockStatements": true,
-    "disallowYodaConditions": true,
-		"requireBlocksOnNewline": true,
-		"requireSpaceBeforeBlockStatements": 1,
-    "requireCapitalizedConstructors": true,
-    "requireCommaBeforeLineBreak": true,
-    "requireCurlyBraces": true,
-    "requireLineBreakAfterVariableAssignment": true,
-    "requireLineFeedAtFileEnd": true,
-    "requireParenthesesAroundIIFE": true,
-    "requireSemicolons": true,
-    "requireSpaceAfterBinaryOperators": true,
-    "requireSpaceBeforeBinaryOperators": true,
-    "requireSpaceBeforeObjectValues": true,
-    "requireSpaceBetweenArguments": true,
-    "requireSpacesInConditionalExpression": {
-        "afterTest": true,
-        "beforeConsequent": true,
-        "afterConsequent": true,
-        "beforeAlternate": true
-    },
-    "requireSpacesInForStatement": true,
-    "requireSpacesInsideObjectBrackets": "all",
-    "validateIndentation": "\t",
-    "validateQuoteMarks": "'"
+	"disallowEmptyBlocks": true,
+	"disallowMixedSpacesAndTabs": true,
+	"disallowMultipleLineStrings": true,
+	"disallowMultipleSpaces": {"allowEOLComments": true},
+	"disallowOperatorBeforeLineBreak": ["+", "."],
+	"disallowPaddingNewlinesInBlocks": true,
+	"disallowSpaceAfterPrefixUnaryOperators": true,
+	"disallowSpaceBeforeComma": true,
+	"disallowSpaceBeforePostfixUnaryOperators": true,
+	"disallowSpaceBeforeSemicolon": true,
+	"disallowSpacesInAnonymousFunctionExpression": {
+		"beforeOpeningRoundBrace": true
+	},
+	"disallowSpacesInCallExpression": true,
+	"disallowSpacesInFunctionExpression": {
+		"beforeOpeningRoundBrace": true
+	},
+	"disallowSpacesInFunction": {
+		"beforeOpeningRoundBrace": true
+	},
+	"disallowSpacesInNamedFunctionExpression": {
+		"beforeOpeningRoundBrace": true
+	},
+	"disallowSpacesInsideParentheses": true,
+	"disallowTrailingComma": true,
+	"disallowTrailingWhitespace": true,
+	"disallowNewlineBeforeBlockStatements": true,
+	"disallowYodaConditions": true,
+	"requireBlocksOnNewline": true,
+	"requireSpaceBeforeBlockStatements": 1,
+	"requireCapitalizedConstructors": true,
+	"requireCommaBeforeLineBreak": true,
+	"requireCurlyBraces": true,
+	"requireLineBreakAfterVariableAssignment": true,
+	"requireLineFeedAtFileEnd": true,
+	"requireParenthesesAroundIIFE": true,
+	"requireSemicolons": true,
+	"requireSpaceAfterBinaryOperators": true,
+	"requireSpaceBeforeBinaryOperators": true,
+	"requireSpaceBeforeObjectValues": true,
+	"requireSpaceBetweenArguments": true,
+	"requireSpacesInConditionalExpression": {
+		"afterTest": true,
+		"beforeConsequent": true,
+		"afterConsequent": true,
+		"beforeAlternate": true
+	},
+	"requireSpacesInForStatement": true,
+	"requireSpacesInsideObjectBrackets": "all",
+	"validateIndentation": "\t",
+	"validateQuoteMarks": "'"
 }
