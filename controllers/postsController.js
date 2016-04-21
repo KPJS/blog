@@ -17,7 +17,7 @@ module.exports = function(mongo) {
 			if (err) {
 				return next(err);
 			}
-			res.render('index.html', { user: req.user, posts: items.map(function(i) {
+			res.render('index.html', { title: 'KPJS blog', posts: items.map(function(i) {
 					return { title: i.title, uri: i.uri, date: i.publishDate };
 				})
 			});
@@ -48,7 +48,7 @@ module.exports = function(mongo) {
 				error.statusCode = 404;
 				return next(error);
 			}
-			res.render('editPost.html', { user: req.user, title: item.title, content: item.content });
+			res.render('editPost.html', { title: item.title, content: item.content });
 		});
 	}
 
@@ -74,7 +74,7 @@ module.exports = function(mongo) {
 	}
 
 	function getCreateRouteHandler(req, res) {
-		res.render('create.html', {});
+		res.render('create.html', { title: 'Create post'});
 	}
 
 	function postCreateRouteHandler(req, res, next) {

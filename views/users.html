@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Users</title>
-    </head>
+{{> head}}
     <body>
-        <img src="{{user.avatarUrl}}" alt="avatar" height="50"> <i>{{user.name}}</i> (<a href="/logout">logout</a>)
+        {{> header}}
         <ul>
-            {{#each users}}<li><a href="/users/{{_id}}">{{name}} ({{provider}})</a></li>{{/each}}
+            {{#each users}}<li><a href="/users/{{_id}}">{{name}} ({{provider}})</a></li>
+            {{/each}}
         </ul>
     </body>
 </html>
