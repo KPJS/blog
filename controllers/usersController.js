@@ -14,7 +14,7 @@ module.exports = function(mongo) {
 			if (err) {
 				return next(err);
 			}
-			res.render('users.html', { user: req.user, users: items });
+			res.render('users.html', { users: items, title: 'Users' });
 		});
 	}
 
@@ -29,7 +29,7 @@ module.exports = function(mongo) {
 				error.statusCode = 404;
 				return next(error);
 			}
-			res.render('userDetail.html', { user: req.user, userName: item.name, userProvider: item.provider, role: item.role, userId: item._id });
+			res.render('userDetail.html', { userName: item.name, userProvider: item.provider, role: item.role, userId: item._id, title: 'User detail' });
 		});
 	}
 
@@ -44,7 +44,7 @@ module.exports = function(mongo) {
 				error.statusCode = 404;
 				return next(error);
 			}
-			res.render('userDetail.html', { user: req.user, userName: item.value.name, userProvider: item.value.provider, role: item.value.role, userId: item.value._id });
+			res.render('userDetail.html', { userName: item.value.name, userProvider: item.value.provider, role: item.value.role, userId: item.value._id, title: 'User detail' });
 		});
 	}
 };

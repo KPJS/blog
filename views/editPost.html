@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Edit: {{title}}</title>
-    </head>
+{{> head}}
     <body>
-        <img src="{{user.avatarUrl}}" alt="avatar" height="50"> <i>{{user.name}}</i> (<a href="/logout">logout</a>)
+        {{> header}}
         <form action="" method="post">
           <table>
             <tr>

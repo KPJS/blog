@@ -22,9 +22,9 @@
 	},
 	"scripts": {
 		"start": "node app.js",
-		"pretest": "jshint --verbose *.js controllers/*.js",
+		"pretest": "jshint --verbose app.js server.js controllers/",
 		"test": "mocha tests/ --reporter spec",
-		"posttest": "jscs --verbose *.js controllers/*.js"
+		"posttest": "jscs --verbose app.js server.js controllers/"
 	},
 	"engines": {
 		"node": "4.2.x"
