@@ -6,7 +6,7 @@
 	"freeze": true,
 	"maxcomplexity": 10,
 	"maxdepth": 4,
-	"maxstatements": 20,
+	"maxstatements": 30,
 	"noarg": true,
 	"nonbsp": true,
 	"nonew": true,

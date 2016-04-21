@@ -74,7 +74,7 @@ module.exports = function(mongo) {
 	}
 
 	function getCreateRouteHandler(req, res) {
-		res.render('create.html', { title: 'Create post'});
+		res.render('create.html', { title: 'Create post' });
 	}
 
 	function postCreateRouteHandler(req, res, next) {

@@ -14,7 +14,7 @@ function start(logger, authenticationController, postsController, usersControlle
 	app.engine('html', hbs.__express);
 	app.use(express.static('static'));
 
-    hbs.localsAsTemplateData(app);
+	hbs.localsAsTemplateData(app);
 
 	var bodyParser = require('body-parser');
 	app.use(bodyParser.urlencoded({ extended: false }));
@@ -35,10 +35,10 @@ function start(logger, authenticationController, postsController, usersControlle
 	}));
 
 	authenticationController.setup(app);
-    
-	app.use(function (req, res, next) {
-	    res.locals.user = req.user;
-	    next();
+
+	app.use(function(req, res, next) {
+		res.locals.user = req.user;
+		next();
 	});
 
 	registerPostControllerRoutes(app, authenticationController.ensureOwner, authenticationController.ensureCitizen, postsController);
