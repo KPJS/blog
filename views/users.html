@@ -4,8 +4,7 @@
     <body>
         {{> header}}
         <ul>
-            {{#each users}}<li><a href="/users/{{_id}}">{{name}} ({{provider}})</a></li>
-            {{/each}}
+            {{#each users}}<li><a href="/users/{{_id}}">{{name}} ({{provider}})</a></li>{{/each}}
         </ul>
     </body>
 </html>
