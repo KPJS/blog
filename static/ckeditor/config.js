@@ -32,6 +32,5 @@ CKEDITOR.editorConfig = function( config ) {
 	// Dialog windows are also simplified.
 	config.removeDialogTabs = 'link:advanced';
 
-	// Skin
-	config.skin = 'office2013';
+	config.uiColor = '#ffffff';
 };
