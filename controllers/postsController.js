@@ -90,7 +90,7 @@ module.exports = function(mongo) {
 			url = title.replace(/\s+/g, '-');
 		}
 		var ObjectID = require('mongodb').ObjectID;
-		mongo.collection('posts').insertOne({ title: title, uri: url, content: content, user_id: new ObjectID(req.user.id), publishDate: new Date() }, function(err) {
+		mongo.collection('posts').insertOne({ title: title, uri: url, content: content, author_id: new ObjectID(req.user.id), publishDate: new Date() }, function(err) {
 			if(err) {
 				if(err.code === 11000) { //duplicate key
 					return res.render('create.html', { post: { url: url, title: title, content: content, exists: true } });
