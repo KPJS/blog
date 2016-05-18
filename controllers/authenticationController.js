@@ -165,11 +165,11 @@ module.exports = function(mongo) {
 			return next(error);
 		}
 		var ObjectID = require('mongodb').ObjectID;
-		mongo.collection('posts').count({ users_id: new ObjectID(req.user.id), uri: req.params.uri }, function(err, count) {
+		mongo.collection('posts').count({ author_id: new ObjectID(req.user.id), uri: req.params.uri }, function(err, count) {
 			if(count > 0) {
 				return next();
 			}
-			var error = new Error('Not authorized');
+			var error = new Error('Not owner');
 			error.statusCode = 403;
 			return next(error);
 		});

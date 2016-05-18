@@ -11,7 +11,7 @@
             </tr>
             <tr>
               <td>Content</td>
-              <td><textarea name="content" cols="100" rows="50">{{content}}</textarea></td>
+              <td><textarea name="content" id="editor" cols="100" rows="50">{{content}}</textarea></td>
             </tr>
             <tr>
               <td></td>
@@ -19,5 +19,7 @@
             </tr>
           </table>
         </form>
+				<script src="/ckeditor/ckeditor.js"></script>
+				<script>CKEDITOR.replace( 'editor');</script>
     </body>
 </html>

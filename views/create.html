@@ -16,9 +16,11 @@
             </div>
             {{/if}}
             <div>
-                Content: <textarea name="content" cols="80" rows="25">{{post.content}}</textarea>
+                Content: <textarea name="content" id="editor" cols="100" rows="50">{{post.content}}</textarea>
             </div>
-            <input type="submit" />
+            <input type="submit" value="Save"/>
         </form>
+				<script src="/ckeditor/ckeditor.js"></script>
+				<script>CKEDITOR.replace( 'editor');</script>
     </body>
 </html>
