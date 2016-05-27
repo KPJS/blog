@@ -1,1 +1,24 @@
-﻿{{> user}}
+<header class="menu">
+	<div id="main-logo">
+		<img src="img/KPJS_logo.png" height="110" width="150" alt="KPJS_logo">
+	</div>
+	<nav>
+		<ul class="navigation">
+			<li class="menuItem">
+				<a href="index.html">Home</a>
+			</li>
+			<li class="menuItem" id="aboutUs">      
+				<a href="aboutUs.html">WTF?</a>
+			</li>
+			<li class="menuItem" id="AllPosts"> 
+				<a href="AllPosts.html">Blog</a>
+			</li>
+			<li class="menuItem" id="ContactPage"> 
+				<a href="ContactPage.html">Contact</a>
+			</li>
+			<li class="menuItem" id="LoginIn-Line"> 
+				{{> user}}
+			</li>
+		</ul>
+	</nav>    
+</header>    

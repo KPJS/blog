@@ -2,10 +2,16 @@
 <html>
 {{> head}}
 <body>
-    {{> header}}
-    <ul>
-        {{#each posts}}<li><a href="posts/{{uri}}">{{title}}</a> ({{date}})</li>
-        {{/each}}
-    </ul>
+	<div class="content">
+		{{> header}}
+		<main class="homePage">
+			<div class="MainTitle">
+				<h1>HTML Ipsum Presents</h1>
+				<h2>Header Level 2</h2>
+					<p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada ...</p>
+			</div>
+		</main>
+	</div>	
+	{{> footer}}
 </body>
 </html>
