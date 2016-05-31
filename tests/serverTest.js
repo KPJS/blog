@@ -26,6 +26,9 @@ var fakePostsController = {
 	},
 	postCreateRouteHandler: function(req, res){
 		res.end("create post - POST");
+	},
+	getPostsRouteHandler: function(req, res){
+		res.end("all posts - GET");
 	}
 };
 var fakeUsersController = {

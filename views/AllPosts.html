@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+{{> head}}
+<body>
+	<div class="content">
+	    {{> header}}
+	    <main class="homePage">
+	        <ul>
+	            {{#each posts}}<li><a href="posts/{{uri}}">{{title}}</a> ({{date}})</li>
+	            {{/each}}
+	        </ul>
+	    </main>
+	</div>  
+    {{> footer}} 
+</body>
+</html>

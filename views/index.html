@@ -2,10 +2,15 @@
 <html>
 {{> head}}
 <body>
-    {{> header}}
-    <ul>
-        {{#each posts}}<li><a href="posts/{{uri}}">{{title}}</a> ({{date}})</li>
-        {{/each}}
-    </ul>
+	<div class="content">
+		{{> header}}
+		<main class="homePage">
+			<div class="MainTitle">
+				<h1>{{title}}</h1>
+				<p class="perex">{{perex}}</p>
+			</div>
+		</main>
+	</div>	
+	{{> footer}}
 </body>
 </html>
