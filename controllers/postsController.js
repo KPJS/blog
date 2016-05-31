@@ -12,11 +12,14 @@ module.exports = function(mongo) {
 		getCreateRouteHandler: getCreateRouteHandler,
 		postCreateRouteHandler: postCreateRouteHandler,
 		aboutRouteHandler: aboutRouteHandler,
+		contactRouteHandler: contactRouteHandler
 	};
 
+	function aboutRouteHandler(req, res) {
 		res.render('about.html');
 	}
 
+	function contactRouteHandler(req, res) {
 		res.render('contact.html');
 	}
 
