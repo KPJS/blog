@@ -87,6 +87,7 @@ function registerUserControllerRoutes(app, verifyRuler, usersController) {
 
 function registerPostControllerRoutes(app, verifyOwner, verifyCitizen, postsController) {
 	app.get('/', postsController.getRootRouteHandler);
+	app.get('/posts', postsController.getPostsRouteHandler);
 	app.get('/posts/:uri', postsController.getReadRouteHandler);
 	app.get('/edit/:uri', verifyOwner, postsController.getEditRouteHandler);
 	app.post('/edit/:uri', verifyOwner, postsController.postEditRouteHandler);

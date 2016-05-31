@@ -4,20 +4,15 @@
     <body>
         {{> header}}
         <form action="" method="post">
-          <table>
-            <tr>
-              <td>Title</td>
-              <td><input type="text" name="title" value="{{title}}"></td>
-            </tr>
-            <tr>
-              <td>Content</td>
-              <td><textarea name="content" id="editor" cols="100" rows="50">{{content}}</textarea></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td><input type="submit" name="save" value="Save"></td>
-            </tr>
-          </table>
+          <div>
+            Title: <input type="text" name="title" value="{{title}}" />
+          </div>
+          <div>
+            Content: <textarea name="content" id="editor" cols="100" rows="50">{{content}}</textarea>
+          </div>
+          <div>
+            <input type="submit" name="save" value="Save" />
+          </div>
         </form>
 				<script src="/ckeditor/ckeditor.js"></script>
 				<script>CKEDITOR.replace( 'editor');</script>
