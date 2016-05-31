@@ -3,12 +3,14 @@
 {{> head}}
 <body>
 	<div class="content">
-		{{> header}}
-		<ul>
-			{{#each posts}}<li><a href="posts/{{uri}}">{{title}}</a> ({{date}})</li>
-	        {{/each}}
-		</ul>
-		{{> footer}}
-	</div>   
+	    {{> header}}
+	    <main class="homePage">
+	        <ul>
+	            {{#each posts}}<li><a href="posts/{{uri}}">{{title}}</a> ({{date}})</li>
+	            {{/each}}
+	        </ul>
+	    </main>
+	</div>  
+    {{> footer}} 
 </body>
 </html>
