@@ -14,20 +14,20 @@ module.exports = function(mongo) {
 	};
 
 	function getRootRouteHandler(req, res, next) {
-	    mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1, content: 1 }).sort({ publishDate: -1 }).limit(1).toArray(function (err, items) {
-	        if (err) {
-	            return next(err);
-	        }
-	        res.render('index.html', { title: items[0].title, perex: items[0].content.replace(/(<([^>]+)>)/ig,"") });
-	    });
-	}
-
-	function getPostsRouteHandler(req, res, next) {
-	    mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function (err, items) {
+		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1, content: 1 }).sort({ publishDate: -1 }).limit(1).toArray(function(err, items) {
 			if (err) {
 				return next(err);
 			}
-		    res.render('allposts.html', { title: 'KPJS blog', posts: items.map(function(i) {
+			res.render('index.html', { title: items[0].title, perex: items[0].content.replace(/(<([^>]+)>)/ig, '') });
+		});
+	}
+
+	function getPostsRouteHandler(req, res, next) {
+		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
+			if (err) {
+				return next(err);
+			}
+			res.render('allposts.html', { title: 'KPJS blog', posts: items.map(function(i) {
 					return { title: i.title, uri: i.uri, date: i.publishDate };
 				})
 			});
