@@ -2,7 +2,13 @@
 <html>
 {{> head}}
     <body>
-        {{> header}}
-        {{{content}}}
+        <div class="content">
+            {{> header}}
+            <main class="homePage">
+                <div>
+                {{{content}}}
+                    </div>
+            </main>
+        </div>
     </body>
 </html>

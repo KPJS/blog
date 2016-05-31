@@ -10,8 +10,15 @@ module.exports = function(mongo) {
 		getEditRouteHandler: getEditRouteHandler,
 		postEditRouteHandler: postEditRouteHandler,
 		getCreateRouteHandler: getCreateRouteHandler,
-		postCreateRouteHandler: postCreateRouteHandler
+		postCreateRouteHandler: postCreateRouteHandler,
+		aboutRouteHandler: aboutRouteHandler,
 	};
+
+		res.render('about.html');
+	}
+
+		res.render('contact.html');
+	}
 
 	function getRootRouteHandler(req, res, next) {
 		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1, content: 1 }).sort({ publishDate: -1 }).limit(1).toArray(function(err, items) {

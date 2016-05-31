@@ -29,6 +29,12 @@ var fakePostsController = {
 	},
 	getPostsRouteHandler: function(req, res){
 		res.end("all posts - GET");
+	},
+	aboutRouteHandler: function(req, res){
+		res.end("about - GET");
+	},
+	contactRouteHandler: function(req, res){
+		res.end("contact - GET");
 	}
 };
 var fakeUsersController = {
