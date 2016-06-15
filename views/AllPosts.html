@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
 {{> head}}
-<body>
-	<div class="content">
-	    {{> header}}
-	    <main class="homePage">
-	        <ul>
-	            {{#each posts}}<li><a href="posts/{{uri}}">{{title}}</a> ({{date}})</li>
-	            {{/each}}
-	        </ul>
-	    </main>
-	</div>  
-    {{> footer}} 
-</body>
+	<body>
+		<div class="content">
+		    {{> header}}
+		    <main class="homePage">
+		        <ul class="blogsList">
+		            {{#each posts}}<li><a href="posts/{{uri}}" class="ListTitle">{{title}}</a><br>
+		            <a href=""><strong>Authors name</strong></a> ({{date}})</li>
+		            {{/each}}
+		        </ul>
+		    </main>
+		</div>  
+	    {{> footer}} 
+	</body>
 </html>
