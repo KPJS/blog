@@ -28,7 +28,7 @@ module.exports = function(mongo) {
 			if (err) {
 				return next(err);
 			}
-			res.render('index.html', { title: items[0].title, perex: items[0].content.replace(/(<([^>]+)>)/ig, '') });
+			res.render('index.html', { title: items[0].title, perex: items[0].content.replace(/(<([^>]+)>)/ig, '').substring(0, 200) + '...', uri: items[0].uri });
 		});
 	}
 
