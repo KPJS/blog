@@ -37,7 +37,7 @@ module.exports = function(mongo) {
 			if (err) {
 				return next(err);
 			}
-			res.render('allposts.html', { title: 'KPJS blog', posts: items.map(function(i) {
+			res.render('allPosts.html', { title: 'KPJS blog', posts: items.map(function(i) {
 					return { title: i.title, uri: i.uri, date: i.publishDate };
 				})
 			});
