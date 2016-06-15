@@ -16,11 +16,11 @@ module.exports = function(mongo) {
 	};
 
 	function aboutRouteHandler(req, res) {
-		res.render('about.html');
+		res.render('about.html', { title: 'About Us' });
 	}
 
 	function contactRouteHandler(req, res) {
-		res.render('contact.html');
+		res.render('contact.html', { title: 'Contact' });
 	}
 
 	function getRootRouteHandler(req, res, next) {
