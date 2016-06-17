@@ -15,7 +15,7 @@
           </div>
         </form>
 				<script src="/ckeditor/ckeditor.js"></script>
-				<script>CKEDITOR.replace( 'editor');</script>
+				<script>CKEDITOR.replace('editor', { uploadUrl: '/imageUpload' });</script>
     {{> footer}}
     </body>
 </html>
