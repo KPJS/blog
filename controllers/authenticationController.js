@@ -68,12 +68,15 @@ module.exports = function(mongo) {
 		ensureOwner: ensureOwner,
 		ensureZombie: ensureRoleRequestHandlerWrapper(0),
 		ensureCitizen: ensureRoleRequestHandlerWrapper(1),
-		ensureRuler: ensureRoleRequestHandlerWrapper(2)
+		ensureRuler: ensureRoleRequestHandlerWrapper(2),
+		ensureRulerOrOwner: ensureRulerOrOwner
 	};
 
 	function authCallback(avatarCallback) {
 		return function(token, tokenSecret, profile, done) {
-			mongo.collection('users').findOneAndUpdate({ provider: profile.provider, providerId: profile.id }, { $setOnInsert: { name: profile.displayName, role: 0 } }, { upsert: true, returnOriginal: false },
+			mongo.collection('users').findOneAndUpdate({ provider: profile.provider, providerId: profile.id },
+				{ $set: { name: profile.displayName }, $setOnInsert: { name: profile.displayName, role: 0 } },
+				{ upsert: true, returnOriginal: false },
 				function(err, item) {
 					if(err) {
 						return done(err);
@@ -156,6 +159,25 @@ module.exports = function(mongo) {
 				}
 			});
 		};
+	}
+
+	function ensureRulerOrOwner(req, res, next) {
+		if(!req.isAuthenticated()) {
+			var error = new Error('Not logged in');
+			error.statusCode = 401;
+			return next(error);
+		}
+		verifyRole(req.user.id, 2, function(err, hasRole) {
+			if(err) {
+				return next(err);
+			}
+			if(hasRole) {
+				next();
+			}
+			else {
+				ensureOwner(req, res, next);
+			}
+		});
 	}
 
 	function ensureOwner(req, res, next) {

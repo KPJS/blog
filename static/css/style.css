@@ -8,7 +8,7 @@ b, i,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, figcaption, figure, 
+article, aside, canvas, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section, summary,
 time, mark, audio, video {
     margin:0;
@@ -25,7 +25,7 @@ body {
 }
 
 article,aside,details,figcaption,figure,
-footer,header,hgroup,menu,nav,section { 
+footer,header,hgroup,menu,nav,section {
     display:block;
 }
 
@@ -69,7 +69,7 @@ table {
 hr {
     display:block;
     height:1px;
-    border:0;   
+    border:0;
     border-top:1px solid #cccccc;
     margin:1em 0;
     padding:0;
@@ -105,7 +105,7 @@ body {
     float: left;
     max-width: 230px;
     padding-right:80px;
-    
+
 }
 
 /*MAIN TEXT*/
@@ -152,11 +152,11 @@ li {
     margin: 0 60px 0 30px;
 }
 
-strong { 
+strong {
     letter-spacing: 2px;
 }
 
-a { 
+a {
     color: #222222;
     font-weight: 700;
 }
@@ -164,7 +164,7 @@ a {
 blockquote {
     padding: 20px 0px 20px 100px;
 }
-    
+
 blockquote > p {
     font-size: 20px;
     font-family: 'Economica', sans-serif;
@@ -189,8 +189,8 @@ pre {
     white-space: pre-wrap;
     white-space: -moz-pre-wrap;
     white-space: -o-pre-wrap;
-}       
-    
+}
+
 code {
     font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
     font-size: 95%;
@@ -200,7 +200,7 @@ code {
     white-space: -moz-pre-wrap;
     white-space: -o-pre-wrap;
 }
-    
+
 #content code {
     display: block;
     padding: 0.5em 1em;
@@ -210,14 +210,14 @@ code {
 div.main > img {
     max-width: 820px;
     margin-left: 30px;
-    border: solid 1px #222222; 
+    border: solid 1px #222222;
     display: inline;
-    text-align: center; 
+    text-align: center;
 }
 
 /*HEADER*/
 .upper_stripe {
-    background-color: #222222; 
+    background-color: #222222;
     height: 5px;
     width: 100%;
 }
@@ -232,10 +232,10 @@ nav {
     padding: 30px 0 4px 0 ;
     height: 28px;
     text-align: right;
-    border-bottom: #222222 solid 2px; 
+    border-bottom: #222222 solid 2px;
 }
-.navigation { 
-    
+.navigation {
+
 }
 
 .menuItem {
@@ -260,7 +260,7 @@ li.menuItem > p {
     font-size: 20px;
     font-weight:700;
     line-height: 32px;
-    text-decoration: none;  
+    text-decoration: none;
 }
 
 .navbar-avatar {
@@ -308,7 +308,7 @@ footer {
     position: fixed;
     width: 100%;
     bottom: 0px;
-    height:50px; 
+    height:50px;
     background-color: #222222;
     margin-top: 20px;
     margin-left: auto;
@@ -343,19 +343,12 @@ div.footer a {
     background-repeat: no-repeat;
     background-position: center;
     }
-  
-/*HOME*/
 
-.MainTitle {
-    max-width: 550px;
-    max-height: 390px;
-    overflow: hidden;
-    
-}
+/*HOME*/
 
 .MainTitle a{
     text-decoration: none;
-    
+
 }
 .MainTitle h1 {
     font-size: 130px;
@@ -369,7 +362,7 @@ div.footer a {
 }
 
 .MainTitle > p {
-    
+
 }
 
 .perex {
@@ -391,7 +384,7 @@ div.footer a {
 }
 
 .blogsList a {
-    color: #222222;   
+    color: #222222;
     text-decoration: none;
 }
 

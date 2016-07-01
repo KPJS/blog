@@ -16,11 +16,11 @@ module.exports = function(mongo) {
 	};
 
 	function aboutRouteHandler(req, res) {
-		res.render('about.html');
+		res.render('about.html', { title: 'About Us' });
 	}
 
 	function contactRouteHandler(req, res) {
-		res.render('contact.html');
+		res.render('contact.html', { title: 'Contact' });
 	}
 
 	function getRootRouteHandler(req, res, next) {
@@ -28,7 +28,7 @@ module.exports = function(mongo) {
 			if (err) {
 				return next(err);
 			}
-			res.render('index.html', { title: items[0].title, perex: items[0].content.replace(/(<([^>]+)>)/ig, '') });
+			res.render('index.html', { title: items[0].title, perex: items[0].content.replace(/(<([^>]+)>)/ig, '').substring(0, 200) + '...', uri: items[0].uri });
 		});
 	}
 
@@ -37,7 +37,7 @@ module.exports = function(mongo) {
 			if (err) {
 				return next(err);
 			}
-			res.render('allposts.html', { title: 'KPJS blog', posts: items.map(function(i) {
+			res.render('allPosts.html', { title: 'KPJS blog', posts: items.map(function(i) {
 					return { title: i.title, uri: i.uri, date: i.publishDate };
 				})
 			});

@@ -41,7 +41,7 @@ function start(logger, authenticationController, postsController, usersControlle
 		next();
 	});
 
-	registerPostControllerRoutes(app, authenticationController.ensureOwner, authenticationController.ensureCitizen, postsController);
+	registerPostControllerRoutes(app, authenticationController.ensureRulerOrOwner, authenticationController.ensureCitizen, postsController);
 	registerUserControllerRoutes(app, authenticationController.ensureRuler, usersController);
 
 	// handler for all other paths
@@ -85,14 +85,14 @@ function registerUserControllerRoutes(app, verifyRuler, usersController) {
 	app.post('/users/:id', verifyRuler, usersController.postUserRouteHandler);
 }
 
-function registerPostControllerRoutes(app, verifyOwner, verifyCitizen, postsController) {
+function registerPostControllerRoutes(app, verifyRulerOrOwner, verifyCitizen, postsController) {
 	app.get('/', postsController.getRootRouteHandler);
 	app.get('/about', postsController.aboutRouteHandler);
 	app.get('/contact', postsController.contactRouteHandler);
 	app.get('/posts', postsController.getPostsRouteHandler);
 	app.get('/posts/:uri', postsController.getReadRouteHandler);
-	app.get('/edit/:uri', verifyOwner, postsController.getEditRouteHandler);
-	app.post('/edit/:uri', verifyOwner, postsController.postEditRouteHandler);
+	app.get('/edit/:uri', verifyRulerOrOwner, postsController.getEditRouteHandler);
+	app.post('/edit/:uri', verifyRulerOrOwner, postsController.postEditRouteHandler);
 	app.get('/create', verifyCitizen, postsController.getCreateRouteHandler);
 	app.post('/create', verifyCitizen, postsController.postCreateRouteHandler);
 }
