@@ -1,40 +1,41 @@
 {
-	"name": "KPJS-blog",
-	"version": "0.0.0",
-	"dependencies": {
-		"body-parser": "^1.15.0",
-		"express": "^4.13.4",
-		"express-session": "^1.13.0",
-		"hbs": "^4.0.0",
-		"mongodb": "^2.1.14",
-		"passport": "^0.3.2",
-		"passport-facebook": "^2.1.0",
-		"passport-github": "^1.1.0",
-		"passport-google-oauth": "^1.0.0",
-		"passport-twitter": "^1.0.4",
-		"session-file-store": "0.2.0",
-		"winston": "^2.2.0"
-	},
-	"devDependencies": {
-		"jscs": "^2.11.0",
-		"jshint": "^2.9.1",
-		"mocha": "^2.4.5"
-	},
-	"scripts": {
-		"start": "node app.js",
-		"pretest": "jshint --verbose app.js server.js controllers/",
-		"test": "mocha tests/ --reporter spec",
-		"posttest": "jscs --verbose app.js server.js controllers/"
-	},
-	"engines": {
-		"node": "4.2.x"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/KPJS/blog.git"
-	},
-	"bugs": {
-		"url": "https://github.com/KPJS/blog/issues"
-	},
-	"license": "Unlicense"
+  "name": "KPJS-blog",
+  "version": "0.0.0",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "connect-busboy": "0.0.2",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "hbs": "^4.0.0",
+    "mongodb": "^2.1.14",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.0",
+    "passport-github": "^1.1.0",
+    "passport-google-oauth": "^1.0.0",
+    "passport-twitter": "^1.0.4",
+    "session-file-store": "0.2.0",
+    "winston": "^2.2.0"
+  },
+  "devDependencies": {
+    "jscs": "^2.11.0",
+    "jshint": "^2.9.1",
+    "mocha": "^2.4.5"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "pretest": "jshint --verbose app.js server.js controllers/",
+    "test": "mocha tests/ --reporter spec",
+    "posttest": "jscs --verbose app.js server.js controllers/"
+  },
+  "engines": {
+    "node": "4.2.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KPJS/blog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KPJS/blog/issues"
+  },
+  "license": "Unlicense"
 }

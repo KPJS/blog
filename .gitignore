@@ -37,3 +37,6 @@ node_modules
 
 #session file storage
 sessions
+
+#temp upload dir
+static/uploads

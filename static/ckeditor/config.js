@@ -27,6 +27,7 @@ CKEDITOR.editorConfig = function( config ) {
 	];
 
 	config.extraPlugins = 'uploadimage';
+	config.imageUploadUrl = '/uploadImage';
 
 	// Remove some buttons provided by the standard plugins, which are
 	// not needed in the Standard(s) toolbar.

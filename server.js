@@ -1,4 +1,4 @@
-function start(logger, authenticationController, postsController, usersController, callback) {
+function start(logger, authenticationController, postsController, usersController, imageUploadController, callback) {
 	var port = process.env.PORT || 1337;
 	var express = require('express');
 	var hbs = require('hbs');
@@ -18,6 +18,9 @@ function start(logger, authenticationController, postsController, usersControlle
 
 	var bodyParser = require('body-parser');
 	app.use(bodyParser.urlencoded({ extended: false }));
+
+	var busboy = require('connect-busboy');
+	app.use(busboy());
 
 	app.use(function(req, res, next) {
 		logger.info('Request for ' + req.path);
@@ -43,6 +46,7 @@ function start(logger, authenticationController, postsController, usersControlle
 
 	registerPostControllerRoutes(app, authenticationController.ensureRulerOrOwner, authenticationController.ensureCitizen, postsController);
 	registerUserControllerRoutes(app, authenticationController.ensureRuler, usersController);
+	registerImageUploadControllerRoutes(app, authenticationController.ensureRulerOrOwner, imageUploadController);
 
 	// handler for all other paths
 	app.use(function(req, res, next) {
@@ -97,7 +101,11 @@ function registerPostControllerRoutes(app, verifyRulerOrOwner, verifyCitizen, po
 	app.post('/create', verifyCitizen, postsController.postCreateRouteHandler);
 }
 
-module.exports = function(logger, authenticationController, postsController, usersController) {
+function registerImageUploadControllerRoutes(app, verifyRulerOrOwner, imageUploadController) {
+	app.post('/uploadImage', verifyRulerOrOwner, imageUploadController.uploadImageRouteHandler);
+}
+
+module.exports = function(logger, authenticationController, postsController, usersController, imageUploadController) {
 	if(!logger) {
 		throw 'Missing logger';
 	}
@@ -110,12 +118,15 @@ module.exports = function(logger, authenticationController, postsController, use
 	if(!usersController) {
 		throw 'Missing usersController';
 	}
+	if(!imageUploadController) {
+		throw 'Missing imageUploadController';
+	}
 
 	var server;
 
 	return {
 		start: function(startCallback) {
-			start(logger, authenticationController, postsController, usersController, function(err, srv) {
+			start(logger, authenticationController, postsController, usersController, imageUploadController, function(err, srv) {
 				if (err) {
 					return startCallback(err);
 				}
