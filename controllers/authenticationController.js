@@ -65,10 +65,10 @@ module.exports = function(mongo) {
 
 	return {
 		setup: setup,
-		ensureOwner: ensureOwner,
 		ensureZombie: ensureRoleRequestHandlerWrapper(0),
 		ensureCitizen: ensureRoleRequestHandlerWrapper(1),
-		ensureRuler: ensureRoleRequestHandlerWrapper(2)
+		ensureRuler: ensureRoleRequestHandlerWrapper(2),
+		ensureRulerOrOwner: ensureRulerOrOwner
 	};
 
 	function authCallback(avatarCallback) {
@@ -158,6 +158,25 @@ module.exports = function(mongo) {
 				}
 			});
 		};
+	}
+
+	function ensureRulerOrOwner(req, res, next) {
+		if(!req.isAuthenticated()) {
+			var error = new Error('Not logged in');
+			error.statusCode = 401;
+			return next(error);
+		}
+		verifyRole(req.user.id, 2, function(err, hasRole) {
+			if(err) {
+				return next(err);
+			}
+			if(hasRole) {
+				next();
+			}
+			else {
+				ensureOwner(req, res, next);
+			}
+		});
 	}
 
 	function ensureOwner(req, res, next) {
