@@ -38,7 +38,8 @@ mongoClient.connect(mongoConnStr, function(err, db) {
 		var authenticationController = require('./controllers/authenticationController')(db);
 		var postsController = require('./controllers/postsController')(db);
 		var usersController = require('./controllers/usersController')(db);
-		var server = require('./server')(logger, authenticationController, postsController, usersController);
+		var imageUploadController = require('./controllers/imageUploadController');
+		var server = require('./server')(logger, authenticationController, postsController, usersController, imageUploadController);
 		server.start(startCallback);
 	}
 });
