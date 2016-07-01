@@ -65,7 +65,6 @@ module.exports = function(mongo) {
 
 	return {
 		setup: setup,
-		ensureOwner: ensureOwner,
 		ensureZombie: ensureRoleRequestHandlerWrapper(0),
 		ensureCitizen: ensureRoleRequestHandlerWrapper(1),
 		ensureRuler: ensureRoleRequestHandlerWrapper(2),
