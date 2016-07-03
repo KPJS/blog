@@ -4,12 +4,28 @@
     <body>
         <div class="content">
             {{> header}}
+            {{#if user}}
+            <a href="#" id="deletePost">delete</a>
+            {{/if}}
             <main class="homePage">
                 <div class="main">
                 {{{content}}}
                 </div>
             </main>
         </div>
+        <script type="text/javascript">
+        function reqListener () {
+            alert('deleted?');
+        }
+
+        document.getElementById('deletePost').addEventListener('click', function(){
+            var oReq = new XMLHttpRequest();
+            oReq.addEventListener("load", reqListener);
+            oReq.open("DELETE", "");
+            oReq.send();
+            return false;
+        });
+        </script>
         {{> footer}}
     </body>
 </html>

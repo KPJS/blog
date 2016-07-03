@@ -95,6 +95,7 @@ function registerPostControllerRoutes(app, verifyRulerOrOwner, verifyCitizen, po
 	app.get('/contact', postsController.contactRouteHandler);
 	app.get('/posts', postsController.getPostsRouteHandler);
 	app.get('/posts/:uri', postsController.getReadRouteHandler);
+	app.delete('/posts/:uri', verifyRulerOrOwner, postsController.deletePostRouteHandler);
 	app.get('/edit/:uri', verifyRulerOrOwner, postsController.getEditRouteHandler);
 	app.post('/edit/:uri', verifyRulerOrOwner, postsController.postEditRouteHandler);
 	app.get('/create', verifyCitizen, postsController.getCreateRouteHandler);
