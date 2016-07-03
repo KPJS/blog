@@ -4,8 +4,8 @@ function start(logger, authenticationController, postsController, usersControlle
 	var hbs = require('hbs');
 	hbs.registerHelper('select', function(selected, options) {
 		return options.fn(this).replace(
-        new RegExp(' value=\"' + selected + '\"'),
-        '$& selected="selected"');
+			new RegExp(' value=\"' + selected + '\"'),
+			'$& selected="selected"');
 	});
 	hbs.registerPartials(__dirname + '/views/partials');
 

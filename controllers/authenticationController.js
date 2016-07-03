@@ -19,7 +19,7 @@ module.exports = function(mongo) {
 		authCallback(function(p) {
 			return p.photos[0].value;
 		})
-  ));
+	));
 
 	passport.use(new GithubStrategy({
 			clientID: process.env.GITHUB_CLIENT_ID,
@@ -30,7 +30,7 @@ module.exports = function(mongo) {
 		authCallback(function(p) {
 			return p._json.avatar_url;
 		})
-  ));
+	));
 
 	passport.use(new TwitterStrategy({
 			consumerKey: process.env.TWITTER_CLIENT_ID,
