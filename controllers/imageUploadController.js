@@ -1,8 +1,9 @@
 module.exports = {
 	uploadImageRouteHandler: function(req, res) {
 		var fs = require('fs');
-		req.pipe(req.busboy);
+		var requestContainsFile = false;
 		req.busboy.on('file', function(fieldname, file, filename) {
+			requestContainsFile = true;
 			var fstream = fs.createWriteStream(__dirname + '/../static/uploads/' + filename);
 			file.pipe(fstream);
 			fstream.on('close', function() {
@@ -12,5 +13,12 @@ module.exports = {
 				res.json({ uploaded: 0, error: err });
 			});
 		});
+		req.busboy.on('finish', function() {
+			if(!requestContainsFile) {
+				res.writeHead(400, { 'Connection': 'close' });
+				res.end('No file in request');
+			}
+		});
+		req.pipe(req.busboy);
 	}
 };
