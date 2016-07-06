@@ -3,54 +3,53 @@ var http = require('http');
 
 var fakeLogger = { error: function() {}, info: function() {} };
 var fakeAuth = {
-	setup: function(){},
-	ensureOwner: function(req, res, next){ next(); },
-	ensureZombie: function(req, res, next){ next(); },
-	ensureCitizen: function(req, res, next){ next(); },
-	ensureRuler: function(req, res, next){ next(); },
-	ensureRulerOrOwner: function(req, res, next){ next(); } };
+	setup: function() {},
+	ensureZombie: function(req, res, next) { next(); },
+	ensureCitizen: function(req, res, next) { next(); },
+	ensureRuler: function(req, res, next) { next(); },
+	ensureRulerOrOwner: function(req, res, next) { next(); } };
 var fakePostsController = {
-	getRootRouteHandler: function(req, res){
+	getRootRouteHandler: function(req, res) {
 		res.end("root - GET");
 	},
-	getReadRouteHandler: function(req, res){
+	getReadRouteHandler: function(req, res) {
 		res.end("read post - GET");
 	},
-	getEditRouteHandler: function(req, res){
+	getEditRouteHandler: function(req, res) {
 		res.end("edit post - GET");
 	},
-	postEditRouteHandler: function(req, res){
+	postEditRouteHandler: function(req, res) {
 		res.end("edit post - POST");
 	},
-	getCreateRouteHandler: function(req, res){
+	getCreateRouteHandler: function(req, res) {
 		res.end("create post - GET");
 	},
-	postCreateRouteHandler: function(req, res){
+	postCreateRouteHandler: function(req, res) {
 		res.end("create post - POST");
 	},
-	getPostsRouteHandler: function(req, res){
+	getPostsRouteHandler: function(req, res) {
 		res.end("all posts - GET");
 	},
-	aboutRouteHandler: function(req, res){
+	aboutRouteHandler: function(req, res) {
 		res.end("about - GET");
 	},
-	contactRouteHandler: function(req, res){
+	contactRouteHandler: function(req, res) {
 		res.end("contact - GET");
 	}
 };
 var fakeUsersController = {
-    getAllUsersRouteHandler: function(req, res){
-        res.end("User list - GET");
-    },
-		getUserRouteHandler: function(req, res){
-			res.end("read user - GET");
-		},
-		postUserRouteHandler: function(req, res){
-			res.end("edit user - POST");
-		}
+	getAllUsersRouteHandler: function(req, res) {
+		res.end("User list - GET");
+	},
+	getUserRouteHandler: function(req, res) {
+		res.end("read user - GET");
+	},
+	postUserRouteHandler: function(req, res) {
+		res.end("edit user - POST");
+	}
 };
 var fakeImageUploadController = {
-	uploadImageRouteHandler: function(req, res){
+	uploadImageRouteHandler: function(req, res) {
 		res.end("upload image - POST");
 	}
 };
@@ -142,12 +141,26 @@ describe('Route authorization tests [successfull auth]', function() {
 			});
 		});
 	});
+
+	it('POST image - 200 is returned', function(done) {
+		server.start(function(err, addr) {
+			var options = {
+				hostname: 'localhost',
+				port: addr.port,
+				path: '/uploadImage',
+				method: 'POST'
+			};
+			http.request(options, function(res) {
+				assert.equal(res.statusCode, 200);
+				done();
+			}).end();
+		});
+	});
 });
 
 describe('Route authorization tests [failed auth]', function() {
 	var fakeAuth2 = {
 		setup: function(){},
-		ensureOwner: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
 		ensureZombie: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
 		ensureCitizen: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
 		ensureRuler: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
@@ -175,7 +188,7 @@ describe('Route authorization tests [failed auth]', function() {
 		});
 	});
 
-	it('GET edit post call [not owner] - 401 is returned', function(done) {
+	it('GET edit post call [not ruler|owner] - 401 is returned', function(done) {
 		server.start(function(err, addr) {
 			http.get('http://localhost:' + addr.port + "/edit/qwerty", function(res) {
 				assert.equal(res.statusCode, 401);
@@ -208,6 +221,21 @@ describe('Route authorization tests [failed auth]', function() {
 				assert.equal(res.statusCode, 401);
 				done();
 			});
+		});
+	});
+
+	it('POST image [not ruler|owner] - 401 is returned', function(done) {
+		server.start(function(err, addr) {
+			var options = {
+				hostname: 'localhost',
+				port: addr.port,
+				path: '/uploadImage',
+				method: 'POST'
+			};
+			http.request(options, function(res) {
+				assert.equal(res.statusCode, 401);
+				done();
+			}).end();
 		});
 	});
 });
