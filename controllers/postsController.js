@@ -60,8 +60,12 @@ module.exports = function(mongo) {
 	}
 
 	function deletePostRouteHandler(req, res, next) {
-		console.info('deleting');
-		getReadRouteHandler(req, res, next);
+		mongo.collection('posts').deleteOne({ uri: req.params.uri }, function(err, results){
+			if (err) {
+				return next(err);
+			}
+			next();
+		})
 	}
 
 	function getEditRouteHandler(req, res, next) {
