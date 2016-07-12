@@ -14,15 +14,14 @@
             </main>
         </div>
         <script type="text/javascript">
-        function reqListener () {
-            window.location = '/posts';
-        }
-
-        document.getElementById('deletePost').addEventListener('click', function(){
+        document.getElementById('deletePost').addEventListener('click', function(ev){
             var oReq = new XMLHttpRequest();
-            oReq.addEventListener("load", reqListener);
+            oReq.addEventListener("load", function(){
+                window.location = oReq.getResponseHeader('Location');
+            });
             oReq.open("DELETE", "");
             oReq.send();
+            ev.preventDefault();
             return false;
         });
         </script>

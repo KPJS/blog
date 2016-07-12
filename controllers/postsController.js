@@ -64,7 +64,8 @@ module.exports = function(mongo) {
 			if (err) {
 				return next(err);
 			}
-			next();
+			res.writeHead(200, {'Location': '/posts'});
+			res.end();
 		})
 	}
 
