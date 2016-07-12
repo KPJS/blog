@@ -308,21 +308,22 @@ footer {
     position: fixed;
     width: 100%;
     bottom: 0px;
-    height:50px;
+    height:29px;
     background-color: #222222;
     margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
     color: #f6f6f6;
 }
 
 div.footer {
-    padding-top: 4px;
+    max-width: 1080px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 div.footer p {
     font-family: 'Economica', sans-serif;
     font-size: 16px;
+    padding: 2px 0px 2px 230px;
 }
 
 div.footer a {
