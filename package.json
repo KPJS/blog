@@ -23,7 +23,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "pretest": "jshint --verbose app.js server.js controllers/",
+    "pretest": "jshint --verbose --extract=always app.js server.js controllers/ views/*.html",
     "test": "mocha tests/ --reporter spec",
     "posttest": "jscs --verbose app.js server.js controllers/"
   },
