@@ -101,13 +101,6 @@ body {
     padding: 12px 8px 0 8px;
 }
 
-#main-logo {
-    float: left;
-    max-width: 230px;
-    padding-right:80px;
-
-}
-
 /*MAIN TEXT*/
 
 main {
@@ -227,6 +220,18 @@ header {
     min-height: 112px;
 }
 
+div #main-logo  {
+    width: 150px;
+    height: 175px;
+    background-image: url('../img/kpjs_logo_150x175px.png');
+    background-width: 80px;
+    background-repeat: no-repeat;
+    display: block;
+    float: left;
+    text-indent: -9999px;
+    margin: 0 70px 0 20px;
+}
+
 nav {
     margin: 0 0 20px 230px;
     padding: 30px 0 4px 0 ;
@@ -234,6 +239,7 @@ nav {
     text-align: right;
     border-bottom: #222222 solid 2px;
 }
+
 .navigation {
 
 }
@@ -255,7 +261,8 @@ nav {
 
 li.menuItem > a,
 li.menuItem > p {
-    font-family: 'Economica', sans-serif; color: #222222;
+    font-family: 'Economica', sans-serif; 
+    color: #222222;
     text-transform: uppercase;
     font-size: 20px;
     font-weight:700;
@@ -286,6 +293,9 @@ li.menuItem > p {
 }
 
 .dropdown-content a {
+    font-family: 'Economica', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.1px;
     color: #f6f6f6;
     text-decoration: none;
 
@@ -323,6 +333,7 @@ div.footer {
 div.footer p {
     font-family: 'Economica', sans-serif;
     font-size: 16px;
+    letter-spacing: 0.1px;
     padding: 2px 0px 2px 230px;
 }
 
