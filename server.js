@@ -46,7 +46,7 @@ function start(logger, authenticationController, postsController, usersControlle
 
 	registerPostControllerRoutes(app, authenticationController.ensureRulerOrOwner, authenticationController.ensureCitizen, postsController);
 	registerUserControllerRoutes(app, authenticationController.ensureRuler, usersController);
-	registerImageUploadControllerRoutes(app, authenticationController.ensureRulerOrOwner, imageUploadController);
+	registerImageUploadControllerRoutes(app, authenticationController.ensureCitizen, imageUploadController);
 
 	// handler for all other paths
 	app.use(function(req, res, next) {
