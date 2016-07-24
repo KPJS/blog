@@ -1,11 +1,11 @@
 {
   "name": "kpjs-blog",
   "version": "0.1.0",
-	"description": "Minimalistic blogging solution",
-	"keywords": [
-		"kpjs",
-		"blog"
-	],
+  "description": "Minimalistic blogging solution",
+  "keywords": [
+    "kpjs",
+    "blog"
+  ],
   "dependencies": {
     "body-parser": "^1.15.2",
     "connect-busboy": "0.0.2",
@@ -26,7 +26,7 @@
     "jshint": "^2.9.2",
     "mocha": "^2.5.3"
   },
-	"main": "server.js",
+  "main": "server.js",
   "scripts": {
     "start": "node app.js",
     "pretest": "jshint --verbose --extract=always app.js server.js controllers/ views/*.html",
@@ -34,7 +34,7 @@
     "posttest": "jscs --verbose app.js server.js controllers/"
   },
   "engines": {
-    "node": ">=4.2.0 <5.0"
+  "node": ">=4.2.0 <5.0"
   },
   "repository": {
     "type": "git",
@@ -43,6 +43,6 @@
   "bugs": {
     "url": "https://github.com/KPJS/blog/issues"
   },
-	"homepage": "http://kpjs.azurewebsites.net/",
+  "homepage": "http://kpjs.azurewebsites.net",
   "license": "Unlicense"
 }
