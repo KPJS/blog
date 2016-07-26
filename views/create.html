@@ -2,29 +2,33 @@
 <html>
 {{> head}}
     <body>
-        {{> header}}
-        <form method="post">
-            <div>
-                Title: <input name="title" value="{{post.title}}" />
-            </div>
-            {{#if post}}
-            {{#if post.exists}}
-            <div style="color: red">Post with this url already exits</div>
-            {{/if}}
-            <div>
-                Url: <input name="url" value="{{post.url}}" />
-            </div>
-            {{/if}}
-            <div>
-                Content: <textarea name="content" id="editor" cols="100" rows="50">{{post.content}}</textarea>
-            </div>
-            <input type="submit" value="Save"/>
-        </form>
-		<script src="/ckeditor/ckeditor.js"></script>
-		<script>
-			/* globals CKEDITOR */
-			CKEDITOR.replace( 'editor');
-		</script>
+        <div class="content">
+            {{> header}}
+            <main class="homePage">
+                <form method="post">
+                    <div>
+                        Title: <input name="title" value="{{post.title}}" />
+                    </div>
+                    {{#if post}}
+                    {{#if post.exists}}
+                    <div style="color: #b20982">Post with this url already exits</div>
+                    {{/if}}
+                    <div>
+                        Url: <input name="url" value="{{post.url}}" />
+                    </div>
+                    {{/if}}
+                    <div>
+                        Content: <textarea name="content" id="editor" cols="100" rows="50">{{post.content}}</textarea>
+                    </div>
+                    <input type="submit" value="Save"/>
+                </form>
+        		<script src="/ckeditor/ckeditor.js"></script>
+        		<script>
+        			/* globals CKEDITOR */
+        			CKEDITOR.replace( 'editor');
+        		</script>
+            </main>
+        </div>
         {{> footer}}
     </body>
 </html>
