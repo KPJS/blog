@@ -224,12 +224,11 @@ div #main-logo  {
     width: 150px;
     height: 175px;
     background-image: url('../img/kpjs_logo_150x175px.png');
-    background-width: 80px;
     background-repeat: no-repeat;
     display: block;
     float: left;
     text-indent: -9999px;
-    margin: 0 70px 0 20px;
+    margin: 0 0px 0 20px;
 }
 
 nav {
@@ -389,6 +388,7 @@ div.footer a {
 }
 
 .blogsList li {
+    list-style: none;
     padding-left: 0px;
     margin: 15px 0 5px 0;
 }

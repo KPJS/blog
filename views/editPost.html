@@ -2,23 +2,27 @@
 <html>
 {{> head}}
     <body>
+      <div class="content">
         {{> header}}
-        <form action="" method="post">
-          <div>
-            Title: <input type="text" name="title" value="{{title}}" />
-          </div>
-          <div>
-            Content: <textarea name="content" id="editor" cols="100" rows="50">{{content}}</textarea>
-          </div>
-          <div>
-            <input type="submit" name="save" value="Save" />
-          </div>
-        </form>
-				<script src="/ckeditor/ckeditor.js"></script>
-				<script>
-					/* globals CKEDITOR */
-					CKEDITOR.replace('editor', { uploadUrl: '/imageUpload' });
-				</script>
-    {{> footer}}
+        <main class="homePage">
+          <form action="" method="post">
+            <div>
+              Title: <input type="text" name="title" value="{{title}}" />
+            </div>
+            <div>
+              Content: <textarea name="content" id="editor" cols="100" rows="50">{{content}}</textarea>
+            </div>
+            <div>
+              <input type="submit" name="save" value="Save" />
+            </div>
+          </form>
+  				<script src="/ckeditor/ckeditor.js"></script>
+  				<script>
+  					/* globals CKEDITOR */
+  					CKEDITOR.replace('editor', { uploadUrl: '/imageUpload' });
+  				</script>
+        </main>
+      </div>
+      {{> footer}}
     </body>
 </html>

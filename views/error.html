@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
 {{> head}}
-		<body>
-		<img style="display:block;margin:0 auto;" src="/{{errorCode}}.jpg" />
-		<p>{{message}}</p>
+	<body>
+		<div class="content">
+			<main class="homePage">
+				<img style="display:block;margin:0 auto;" src="/{{errorCode}}.jpg" />
+				<p>{{message}}</p>
+			</main>	
+		</div>	
 		{{> footer}}
     </body>
 </html>
