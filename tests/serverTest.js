@@ -15,7 +15,10 @@ var fakePostsController = {
 	getReadRouteHandler: function(req, res) {
 		res.end("read post - GET");
 	},
-	getEditRouteHandler: function(req, res) {
+	deletePostRouteHandler: function(req, res){
+		res.end("deleting post");
+	},
+	getEditRouteHandler: function(req, res){
 		res.end("edit post - GET");
 	},
 	postEditRouteHandler: function(req, res) {

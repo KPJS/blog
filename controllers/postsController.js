@@ -8,6 +8,7 @@ module.exports = function(mongo) {
 		getPostsRouteHandler: getPostsRouteHandler,
 		getReadRouteHandler: getReadRouteHandler,
 		getEditRouteHandler: getEditRouteHandler,
+		deletePostRouteHandler: deletePostRouteHandler,
 		postEditRouteHandler: postEditRouteHandler,
 		getCreateRouteHandler: getCreateRouteHandler,
 		postCreateRouteHandler: postCreateRouteHandler,
@@ -54,7 +55,17 @@ module.exports = function(mongo) {
 				error.statusCode = 404;
 				return next(error);
 			}
-			res.render('post.html', { title: item.title, content: item.content });
+			res.render('post.html', { title: item.title, content: item.content, user: req.user });
+		});
+	}
+
+	function deletePostRouteHandler(req, res, next) {
+		mongo.collection('posts').deleteOne({ uri: req.params.uri }, function(err) {
+			if (err) {
+				return next(err);
+			}
+			res.writeHead(200, { 'Location': '/posts' });
+			res.end();
 		});
 	}
 

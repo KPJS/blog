@@ -6,6 +6,9 @@
         <form action="" method="post">
           <div>
             Title: <input type="text" name="title" value="{{title}}" />
+            {{#if user}}
+              <a href="#" id="deletePost">delete</a>
+            {{/if}}
           </div>
           <div>
             Content: <textarea name="content" id="editor" cols="100" rows="50">{{content}}</textarea>
@@ -15,10 +18,21 @@
           </div>
         </form>
 				<script src="/ckeditor/ckeditor.js"></script>
-				<script>
+        <script type="text/javascript">
 					/* globals CKEDITOR */
 					CKEDITOR.replace('editor', { uploadUrl: '/imageUpload' });
-				</script>
+          
+          document.getElementById('deletePost').addEventListener('click', function(ev){
+            var oReq = new XMLHttpRequest();
+            oReq.addEventListener("load", function(){
+                window.location = oReq.getResponseHeader('Location');
+            });
+            oReq.open("DELETE", "");
+            oReq.send();
+            ev.preventDefault();
+            return false;
+          });
+        </script>
     {{> footer}}
     </body>
 </html>
