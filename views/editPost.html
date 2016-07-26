@@ -2,37 +2,41 @@
 <html>
 {{> head}}
     <body>
-        {{> header}}
-        <form action="" method="post">
-          <div>
-            Title: <input type="text" name="title" value="{{title}}" />
-            {{#if user}}
-              <a href="#" id="deletePost">delete</a>
-            {{/if}}
-          </div>
-          <div>
-            Content: <textarea name="content" id="editor" cols="100" rows="50">{{content}}</textarea>
-          </div>
-          <div>
-            <input type="submit" name="save" value="Save" />
-          </div>
-        </form>
-				<script src="/ckeditor/ckeditor.js"></script>
-        <script type="text/javascript">
-					/* globals CKEDITOR */
-					CKEDITOR.replace('editor', { uploadUrl: '/imageUpload' });
+		<div class="content">
+	        {{> header}}
+			<main class="homePage">
+		        <form action="" method="post">
+		          <div>
+		            Title: <input type="text" name="title" value="{{title}}" />
+		            {{#if user}}
+		              <a href="#" id="deletePost">delete</a>
+		            {{/if}}
+		          </div>
+		          <div>
+		            Content: <textarea name="content" id="editor" cols="100" rows="50">{{content}}</textarea>
+		          </div>
+		          <div>
+		            <input type="submit" name="save" value="Save" />
+		          </div>
+		        </form>
+						<script src="/ckeditor/ckeditor.js"></script>
+		        <script type="text/javascript">
+							/* globals CKEDITOR */
+							CKEDITOR.replace('editor', { uploadUrl: '/imageUpload' });
           
-          document.getElementById('deletePost').addEventListener('click', function(ev){
-            var oReq = new XMLHttpRequest();
-            oReq.addEventListener("load", function(){
-                window.location = oReq.getResponseHeader('Location');
-            });
-            oReq.open("DELETE", "");
-            oReq.send();
-            ev.preventDefault();
-            return false;
-          });
-        </script>
-    {{> footer}}
+		          document.getElementById('deletePost').addEventListener('click', function(ev){
+		            var oReq = new XMLHttpRequest();
+		            oReq.addEventListener("load", function(){
+		                window.location = oReq.getResponseHeader('Location');
+		            });
+		            oReq.open("DELETE", "");
+		            oReq.send();
+		            ev.preventDefault();
+		            return false;
+		          });
+		        </script>
+			</main>
+		</div>
+    	{{> footer}}
     </body>
 </html>

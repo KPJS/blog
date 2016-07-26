@@ -2,10 +2,14 @@
 <html>
 {{> head}}
     <body>
-        {{> header}}
-        <ul>
-            {{#each users}}<li><a href="/users/{{_id}}">{{name}} ({{provider}})</a></li>{{/each}}
-        </ul>
+    	<div class="content">
+	        {{> header}}
+	        <main class="homePage">
+		        <ul>
+		            {{#each users}}<li><a href="/users/{{_id}}">{{name}} ({{provider}})</a></li>{{/each}}
+		        </ul>
+		    </main>
+	    </div>
 		{{> footer}}
     </body>
 </html>
