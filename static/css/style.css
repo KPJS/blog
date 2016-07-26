@@ -254,6 +254,7 @@ nav {
 
 .menuItem:last-child  {
     background-image: none;
+    padding-right: 0px;
 }
 
 li.menuItem {
@@ -271,22 +272,23 @@ li.menuItem > a {
 }
 
 .navbar-avatar {
-    height: 32px;
+    height: 27px;
     border-radius: 17px;
-    margin: 0 3px 0 3px;
-		vertical-align: bottom;
+    margin: 0 3px 4px 3px;
+	vertical-align: middle;
 }
 
 .dropdown-content {
     position: absolute;;
     text-align: right;
+    text-transform: none;
     background-color: #222222;
-    padding: 2px 6px;
+    padding: 0px 8px;
     z-index: 1;
-		top: 29px;
-		right: 4px;
-		white-space: nowrap;
-		display: none;
+	top: 28px;
+	right: 0px;
+	white-space: nowrap;
+	display: none;
 }
 
 .menuItem:hover >  .dropdown-content {
