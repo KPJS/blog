@@ -266,6 +266,10 @@ li.menuItem {
     text-decoration: none;
 }
 
+li.menuItem > a {
+	text-decoration: none;
+}
+
 .navbar-avatar {
     height: 32px;
     border-radius: 17px;
