@@ -2,10 +2,15 @@
 <html>
 {{> head}}
 	<body>
+		<div class="grid"></div>
 		<div class="content">
+			{{> header}}
 			<main class="homePage">
-				<img style="display:block;margin:0 auto;" src="/{{errorCode}}.jpg" />
-				<p>{{message}}</p>
+				<div class="MainText MainTitle">
+					<img style="errorImage" src="/{{errorCode}}.jpg"/>
+					<h1>{{errorCode}}</h1>
+					<p>{{message}}</p>
+				</div>
 			</main>	
 		</div>	
 		{{> footer}}
