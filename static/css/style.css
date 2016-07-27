@@ -193,6 +193,27 @@ blockquote > p {
     line
 } */
 
+input, textarea {
+    width: 100%;
+    margin: 5px 0 15px;
+    padding: 3px;
+    border: none;
+}
+
+.button {
+    background: #19ffdc;
+    height: 20px;
+    border-radius: 26px;
+    padding: 16px 22px;
+    margin: 15px 0;
+    display: inline-block;
+    color: #222222;
+    font-size: 20px;
+    font-family: 'Economica', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
 pre {
     background: #222222;
     color: #f6f6f6;
