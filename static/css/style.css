@@ -218,11 +218,9 @@ input, textarea {
     border: none;
 }
 
-.button {
-    background: #19ffdc;
-    height: 20px;
-    border-radius: 26px;
-    padding: 16px 22px;
+input[type=submit]  {
+		border: 2px solid #222222;
+    padding: 0 20px;
     margin: 15px 0;
     display: inline-block;
     color: #222222;
@@ -230,6 +228,12 @@ input, textarea {
     font-family: 'Economica', sans-serif;
     font-weight: 700;
     text-transform: uppercase;
+		width: auto;
+		height: 30px;
+}
+
+input[type=submit]:hover {
+    background: #19ffdc;
 }
 
 pre {
