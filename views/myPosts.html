@@ -9,31 +9,37 @@
 		    	<div class="MainText background">
 			        <ul class="blogsList">
 			            {{#each posts}}<li><a href="posts/{{uri}}" class="ListTitle">{{title}}</a>
-										<button class="floatRight" id="editButton" value="posts/{{uri}}">Edit</button>
-										<button class="floatRight" id="deleteButton" value="posts/{{uri}}">Delete</button>
+										<button class="floatRight" name="editButton" value="posts/{{uri}}">Edit</button>
+										<button class="floatRight" name="deleteButton" value="posts/{{uri}}">Delete</button>
 										<br>
 										Published on {{date}}
 			            {{/each}}
 			        </ul>
 			    </div>
 					<script type="text/javascript">
-		        document.getElementById('deleteButton').addEventListener('click', function(ev){
-		          var oReq = new XMLHttpRequest();
-		          oReq.onreadystatechange = function(){
-								if (oReq.readyState === 4 && oReq.status === 200) {
-						      window.location.reload(true);
-						    }
-		          };
-		          oReq.open("DELETE", this.value);
-		          oReq.send();
-		          ev.preventDefault();
-		          return false;
-		        });
-						document.getElementById('editButton').addEventListener('click', function(ev){
-		          window.location.href = this.value;
-							ev.preventDefault();
-		          return false;
-		        });
+
+					var editHandler = function() {
+						window.location.href = this.value;
+					};
+					var editButtons = document.getElementsByName('editButton');
+					for(var i = 0; i < editButtons.length; i++) {
+						editButtons[i].addEventListener('click', editHandler);
+					}
+
+					var deleteHandler = function() {
+						var oReq = new XMLHttpRequest();
+						oReq.onreadystatechange = function() {
+							if (oReq.readyState === 4 && oReq.status === 200) {
+								window.location.reload(true);
+							}
+						};
+						oReq.open('DELETE', this.value);
+						oReq.send();
+					};
+					var deleteButtons = document.getElementsByName('deleteButton');
+					for(var i = 0; i < deleteButtons.length; i++) {
+						deleteButtons[i].addEventListener('click', deleteHandler);
+					}
 		      </script>
 		    </main>
 		</div>
