@@ -136,14 +136,17 @@ module.exports = function(mongo) {
 			res.redirect('/posts/' + url);
 		});
 	}
+<<<<<<< HEAD
 
 	function moveImages(content) {
-		var result = content.replace(new RegExp('<img\\s+src="/uploads/([^"]*)"', 'g'), function(wholeMatch, filename) {
-			fs.rename(__rootDir + '/static/uploads/' + filename, __rootDir + '/static/postImages/' + filename);
+		var result = content.replace(new RegExp('<img\\s+src="/uploads/([^"]*)"', 'g'), function(wholeMatch, filename){
+			fs.rename(__rootDir + "/static/uploads/" + filename, __rootDir + "/static/postImages/" + filename)
 			return wholeMatch.replace('"/uploads/' + filename + '"', '"/postImages/' + filename + '"');
 		});
 		return result;
 	}
+||||||| merged common ancestors
+=======
 
 	function getMyPostsRouteHandler(req, res, next) {
 		var ObjectID = require('mongodb').ObjectID;
@@ -157,4 +160,5 @@ module.exports = function(mongo) {
 			});
 		});
 	}
+>>>>>>> master
 };

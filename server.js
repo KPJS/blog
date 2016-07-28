@@ -126,11 +126,12 @@ module.exports = function(logger, authenticationController, postsController, use
 		app.get('/contact', postsController.contactRouteHandler);
 		app.get('/posts', postsController.getPostsRouteHandler);
 		app.get('/posts/:uri', postsController.getReadRouteHandler);
-		app.delete('/edit/:uri', verifyRulerOrOwner, postsController.deletePostRouteHandler);
+		app.delete('/posts/:uri', verifyRulerOrOwner, postsController.deletePostRouteHandler);
 		app.get('/edit/:uri', verifyRulerOrOwner, postsController.getEditRouteHandler);
 		app.post('/edit/:uri', verifyRulerOrOwner, postsController.postEditRouteHandler);
 		app.get('/create', verifyCitizen, postsController.getCreateRouteHandler);
 		app.post('/create', verifyCitizen, postsController.postCreateRouteHandler);
+		app.get('/myPosts', postsController.getMyPostsRouteHandler);
 	}
 
 	function registerImageUploadControllerRoutes(app, verifyRulerOrOwner, imageUploadController) {

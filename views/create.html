@@ -5,6 +5,7 @@
         <div class="content">
             {{> header}}
             <main class="homePage">
+							<div class="MainText">
                 <form method="post">
                     <div>
                         Title: <input name="title" value="{{post.title}}" />
@@ -25,8 +26,9 @@
         		<script src="/ckeditor/ckeditor.js"></script>
         		<script>
         			/* globals CKEDITOR */
-        			CKEDITOR.replace( 'editor');
+        			CKEDITOR.replace('editor');
         		</script>
+					</div>
             </main>
         </div>
         {{> footer}}

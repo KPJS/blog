@@ -163,12 +163,6 @@ small {
     padding: 10px 0 20px 60px;
 }
 
-ul, ol {
-    padding-left: 30px;
-    text-indent: 15px;
-    padding-bottom: 6px;
-}
-
 li {
     text-indent: 0px;
     padding: 2px 0 2px 5px;
@@ -218,11 +212,9 @@ input, textarea {
     border: none;
 }
 
-.button {
-    background: #19ffdc;
-    height: 20px;
-    border-radius: 26px;
-    padding: 16px 22px;
+input[type=submit], input[type=button], button {
+		border: 2px solid #222222;
+    padding: 0 20px;
     margin: 15px 0;
     display: inline-block;
     color: #222222;
@@ -230,6 +222,17 @@ input, textarea {
     font-family: 'Economica', sans-serif;
     font-weight: 700;
     text-transform: uppercase;
+		width: auto;
+		height: 30px;
+}
+
+input[type=submit]:hover, input[type=button]:hover, button:hover {
+    background: #19ffdc;
+}
+
+.floatRight {
+	margin-left: 10px;
+	float: right;
 }
 
 pre {
@@ -348,7 +351,7 @@ li.menuItem > a {
     padding: 0px 8px;
     z-index: 1;
 	top: 28px;
-	right: 0px;
+	right: 4px;
 	white-space: nowrap;
 	display: none;
 }
@@ -378,29 +381,26 @@ footer {
     position: fixed;
     width: 100%;
     bottom: 0px;
-    height:29px;
+    height: 29px;
     background-color: #222222;
     margin-top: 20px;
     color: #f6f6f6;
 }
 
-div.footer {
-    max-width: 1080px;
-    margin-left: auto;
-    margin-right: auto;
+footer > div {
+	max-width: 1080px;
+	margin: 5px auto;
 }
 
-div.footer p {
-    font-family: 'Economica', sans-serif;
+footer > div > div {
+		font-family: 'Economica', sans-serif;
     font-size: 16px;
     letter-spacing: 0.1px;
-    padding: 2px 0px 2px 230px;
+		margin-left: 215px;
 }
 
-div.footer a {
-    font-family: 'Economica', sans-serif;
-    font-size: 16px;
-    color: #f6f6f6;
+footer a {
+		color: #f6f6f6;
     text-decoration: none;
 }
 
