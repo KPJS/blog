@@ -13,7 +13,8 @@ module.exports = function(mongo) {
 		getCreateRouteHandler: getCreateRouteHandler,
 		postCreateRouteHandler: postCreateRouteHandler,
 		aboutRouteHandler: aboutRouteHandler,
-		contactRouteHandler: contactRouteHandler
+		contactRouteHandler: contactRouteHandler,
+		getMyPostsRouteHandler: getMyPostsRouteHandler
 	};
 
 	function aboutRouteHandler(req, res) {
@@ -129,6 +130,19 @@ module.exports = function(mongo) {
 				return next(err);
 			}
 			res.redirect('/posts/' + url);
+		});
+	}
+
+	function getMyPostsRouteHandler(req, res, next) {
+		var ObjectID = require('mongodb').ObjectID;
+		mongo.collection('posts').find({ author_id: new ObjectID(req.user.id) }, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
+			if (err) {
+				return next(err);
+			}
+			res.render('myPosts.html', { title: 'My posts', posts: items.map(function(i) {
+					return { title: i.title, uri: i.uri, date: i.publishDate };
+				})
+			});
 		});
 	}
 };
