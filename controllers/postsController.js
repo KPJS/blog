@@ -3,6 +3,8 @@ module.exports = function(mongo) {
 		throw 'Missing mongo';
 	}
 
+	var fs = require('fs');
+
 	return {
 		getRootRouteHandler: getRootRouteHandler,
 		getPostsRouteHandler: getPostsRouteHandler,
@@ -91,6 +93,7 @@ module.exports = function(mongo) {
 			error.statusCode = 400;
 			return next(error);
 		}
+		content = moveImages(content);
 		mongo.collection('posts').findOneAndUpdate({ uri: req.params.uri }, { $set: { title: title, content: content } }, function(err, item) {
 			if(err) {
 				return next(err);
@@ -120,6 +123,7 @@ module.exports = function(mongo) {
 		if(!url) {
 			url = title.replace(/\s+/g, '-');
 		}
+		content = moveImages(content);
 		var ObjectID = require('mongodb').ObjectID;
 		mongo.collection('posts').insertOne({ title: title, uri: url, content: content, author_id: new ObjectID(req.user.id), publishDate: new Date() }, function(err) {
 			if(err) {
@@ -130,5 +134,13 @@ module.exports = function(mongo) {
 			}
 			res.redirect('/posts/' + url);
 		});
+	}
+
+	function moveImages(content) {
+		var result = content.replace(new RegExp('<img\\s+src="/uploads/([^"]*)"', 'g'), function(wholeMatch, filename){
+			fs.rename(__rootDir + "/static/uploads/" + filename, __rootDir + "/static/postImages/" + filename)
+			return wholeMatch.replace('"/uploads/' + filename + '"', '"/postImages/' + filename + '"');
+		});
+		return result;
 	}
 };
