@@ -218,7 +218,7 @@ input, textarea {
     border: none;
 }
 
-input[type=submit]  {
+input[type=submit], input[type=button], button {
 		border: 2px solid #222222;
     padding: 0 20px;
     margin: 15px 0;
@@ -232,8 +232,13 @@ input[type=submit]  {
 		height: 30px;
 }
 
-input[type=submit]:hover {
+input[type=submit]:hover, input[type=button]:hover, button:hover {
     background: #19ffdc;
+}
+
+button.floatRight {
+	margin-left: 10px;
+	float: right;
 }
 
 pre {
