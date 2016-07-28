@@ -348,7 +348,7 @@ li.menuItem > a {
     padding: 0px 8px;
     z-index: 1;
 	top: 28px;
-	right: 0px;
+	right: 4px;
 	white-space: nowrap;
 	display: none;
 }
