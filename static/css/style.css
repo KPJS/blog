@@ -236,7 +236,7 @@ input[type=submit]:hover, input[type=button]:hover, button:hover {
     background: #19ffdc;
 }
 
-button.floatRight {
+.floatRight {
 	margin-left: 10px;
 	float: right;
 }
@@ -387,29 +387,26 @@ footer {
     position: fixed;
     width: 100%;
     bottom: 0px;
-    height:29px;
+    height: 29px;
     background-color: #222222;
     margin-top: 20px;
     color: #f6f6f6;
 }
 
-div.footer {
-    max-width: 1080px;
-    margin-left: auto;
-    margin-right: auto;
+footer > div {
+	max-width: 1080px;
+	margin: 5px auto;
 }
 
-div.footer p {
-    font-family: 'Economica', sans-serif;
+footer > div > div {
+		font-family: 'Economica', sans-serif;
     font-size: 16px;
     letter-spacing: 0.1px;
-    padding: 2px 0px 2px 230px;
+		margin-left: 215px;
 }
 
-div.footer a {
-    font-family: 'Economica', sans-serif;
-    font-size: 16px;
-    color: #f6f6f6;
+footer a {
+		color: #f6f6f6;
     text-decoration: none;
 }
 
