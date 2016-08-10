@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-{{> head}}
+	{{> head}}
 	<body>
 		<div class="grid"></div>
 		<div class="content">
@@ -9,10 +9,11 @@
 		    	<div class="MainText background">
 			        <ul class="blogsList">
 			            {{#each posts}}<li><a href="posts/{{uri}}" class="ListTitle">{{title}}</a><br>
-			            <a href=""><strong>{{authorName}}</strong></a> ({{dateIsoStr}})</li>
+			            <a href=""><strong>{{authorName}}</strong></a> (<span class="isoDateStr">{{dateIsoStr}}</span>)</li>
 			            {{/each}}
 			        </ul>
 			    </div>
+					<script src="js/dateFormatter.js" type="text/javascript"></script>
 		    </main>
 		</div>
 	    {{> footer}}
