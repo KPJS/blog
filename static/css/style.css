@@ -213,7 +213,8 @@ input, textarea {
 }
 
 input[type=submit], input[type=button], button {
-		border: 2px solid #222222;
+    background-color: transparent;
+	border: 2px solid #222222;
     padding: 0 20px;
     margin: 15px 0;
     display: inline-block;
@@ -222,12 +223,13 @@ input[type=submit], input[type=button], button {
     font-family: 'Economica', sans-serif;
     font-weight: 700;
     text-transform: uppercase;
-		width: auto;
-		height: 30px;
+	width: auto;
+	height: 30px;
 }
 
 input[type=submit]:hover, input[type=button]:hover, button:hover {
-    background: #19ffdc;
+    background-color: #222222;
+    color: #f6f6f6;
 }
 
 .floatRight {
@@ -265,8 +267,8 @@ code {
     border: 1px solid #bebab0;
 }
 
-div.main img {
-    max-width: 880px;
+div.MainText img {
+    max-width: 805px;
     margin-left: 30px;
     border: solid 1px #222222;
     display: inline;
