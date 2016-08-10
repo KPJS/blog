@@ -13,6 +13,7 @@
     "express-session": "^1.14.0",
     "hbs": "^4.0.0",
     "mongodb": "^2.1.18",
+    "node-schedule": "^1.1.1",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
     "passport-github": "^1.1.0",
@@ -34,7 +35,7 @@
     "posttest": "jscs --verbose app.js server.js controllers/"
   },
   "engines": {
-  "node": ">=4.2.0 <5.0"
+    "node": ">=4.2.0 <5.0"
   },
   "repository": {
     "type": "git",
