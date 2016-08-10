@@ -9,12 +9,12 @@
 		    	<div class="MainText background">
 			        <ul class="blogsList">
 			            {{#each posts}}<li><a href="posts/{{uri}}" class="ListTitle">{{title}}</a><br>
-			            <a href=""><strong>Authors name</strong></a> ({{date}})</li>
+			            <a href=""><strong>{{authorName}}</strong></a> ({{dateIsoStr}})</li>
 			            {{/each}}
 			        </ul>
 			    </div>
 		    </main>
-		</div>  
-	    {{> footer}} 
+		</div>
+	    {{> footer}}
 	</body>
 </html>
