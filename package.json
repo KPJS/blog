@@ -12,20 +12,20 @@
     "express": "^4.14.0",
     "express-session": "^1.14.0",
     "hbs": "^4.0.0",
-    "mongodb": "^2.1.18",
+    "mongodb": "^2.2.8",
     "node-schedule": "^1.1.1",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
     "passport-github": "^1.1.0",
     "passport-google-oauth": "^1.0.0",
     "passport-twitter": "^1.0.4",
-    "session-file-store": "0.2.0",
+    "session-file-store": "0.2.1",
     "winston": "^2.2.0"
   },
   "devDependencies": {
-    "jscs": "^3.0.6",
-    "jshint": "^2.9.2",
-    "mocha": "^2.5.3"
+    "jscs": "^3.0.7",
+    "jshint": "^2.9.3",
+    "mocha": "^3.0.2"
   },
   "main": "server.js",
   "scripts": {
