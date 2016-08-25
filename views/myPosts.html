@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-{{> head}}
+	{{> head}}
 	<body>
 		<div class="grid"></div>
 		<div class="content">
@@ -12,8 +12,9 @@
 										<button class="floatRight" name="editButton" value="edit/{{uri}}">Edit</button>
 										<button class="floatRight" name="deleteButton" value="posts/{{uri}}">Delete</button>
 										<br>
-										Published on {{date}}
-			            {{/each}}
+										Published on <span class="isoDateStr">{{dateIsoStr}}</span>
+									</li>
+									{{/each}}
 			        </ul>
 			    </div>
 					<script type="text/javascript">
@@ -41,6 +42,7 @@
 						deleteButtons[i].addEventListener('click', deleteHandler);
 					}
 		      </script>
+					<script src="js/dateFormatter.js" type="text/javascript"></script>
 		    </main>
 		</div>
 	    {{> footer}}

@@ -3,7 +3,7 @@ module.exports = function() {
 		start: function() {
 			start();
 		}
-	}
+	};
 
 	function start() {
 		var schedule = require('node-schedule');
@@ -25,4 +25,4 @@ module.exports = function() {
 			});
 		});
 	}
-}
+};
