@@ -8,6 +8,7 @@
                 <form action='' method='post'>
                     <input type='hidden' name="userId" value='{{userId}}' />
                     <div>{{userName}} ({{userProvider}})</div>
+                    {{#if user.isRuler}}
                     <div>
                         <select name='role'>
                             {{#select role}}
@@ -17,6 +18,7 @@
                             {{/select}}
                         </select>
                     </div>
+                    {{/if}}
                     <input type='submit' value='update' style="button"/>
                 </form>
             </main>

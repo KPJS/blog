@@ -68,7 +68,8 @@ module.exports = function(mongo) {
 		ensureZombie: ensureRoleRequestHandlerWrapper(0),
 		ensureCitizen: ensureRoleRequestHandlerWrapper(1),
 		ensureRuler: ensureRoleRequestHandlerWrapper(2),
-		ensureRulerOrOwner: ensureRulerOrOwner
+		ensureRulerOrOwner: ensureRulerOrOwner,
+		ensureRulerOrMyself: ensureRulerOrMyself
 	};
 
 	function authCallback(avatarCallback) {
@@ -84,7 +85,9 @@ module.exports = function(mongo) {
 					try {
 						avatarUrl = avatarCallback(profile);
 					} catch(e) {}
-					return done(null, { id: item.value._id, name: item.value.name, avatarUrl: avatarUrl });
+					var isRuler = item.value.role == '2';
+					var isCitizen = isRuler || (item.value.role == '1');
+					return done(null, { id: item.value._id, name: item.value.name, avatarUrl: avatarUrl, isRuler: isRuler, isCitizen: isCitizen });
 				});
 		};
 	}
@@ -160,6 +163,25 @@ module.exports = function(mongo) {
 		};
 	}
 
+	function ensureRulerOrMyself(req, res, next) {
+		if(!req.isAuthenticated()) {
+			var error = new Error('Not logged in');
+			error.statusCode = 401;
+			return next(error);
+		}
+		verifyRole(req.user.id, 2, function(err, hasRole) {
+			if(err) {
+				return next(err);
+			}
+			if(hasRole) {
+				next();
+			}
+			else {
+				ensureMyselfInParams(req, res, next);
+			}
+		});
+	}
+
 	function ensureRulerOrOwner(req, res, next) {
 		if(!req.isAuthenticated()) {
 			var error = new Error('Not logged in');
@@ -194,5 +216,14 @@ module.exports = function(mongo) {
 			error.statusCode = 403;
 			return next(error);
 		});
+	}
+
+	function ensureMyselfInParams(req, res, next) {
+		if (req.user.id == req.params.id) {
+			return next();
+		}
+		var error = new Error('Not allowed to see other than your profile');
+		error.statusCode = 403;
+		return next(error);
 	}
 };

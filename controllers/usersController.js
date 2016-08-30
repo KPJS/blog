@@ -35,7 +35,8 @@ module.exports = function(mongo) {
 
 	function postUserRouteHandler(req, res, next) {
 		var ObjectID = require('mongodb').ObjectID;
-		mongo.collection('users').findOneAndUpdate({ _id: new ObjectID(req.params.id) }, { $set: { role: req.body.role } }, { returnOriginal: false }, function(err, item) {
+		var update = req.user.isRuler ? { role: req.body.role } : {};
+		mongo.collection('users').findOneAndUpdate({ _id: new ObjectID(req.params.id) }, { $set: update }, { returnOriginal: false }, function(err, item) {
 			if(err) {
 				return next(err);
 			}

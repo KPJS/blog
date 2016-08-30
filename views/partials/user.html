@@ -2,18 +2,22 @@
 	<img src="{{user.avatarUrl}}" class="navbar-avatar" alt="avatar">
 	{{user.name}}
 <ul class="dropdown-content">
+	{{#if user.isCitizen}}
 	<li class="dropdown-item">
 		<a href="/create">Create post</a>
 	</li>
 	<li class="dropdown-item">
 		<a href="/myPosts">My posts</a>
 	</li>
+	{{/if}}
 	<li class="dropdown-item">
 		<a href="/users/{{user.id}}">My profile</a>
 	</li>
+	{{#if user.isRuler}}
 	<li class="dropdown-item">
 		<a href="/users">Users</a>
 	</li>
+	{{/if}}
 	<li class="dropdown-item">
 		<a href="/logout">Logout</a>
 	</li>
