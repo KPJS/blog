@@ -219,7 +219,7 @@ module.exports = function(mongo) {
 	}
 
 	function ensureMyselfInParams(req, res, next) {
-		if (req.user.id == req.params.id) {
+		if (req.user.id == req.params.userId) {
 			return next();
 		}
 		var error = new Error('Not allowed to see other than your profile');

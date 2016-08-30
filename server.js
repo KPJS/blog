@@ -121,8 +121,8 @@ module.exports = function(logger, authenticationController, postsController, use
 
 	function registerUserControllerRoutes(app, verifyRuler, verifyRulerOrMyself, usersController) {
 		app.get('/users', verifyRuler, usersController.getAllUsersRouteHandler);
-		app.get('/users/:id', verifyRulerOrMyself, usersController.getUserRouteHandler);
-		app.post('/users/:id', verifyRulerOrMyself, usersController.postUserRouteHandler);
+		app.get('/users/:userId', verifyRulerOrMyself, usersController.getUserRouteHandler);
+		app.post('/users/:userId', verifyRulerOrMyself, usersController.postUserRouteHandler);
 	}
 
 	function registerPostControllerRoutes(app, verifyRulerOrOwner, verifyCitizen, postsController) {

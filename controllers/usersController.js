@@ -20,7 +20,7 @@ module.exports = function(mongo) {
 
 	function getUserRouteHandler(req, res, next) {
 		var ObjectID = require('mongodb').ObjectID;
-		mongo.collection('users').findOne({ _id: new ObjectID(req.params.id) }, { name: 1, provider: 1, _id: 1, role: 1, comment: 1 }, function(err, item) {
+		mongo.collection('users').findOne({ _id: new ObjectID(req.params.userId) }, { name: 1, provider: 1, _id: 1, role: 1, comment: 1 }, function(err, item) {
 			if (err) {
 				return next(err);
 			}
@@ -36,7 +36,7 @@ module.exports = function(mongo) {
 	function postUserRouteHandler(req, res, next) {
 		var ObjectID = require('mongodb').ObjectID;
 		var update = req.user.isRuler ? { role: req.body.role, comment: req.body.comment } : { comment: req.body.comment };
-		mongo.collection('users').findOneAndUpdate({ _id: new ObjectID(req.params.id) }, { $set: update }, { returnOriginal: false }, function(err, item) {
+		mongo.collection('users').findOneAndUpdate({ _id: new ObjectID(req.params.userId) }, { $set: update }, { returnOriginal: false }, function(err, item) {
 			if(err) {
 				return next(err);
 			}
