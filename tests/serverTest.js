@@ -7,7 +7,8 @@ var fakeAuth = {
 	ensureZombie: function(req, res, next) { next(); },
 	ensureCitizen: function(req, res, next) { next(); },
 	ensureRuler: function(req, res, next) { next(); },
-	ensureRulerOrOwner: function(req, res, next) { next(); } };
+	ensureRulerOrOwner: function(req, res, next) { next(); },
+	ensureRulerOrMyself: function(req, res, next) { next(); } };
 var fakePostsController = {
 	getRootRouteHandler: function(req, res) {
 		res.end("root - GET");
@@ -172,7 +173,8 @@ describe('Route authorization tests [failed auth]', function() {
 		ensureZombie: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
 		ensureCitizen: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
 		ensureRuler: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
-		ensureRulerOrOwner: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); }
+		ensureRulerOrOwner: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
+		ensureRulerOrMyself: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); }
 	};
 	var server = require('../server')(fakeLogger, fakeAuth2, fakePostsController, fakeUsersController, fakeImageUploadController, fakeScheduler);
 
