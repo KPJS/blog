@@ -3,6 +3,8 @@ module.exports = function(mongo) {
 		throw 'Missing mongo';
 	}
 
+	var fs = require('fs');
+
 	return {
 		getRootRouteHandler: getRootRouteHandler,
 		getPostsRouteHandler: getPostsRouteHandler,
@@ -35,14 +37,36 @@ module.exports = function(mongo) {
 	}
 
 	function getPostsRouteHandler(req, res, next) {
-		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
+		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1, author_id: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
 			if (err) {
 				return next(err);
 			}
-			res.render('allPosts.html', { title: 'KPJS blog', posts: items.map(function(i) {
-					return { title: i.title, uri: i.uri, date: i.publishDate };
-				})
+			populateAuthors(items, function(err, authors) {
+				if (err) {
+					return next(err);
+				}
+				res.render('allPosts.html', { title: 'KPJS blog', posts: items.map(function(i) {
+						return { title: i.title, uri: i.uri, dateIsoStr: i.publishDate.toISOString(), authorName: authors[i.author_id] };
+					})
+				});
 			});
+		});
+	}
+
+	function populateAuthors(postProjections, callback) {
+		var ObjectID = require('mongodb').ObjectID;
+		var authorIds = postProjections.map(function(x) {
+			return new ObjectID(x.author_id);
+		});
+		mongo.collection('users').find({ _id: { $in: authorIds } }, { _id: 1, name: 1 }).toArray(function(err, items) {
+			if (err) {
+				return callback(err);
+			}
+			var authors = {};
+			for(var i = 0; i < items.length; i++) {
+				authors[items[i]._id] = items[i].name;
+			}
+			callback(null, authors);
 		});
 	}
 
@@ -92,6 +116,7 @@ module.exports = function(mongo) {
 			error.statusCode = 400;
 			return next(error);
 		}
+		content = moveImages(content);
 		mongo.collection('posts').findOneAndUpdate({ uri: req.params.uri }, { $set: { title: title, content: content } }, function(err, item) {
 			if(err) {
 				return next(err);
@@ -121,6 +146,7 @@ module.exports = function(mongo) {
 		if(!url) {
 			url = title.replace(/\s+/g, '-');
 		}
+		content = moveImages(content);
 		var ObjectID = require('mongodb').ObjectID;
 		mongo.collection('posts').insertOne({ title: title, uri: url, content: content, author_id: new ObjectID(req.user.id), publishDate: new Date() }, function(err) {
 			if(err) {
@@ -133,6 +159,14 @@ module.exports = function(mongo) {
 		});
 	}
 
+	function moveImages(content) {
+		var result = content.replace(new RegExp('<img\\s+src="/uploads/([^"]*)"', 'g'), function(wholeMatch, filename) {
+			fs.rename(__rootDir + '/static/uploads/' + filename, __rootDir + '/static/postImages/' + filename);
+			return wholeMatch.replace('"/uploads/' + filename + '"', '"/postImages/' + filename + '"');
+		});
+		return result;
+	}
+
 	function getMyPostsRouteHandler(req, res, next) {
 		var ObjectID = require('mongodb').ObjectID;
 		mongo.collection('posts').find({ author_id: new ObjectID(req.user.id) }, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
@@ -140,7 +174,7 @@ module.exports = function(mongo) {
 				return next(err);
 			}
 			res.render('myPosts.html', { title: 'My posts', posts: items.map(function(i) {
-					return { title: i.title, uri: i.uri, date: i.publishDate };
+					return { title: i.title, uri: i.uri, dateIsoStr: i.publishDate.toISOString() };
 				})
 			});
 		});

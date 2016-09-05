@@ -28,6 +28,11 @@ CKEDITOR.editorConfig = function( config ) {
 
 	config.extraPlugins = 'uploadimage';
 	config.imageUploadUrl = '/uploadImage';
+	config.contentsCss = [
+		'https://fonts.googleapis.com/css?family=Economica:400,700,400italic,700italic',
+		'https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800&subset=latin,latin-ext',
+		'/css/style.css'
+	];
 
 	// Remove some buttons provided by the standard plugins, which are
 	// not needed in the Standard(s) toolbar.

@@ -40,3 +40,5 @@ sessions
 
 #temp upload dir
 static/uploads
+#permanant post image dir
+static/postImages

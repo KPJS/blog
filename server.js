@@ -1,4 +1,4 @@
-module.exports = function(logger, authenticationController, postsController, usersController, imageUploadController) {
+module.exports = function(logger, authenticationController, postsController, usersController, imageUploadController, scheduler) {
 	if(!logger) {
 		throw 'Missing logger';
 	}
@@ -14,12 +14,15 @@ module.exports = function(logger, authenticationController, postsController, use
 	if(!imageUploadController) {
 		throw 'Missing imageUploadController';
 	}
+	if(!scheduler) {
+		throw 'Missing scheduler';
+	}
 
 	var server;
 
 	return {
 		start: function(startCallback) {
-			start(logger, authenticationController, postsController, usersController, imageUploadController, function(err, srv) {
+			start(logger, authenticationController, postsController, usersController, imageUploadController, scheduler, function(err, srv) {
 				if (err) {
 					return startCallback(err);
 				}
@@ -36,7 +39,7 @@ module.exports = function(logger, authenticationController, postsController, use
 		}
 	};
 
-	function start(logger, authenticationController, postsController, usersController, imageUploadController, callback) {
+	function start(logger, authenticationController, postsController, usersController, imageUploadController, scheduler, callback) {
 		var port = process.env.PORT || 1337;
 		var express = require('express');
 		var hbs = require('hbs');
@@ -112,6 +115,8 @@ module.exports = function(logger, authenticationController, postsController, use
 				callback(null, srv);
 			}
 		});
+
+		scheduler.start();
 	}
 
 	function registerUserControllerRoutes(app, verifyRuler, usersController) {
