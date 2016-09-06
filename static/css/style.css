@@ -113,11 +113,11 @@ body {
 /*MAIN TEXT*/
 
 main {
-    margin: 74px 0px 50px 0px;
+    margin: 0px 0px 50px 0px;
 }
 
 .MainText {
-    padding: 0 15px;
+    padding: 0 15px 15px 15px;
     margin: 0 0 0 215px;
 }
 
@@ -157,6 +157,10 @@ p, li {
     padding: 10px 0 15px 0;
 }
 
+main ol {
+    padding: 0 0 0 15px;
+}
+
 small {
     font-family: 'Open Sans', sans-serif;
     font-size: 14px;
@@ -164,17 +168,10 @@ small {
     padding: 10px 0 20px 60px;
 }
 
-li {
-    text-indent: 0px;
-    padding: 2px 0 2px 5px;
-    margin: 0 60px 0 30px;
-}
-
 em {
     font-family: 'Economica', sans-serif;
     font-weight: 400;
     font-style: normal;
-    background-color: #ffc800;
 }
 
 h1 > em {
@@ -182,7 +179,7 @@ h1 > em {
 }
 
 strong {
-    letter-spacing: 2px;
+    letter-spacing: 1px;
 }
 
 a {
@@ -205,33 +202,6 @@ blockquote > p {
     line-height: 8px;
     line
 } */
-
-input, textarea {
-    width: 100%;
-    margin: 5px 0 15px;
-    padding: 3px;
-    border: none;
-}
-
-input[type=submit], input[type=button], button {
-    background-color: transparent;
-	border: 2px solid #222222;
-    padding: 0 20px;
-    margin: 15px 0;
-    display: inline-block;
-    color: #222222;
-    font-size: 20px;
-    font-family: 'Economica', sans-serif;
-    font-weight: 700;
-    text-transform: uppercase;
-	width: auto;
-	height: 30px;
-}
-
-input[type=submit]:hover, input[type=button]:hover, button:hover {
-    background-color: #222222;
-    color: #f6f6f6;
-}
 
 .floatRight {
 	margin-left: 10px;
@@ -276,16 +246,38 @@ div.MainText img {
     text-align: left;
 }
 
-aside {
-    float: left;
-    width: 190px;
-    min-height: 100px;
-    margin-top: 50px;
-    padding: 5px;
-    font-size: 32px;
-    font-weight: 700; 
+::selection {
+    background-color: #ffc800;
 }
 
+/* INPUTS, BUTTONS */
+
+input, textarea {
+    width: 100%;
+    margin: 5px 0 15px;
+    padding: 3px;
+    border: none;
+}
+
+input[type=submit], input[type=button], button {
+    background-color: transparent;
+    border: 2px solid #222222;
+    padding: 0 20px;
+    margin: 15px 0;
+    display: inline-block;
+    color: #222222;
+    font-size: 20px;
+    font-family: 'Economica', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    width: auto;
+    height: 30px;
+}
+
+input[type=submit]:hover, input[type=button]:hover, button:hover {
+    background-color: #222222;
+    color: #f6f6f6;
+}
 
 /*HEADER*/
 .upper_stripe {
@@ -308,7 +300,7 @@ div #main-logo  {
     display: block;
     float: left;
     text-indent: -9999px;
-    margin: 0 0px 0 20px;
+    margin: 5px 0 0 20px;
 }
 
 nav {
@@ -317,6 +309,12 @@ nav {
     height: 28px;
     text-align: right;
     border-bottom: #222222 solid 2px;
+}
+
+nav li {
+    text-indent: 0px;
+    padding: 2px 0 2px 5px;
+    margin: 0 60px 0 30px;
 }
 
 .menuItem {
@@ -365,7 +363,7 @@ li.menuItem > a {
     padding: 0px 8px;
     z-index: 1;
 	top: 28px;
-	right: 4px;
+	right: 0px;
 	white-space: nowrap;
 	display: none;
 }
@@ -478,6 +476,63 @@ footer a {
 a.ListTitle {
     font-family: 'Economica', sans-serif;
     font-size: 32px;
+}
+
+/* POST */
+aside {
+    float: left;
+    position: absolute;
+    width: 190px;
+    min-height: 100px;
+    margin-top: 85px;
+    padding: 5px;
+}
+
+aside ul {
+    list-style: none;
+}    
+
+aside li {
+    padding: 6px 0 6px 0;
+}
+
+.asideText {
+    font-family: 'Economica', sans-serif;
+    color: #222222;
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.postInfoLine {
+    list-style: none;
+    padding-bottom: 25px;
+}
+
+ul.postInfoLine > li { 
+    display: inline;
+} 
+
+.postInfoLine li:before {
+    content: '▪';
+    margin: 0 2px 0 2px;
+}
+
+.postInfoLine li:before :first-child {
+    content: none;
+}
+
+
+
+
+/* POST-FOOTER */
+.postFooter {
+    display: inline-block;
+    background-color: #aaaaaa;
+    padding: 5px;
+    margin-right: 15px; 
+    width: inherit;
 }
 
 /* ERROR */

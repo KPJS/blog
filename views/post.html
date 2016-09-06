@@ -7,18 +7,24 @@
             {{> header}}
             <main class="homePage">
                 <aside class="AuthorsCard">
-                bkfjalkfdjgal
-
+                    <ul class="">
+                        <li class="asideText">JULY </li> 
+                        <li class="asideText">JUNE </li> 
+                        <li class="asideText">MAY</li> 
+                        <li class="asideText">april  
+                    </ul>                        
                 </aside>
-                <div class="MainText background">
-                {{{content}}}
-                </div>
-                <div class=postFooter>
-                    <img src="" class="aside-avatar" alt="avatar">
-                     <!-- autor -->
-                     <!-- short info -->    
 
-                </div>
+                <div class="MainText background">
+                    <ul class="postInfoLine">
+                        <li><strong>{{{title}}}</strong></li>
+                        <li> on <strong>DATE</strong></li> 
+                        <li> by <strong>AUTHOR</strong></li> 
+                        <li> github account</li> 
+                        <li> email </li>
+                    </ul>
+                    {{{content}}}
+                </div>                
             </main>
         </div>
         {{> footer}}
