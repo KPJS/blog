@@ -8,6 +8,7 @@
                 <form action='' method='post'>
                     <input type='hidden' name="userId" value='{{userId}}' />
                     <div>{{userName}} ({{userProvider}})</div>
+                    {{#if user.isRuler}}
                     <div>
                         <select name='role'>
                             {{#select role}}
@@ -16,6 +17,11 @@
                             <option value="2">ruler</option>
                             {{/select}}
                         </select>
+                    </div>
+                    {{/if}}
+                    <div>comment:</div>
+                    <div>
+                        <textarea name="comment">{{comment}}</textarea>
                     </div>
                     <input type='submit' value='update' style="button"/>
                 </form>
