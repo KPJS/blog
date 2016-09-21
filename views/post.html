@@ -6,9 +6,25 @@
         <div class="content">
             {{> header}}
             <main class="homePage">
+                <aside class="AuthorsCard">
+                    <ul class="">
+                        <li class="asideText">JULY </li> 
+                        <li class="asideText">JUNE </li> 
+                        <li class="asideText">MAY</li> 
+                        <li class="asideText">april  
+                    </ul>                        
+                </aside>
+
                 <div class="MainText background">
-                {{{content}}}
-                </div>
+                    <ul class="postInfoLine">
+                        <li><strong>{{{title}}}</strong></li>
+                        <li> on <strong>DATE</strong></li> 
+                        <li> by <strong>AUTHOR</strong></li> 
+                        <li> github account</li> 
+                        <li> email </li>
+                    </ul>
+                    {{{content}}}
+                </div>                
             </main>
         </div>
         {{> footer}}
