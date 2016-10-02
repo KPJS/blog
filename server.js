@@ -87,7 +87,7 @@ module.exports = function(logger, authenticationController, postsController, use
 		});
 
 		registerPostControllerRoutes(app, authenticationController.ensureRulerOrOwner, authenticationController.ensureCitizen, postsController);
-		registerUserControllerRoutes(app, authenticationController.ensureRuler, usersController);
+		registerUserControllerRoutes(app, authenticationController.ensureRuler, authenticationController.ensureRulerOrMyself, usersController);
 		registerImageUploadControllerRoutes(app, authenticationController.ensureCitizen, imageUploadController);
 
 		// handler for all other paths
@@ -119,10 +119,10 @@ module.exports = function(logger, authenticationController, postsController, use
 		scheduler.start();
 	}
 
-	function registerUserControllerRoutes(app, verifyRuler, usersController) {
+	function registerUserControllerRoutes(app, verifyRuler, verifyRulerOrMyself, usersController) {
 		app.get('/users', verifyRuler, usersController.getAllUsersRouteHandler);
-		app.get('/users/:id', verifyRuler, usersController.getUserRouteHandler);
-		app.post('/users/:id', verifyRuler, usersController.postUserRouteHandler);
+		app.get('/users/:userId', verifyRulerOrMyself, usersController.getUserRouteHandler);
+		app.post('/users/:userId', verifyRulerOrMyself, usersController.postUserRouteHandler);
 	}
 
 	function registerPostControllerRoutes(app, verifyRulerOrOwner, verifyCitizen, postsController) {
