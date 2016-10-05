@@ -32,7 +32,15 @@ module.exports = function(mongo) {
 			if (err) {
 				return next(err);
 			}
-			res.render('index.html', { title: items[0].title, perex: items[0].content.replace(/(<([^>]+)>)/ig, '').substring(0, 200) + '...', uri: items[0].uri });
+			var model = { title: items[0].title, perex: items[0].content.replace(/(<([^>]+)>)/ig, '').substring(0, 200) + '...', uri: items[0].uri };
+			res.format({
+				html: function() {
+					res.render('index.html', model);
+				},
+				json: function() {
+					res.json(model);
+				}
+			});
 		});
 	}
 
@@ -45,9 +53,19 @@ module.exports = function(mongo) {
 				if (err) {
 					return next(err);
 				}
-				res.render('allPosts.html', { title: 'KPJS blog', posts: items.map(function(i) {
+				var model = {
+					title: 'KPJS blog',
+					posts: items.map(function(i) {
 						return { title: i.title, uri: i.uri, dateIsoStr: i.publishDate.toISOString(), authorName: authors[i.author_id] };
 					})
+				};
+				res.format({
+					html: function() {
+						res.render('allPosts.html', model);
+					},
+					json: function() {
+						res.json(model.posts);
+					}
 				});
 			});
 		});
@@ -80,7 +98,15 @@ module.exports = function(mongo) {
 				error.statusCode = 404;
 				return next(error);
 			}
-			res.render('post.html', { title: item.title, content: item.content, user: req.user });
+			var model = { title: item.title, content: item.content };
+			res.format({
+				html: function() {
+					res.render('post.html', model);
+				},
+				json: function() {
+					res.json(model);
+				}
+			});
 		});
 	}
 
@@ -104,7 +130,15 @@ module.exports = function(mongo) {
 				error.statusCode = 404;
 				return next(error);
 			}
-			res.render('editPost.html', { title: item.title, content: item.content });
+			var model = { title: item.title, content: item.content };
+			res.format({
+				html: function() {
+					res.render('editPost.html', model);
+				},
+				json: function() {
+					res.json(model);
+				}
+			});
 		});
 	}
 
@@ -126,7 +160,14 @@ module.exports = function(mongo) {
 				error.statusCode = 404;
 				return next(error);
 			}
-			res.redirect('/posts/' + req.params.uri);
+			res.format({
+				html: function() {
+					res.redirect('/posts/' + req.params.uri);
+				},
+				json: function() {
+					res.json({ title: item.title, content: item.content });
+				}
+			});
 		});
 	}
 
@@ -155,7 +196,16 @@ module.exports = function(mongo) {
 				}
 				return next(err);
 			}
-			res.redirect('/posts/' + url);
+			res.format({
+				html: function() {
+					res.redirect('/posts/' + url);
+				},
+				json: function() {
+					res.statusCode = 201;
+					res.location('/posts/' + url);
+					res.end();
+				}
+			});
 		});
 	}
 
@@ -173,9 +223,19 @@ module.exports = function(mongo) {
 			if (err) {
 				return next(err);
 			}
-			res.render('myPosts.html', { title: 'My posts', posts: items.map(function(i) {
+			var model = {
+				title: 'My posts',
+				posts: items.map(function(i) {
 					return { title: i.title, uri: i.uri, dateIsoStr: i.publishDate.toISOString() };
 				})
+			};
+			res.format({
+				html: function() {
+					res.render('myPosts.html', model);
+				},
+				json: function() {
+					res.json(model.posts);
+				}
 			});
 		});
 	}
