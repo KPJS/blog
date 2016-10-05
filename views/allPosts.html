@@ -5,11 +5,11 @@
 		<div class="grid"></div>
 		<div class="content">
 		    {{> header}}
-		    <main class="homePage">
+		    <main class="standardPage">
 		    	<div class="MainText background">
 			        <ul class="blogsList">
 			            {{#each posts}}<li><a href="posts/{{uri}}" class="ListTitle">{{title}}</a><br>
-			            <a href=""><strong>{{authorName}}</strong></a> (<span class="isoDateStr">{{dateIsoStr}}</span>)</li>
+			            on <span class="isoDateStr">{{dateIsoStr}}</span> by <a href=""><strong>{{authorName}}</strong></a> </li>
 			            {{/each}}
 			        </ul>
 			    </div>

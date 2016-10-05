@@ -5,10 +5,23 @@
         <div class="grid"></div>
         <div class="content">
             {{> header}}
-            <main class="homePage">
+            <main class="BlogPostPage">
+                <aside class="AuthorsCard">
+                    <ul class="asideTitle"> All posts
+ 
+                    </ul>                        
+                </aside>
+
                 <div class="MainText background">
-                {{{content}}}
-                </div>
+                    <h1 class="MainTitle">{{{title}}}</h1>
+                    <ul class="postInfoLine">
+                        <li> on <strong>DATE</strong></li> 
+                        <li> by <strong>AUTHOR</strong></li> 
+                        <li> github account</li> 
+                        <li> email </li>
+                    </ul>
+                    {{{content}}}
+                </div>                
             </main>
         </div>
         {{> footer}}
