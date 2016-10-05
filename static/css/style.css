@@ -89,7 +89,7 @@ body, html {
 
 body {
     background: #f6f6f6;
-    font-family: 'Economica', sans-serif;
+    font-family: 'Teko', sans-serif;
     font-size: 16px;
     color: #222222;
 }
@@ -97,7 +97,7 @@ body {
 .grid {
     position: fixed;
     z-index: -100;
-    margin-top: 200px;
+    margin-top: 190px;
     width: 100%;
     height: 50%;
     background-image: url('../img/kpjs-grid.png');
@@ -113,11 +113,12 @@ body {
 /*MAIN TEXT*/
 
 main {
-    padding: 0 0px 50px 215px;
+    margin: 0px 0px 50px 0px;
 }
 
 .MainText {
-    padding: 0 15px;
+    padding: 3px 15px 15px 15px;
+    margin: 0 0 0 215px;
 }
 
 .background {
@@ -127,20 +128,20 @@ main {
 
 h1, h2, h3 {
     font-size: 56px;
-    font-weight: 700;
-    padding-bottom: 15px;
+    font-weight: 400;
+    padding-bottom: 7px;
 }
 
 h2 {
     font-size: 32px;
-    font-weight: 700;
-    padding: 10px 0 6px 0;
+    font-weight: 400;
+    padding: 10px 0 4px 0;
     border-bottom: #222222 solid 2px;
 }
 
 h3 {
     font-size: 24px;
-    font-weight: 700;
+    font-weight: 400;
     padding: 5px 0 8px 0;
 }
 
@@ -153,7 +154,11 @@ p, li {
     font-family: 'Open Sans', sans-serif;
     font-size: 14px;
     line-height: 24px;
-    padding: 10px 0 15px 0;
+    padding: 8px 0 8px 0;
+}
+
+main ol {
+    padding: 0 0 0 45px;
 }
 
 small {
@@ -163,17 +168,10 @@ small {
     padding: 10px 0 20px 60px;
 }
 
-li {
-    text-indent: 0px;
-    padding: 2px 0 2px 5px;
-    margin: 0 60px 0 30px;
-}
-
 em {
-    font-family: 'Economica', sans-serif;
+    font-family: 'Teko', sans-serif;
     font-weight: 400;
     font-style: normal;
-    background-color: #ffc800;
 }
 
 h1 > em {
@@ -181,12 +179,12 @@ h1 > em {
 }
 
 strong {
-    letter-spacing: 2px;
+    letter-spacing: 1px;
 }
 
 a {
     color: #222222;
-    font-weight: 700;
+    font-weight: 400;
 }
 
 blockquote {
@@ -195,7 +193,7 @@ blockquote {
 
 blockquote > p {
     font-size: 20px;
-    font-family: 'Economica', sans-serif;
+    font-family: 'Teko', sans-serif;
 }
 
 /* blockquote>p:before  {
@@ -204,33 +202,6 @@ blockquote > p {
     line-height: 8px;
     line
 } */
-
-input, textarea {
-    width: 100%;
-    margin: 5px 0 15px;
-    padding: 3px;
-    border: none;
-}
-
-input[type=submit], input[type=button], button {
-    background-color: transparent;
-	border: 2px solid #222222;
-    padding: 0 20px;
-    margin: 15px 0;
-    display: inline-block;
-    color: #222222;
-    font-size: 20px;
-    font-family: 'Economica', sans-serif;
-    font-weight: 700;
-    text-transform: uppercase;
-	width: auto;
-	height: 30px;
-}
-
-input[type=submit]:hover, input[type=button]:hover, button:hover {
-    background-color: #222222;
-    color: #f6f6f6;
-}
 
 .floatRight {
 	margin-left: 10px;
@@ -267,12 +238,45 @@ code {
     border: 1px solid #bebab0;
 }
 
-div.MainText img {
+main.BlogPostPage img {
     max-width: 805px;
     margin-left: 30px;
     border: solid 1px #222222;
     display: inline;
     text-align: left;
+}
+
+::selection {
+    background-color: #ffc800;
+}
+
+/* INPUTS, BUTTONS */
+
+input, textarea {
+    width: 100%;
+    margin: 5px 0 15px;
+    padding: 3px;
+    border: none;
+}
+
+input[type=submit], input[type=button], button {
+    background-color: transparent;
+    border: 2px solid #222222;
+    padding: 0 20px;
+    margin: 15px 0;
+    display: inline-block;
+    color: #222222;
+    font-size: 20px;
+    font-family: 'Teko', sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    width: auto;
+    height: 30px;
+}
+
+input[type=submit]:hover, input[type=button]:hover, button:hover {
+    background-color: #222222;
+    color: #f6f6f6;
 }
 
 /*HEADER*/
@@ -296,7 +300,7 @@ div #main-logo  {
     display: block;
     float: left;
     text-indent: -9999px;
-    margin: 0 0px 0 20px;
+    margin: 8px 0 0 8px;
 }
 
 nav {
@@ -307,11 +311,17 @@ nav {
     border-bottom: #222222 solid 2px;
 }
 
+nav li {
+    text-indent: 0px;
+    padding: 2px 0 2px 5px;
+    margin: 0 60px 0 30px;
+}
+
 .menuItem {
     height: 20px;
     display: inline;
     list-style: none;
-    padding: 0px 25px 6px 25px;
+    padding: 0px 25px 2px 25px;
     margin: 0px;
     background-image: url(../img/list_stroke.png);
     background-repeat: no-repeat;
@@ -325,11 +335,11 @@ nav {
 }
 
 li.menuItem {
-    font-family: 'Economica', sans-serif;
+    font-family: 'Teko', sans-serif;
     color: #222222;
     text-transform: uppercase;
-    font-size: 20px;
-    font-weight:700;
+    font-size: 23px;
+    font-weight: 400;
     line-height: 32px;
     text-decoration: none;
 }
@@ -351,9 +361,10 @@ li.menuItem > a {
     text-transform: none;
     background-color: #222222;
     padding: 0px 8px;
+    margin-top: 6px;
     z-index: 1;
 	top: 28px;
-	right: 4px;
+	right: 0px;
 	white-space: nowrap;
 	display: none;
 }
@@ -363,8 +374,8 @@ li.menuItem > a {
 }
 
 .dropdown-content a {
-    font-family: 'Economica', sans-serif;
-    font-size: 16px;
+    font-family: 'Teko', sans-serif;
+    font-size: 18px;
     letter-spacing: 0.1px;
     color: #f6f6f6;
     text-decoration: none;
@@ -395,14 +406,14 @@ footer > div {
 }
 
 footer > div > div {
-		font-family: 'Economica', sans-serif;
-    font-size: 16px;
-    letter-spacing: 0.1px;
-		margin-left: 215px;
+	font-family: 'Teko', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.4px;
+	margin-left: 215px;
 }
 
 footer a {
-		color: #f6f6f6;
+	color: #f6f6f6;
     text-decoration: none;
 }
 
@@ -425,8 +436,8 @@ footer a {
 
 }
 .MainTitle h1 {
-    font-size: 130px;
-    line-height: 100px;
+    font-size: 135px;
+    line-height: 105px;
 }
 
 .MainTitle h2 {
@@ -440,10 +451,16 @@ footer a {
 }
 
 .perex {
-    font-family: 'Economica';
-    padding-right: 230px;
-    font-size: 26px;
-    line-height: 29px;
+    font-family: 'Teko', sans-serif;
+    padding: 0 230px 25px 0;    
+    font-size: 28px;
+    line-height: 30px;
+    font-weight: 300;
+}
+
+/*ABOUT */
+main.standardPage img {
+    max-width: 830px;
 }
 
 /* ALL POSTS */
@@ -464,8 +481,58 @@ footer a {
 }
 
 a.ListTitle {
-    font-family: 'Economica', sans-serif;
+    font-family: 'Teko', sans-serif;
     font-size: 32px;
+}
+
+/* POST */
+aside {
+    float: left;
+    position: absolute;
+    width: 190px;
+    min-height: 100px;
+    margin-top: 85px;
+    padding: 5px;
+}
+
+aside ul {
+    list-style: none;
+}    
+
+aside li {
+    padding: 6px 0 6px 0;
+}
+
+.asideTitle {
+    font-family: 'Teko', sans-serif;
+    color: #222222;
+    text-transform: uppercase;
+    font-size: 23px;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+.postInfoLine {
+    list-style: none;
+    padding-bottom: 25px;
+}
+
+ul.postInfoLine > li { 
+    display: inline;
+} 
+
+.postInfoLine li:before {
+    content: '▪';
+    margin: 0 2px 0 2px;
+}
+
+/* POST-FOOTER */
+.postFooter {
+    display: inline-block;
+    background-color: #aaaaaa;
+    padding: 5px;
+    margin-right: 15px; 
+    width: inherit;
 }
 
 /* ERROR */
