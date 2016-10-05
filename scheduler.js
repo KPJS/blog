@@ -8,20 +8,22 @@ module.exports = function() {
 	function start() {
 		var schedule = require('node-schedule');
 		var fs = require('fs');
-		var i = 0;
+		var path = __rootDir + '/static/uploads';
 		var job = schedule.scheduleJob('42 * * * * *', function() {
-			fs.readdir(__rootDir + '/static/uploads', function(err, files) {
-				files.map(function(file) {
-					fs.stat(__rootDir + '/static/uploads/' + file, function(err, stats) {
-						if ((Date.now() - stats.mtime) / 1000 / 60 / 60 / 24 > 30) {
-							fs.unlink(__rootDir + '/static/uploads/' + file, function(err) {
-								if(err) {
-									console.error('unable to delete image ' + file);
-								}
-							});
-						}
+			fs.readdir(path, function(err, files) {
+				if (!err) {
+					files.map(function(file) {
+						fs.stat(path + file, function(err, stats) {
+							if ((Date.now() - stats.mtime) / 1000 / 60 / 60 / 24 > 30) {
+								fs.unlink(path + file, function(err) {
+									if (err) {
+										console.error('unable to delete image ' + file);
+									}
+								});
+							}
+						});
 					});
-				});
+				}
 			});
 		});
 	}

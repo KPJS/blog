@@ -1,5 +1,5 @@
 module.exports = function(mongo) {
-	if(!mongo) {
+	if (!mongo) {
 		throw 'Missing mongo';
 	}
 
@@ -14,7 +14,14 @@ module.exports = function(mongo) {
 			if (err) {
 				return next(err);
 			}
-			res.render('users.html', { users: items, title: 'Users' });
+			res.format({
+				html: function() {
+					res.render('users.html', { users: items, title: 'Users' });
+				},
+				json: function() {
+					res.json({ users: items });
+				}
+			});
 		});
 	}
 
@@ -24,12 +31,19 @@ module.exports = function(mongo) {
 			if (err) {
 				return next(err);
 			}
-			if(!item) {
+			if (!item) {
 				var error = new Error('User not found');
 				error.statusCode = 404;
 				return next(error);
 			}
-			res.render('userDetail.html', { userName: item.name, userProvider: item.provider, role: item.role, userId: item._id, title: 'User detail', comment: item.comment });
+			res.format({
+				html: function() {
+					res.render('userDetail.html', { userName: item.name, userProvider: item.provider, role: item.role, userId: item._id, title: 'User detail', comment: item.comment });
+				},
+				json: function() {
+					res.json({ userName: item.name, userProvider: item.provider, role: item.role, userId: item._id, comment: item.comment });
+				}
+			});
 		});
 	}
 
@@ -37,7 +51,7 @@ module.exports = function(mongo) {
 		var ObjectID = require('mongodb').ObjectID;
 		var update = req.user.isRuler ? { role: req.body.role, comment: req.body.comment } : { comment: req.body.comment };
 		mongo.collection('users').findOneAndUpdate({ _id: new ObjectID(req.params.userId) }, { $set: update }, { returnOriginal: false }, function(err, item) {
-			if(err) {
+			if (err) {
 				return next(err);
 			}
 			if (!item.value) {
@@ -45,7 +59,14 @@ module.exports = function(mongo) {
 				error.statusCode = 404;
 				return next(error);
 			}
-			res.render('userDetail.html', { userName: item.value.name, userProvider: item.value.provider, role: item.value.role, userId: item.value._id, title: 'User detail', comment: req.body.comment });
+			res.format({
+				html: function() {
+					res.render('userDetail.html', { userName: item.value.name, userProvider: item.value.provider, role: item.value.role, userId: item.value._id, title: 'User detail', comment: req.body.comment });
+				},
+				json: function() {
+					res.json({ userName: item.value.name, userProvider: item.value.provider, role: item.value.role, userId: item.value._id, comment: req.body.comment });
+				}
+			});
 		});
 	}
 };
