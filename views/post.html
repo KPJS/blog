@@ -8,20 +8,20 @@
             <main class="BlogPostPage">
                 <aside class="AuthorsCard">
                     <ul class="asideTitle"> All posts
- 
+                        {{#each posts}}<li><a href="{{uri}}" class="asideText">{{title}}</a><br></li>
+			            {{/each}}
                     </ul>                        
                 </aside>
 
                 <div class="MainText background">
                     <h1 class="MainTitle">{{{title}}}</h1>
                     <ul class="postInfoLine">
-                        <li> on <strong>DATE</strong></li> 
-                        <li> by <strong>AUTHOR</strong></li> 
-                        <li> github account</li> 
-                        <li> email </li>
+                        <li> on <strong class="isoDateStr">{{dateIsoStr}}</strong></li> 
+                        <li> by <strong>{{author}}</strong></li> 
                     </ul>
                     {{{content}}}
-                </div>                
+                </div> 
+                <script src="/js/dateFormatter.js" type="text/javascript"></script>               
             </main>
         </div>
         {{> footer}}
