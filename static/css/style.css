@@ -501,6 +501,11 @@ aside ul {
 
 aside li {
     padding: 6px 0 6px 0;
+    line-height: 18px;
+}
+
+aside li:active {
+   list-style: square;
 }
 
 .asideTitle {
@@ -517,7 +522,6 @@ aside li {
     text-decoration: none;
     font-weight: bold;
 }
-
 
 .postInfoLine {
     list-style: none;
