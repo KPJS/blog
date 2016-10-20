@@ -157,7 +157,7 @@ p, li {
     padding: 8px 0 8px 0;
 }
 
-main ol {
+main ol, ul {
     padding: 0 0 0 45px;
 }
 
@@ -489,7 +489,7 @@ a.ListTitle {
 aside {
     float: left;
     position: absolute;
-    width: 190px;
+    width: 200px;
     min-height: 100px;
     margin-top: 85px;
     padding: 5px;
@@ -501,6 +501,11 @@ aside ul {
 
 aside li {
     padding: 6px 0 6px 0;
+    line-height: 18px;
+}
+
+aside li:active {
+   list-style: square;
 }
 
 .asideTitle {
@@ -512,9 +517,15 @@ aside li {
     text-decoration: none;
 }
 
+.asideText {
+    text-transform: none;
+    text-decoration: none;
+    font-weight: bold;
+}
+
 .postInfoLine {
     list-style: none;
-    padding-bottom: 25px;
+    padding: 0 0 25px 0;
 }
 
 ul.postInfoLine > li { 
