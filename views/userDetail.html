@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
-	{{> head}}
+{{> head}}
     <body>
         <div class="content">
             {{> header}}
             <main class="standardPage">
+                <div class="MainText background">
                 <form action='' method='post'>
                     <input type='hidden' name="userId" value='{{userId}}' />
-                    <div>{{userName}} ({{userProvider}})</div>
+                    <div class="inline">{{userName}} ({{userProvider}})</div>
                     {{#if user.isRuler}}
-                    <div>
+                    <div class="inline">
                         <select name='role'>
                             {{#select role}}
                             <option value="0">zombie</option>
@@ -19,12 +20,13 @@
                         </select>
                     </div>
                     {{/if}}
-                    <div>comment:</div>
+                    <div>Comment:</div>
                     <div>
                         <textarea name="comment">{{comment}}</textarea>
                     </div>
                     <input type='submit' value='update' style="button"/>
                 </form>
+                    </div>
             </main>
         </div>
         {{> footer}}
