@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
-	{{> head}}
+{{> head}}
     <body>
-    	<div class="content">
-	        {{> header}}
-	        <main class="standardPage">
-		        <ul>
-		            {{#each users}}<li><a href="/users/{{_id}}">{{name}} ({{provider}})</a></li>{{/each}}
-		        </ul>
-		    </main>
-	    </div>
-		{{> footer}}
+        <div class="content">
+            {{> header}}
+    	    <main class="standardPage">
+    	           <div class="MainText background">
+    	        <ul>
+    	            {{#each users}}<li><a href="/users/{{_id}}">{{name}} ({{provider}})</a></li>{{/each}}
+    	        </ul>
+                       </div>
+    	    </main>
+        </div>
+        {{> footer}}
     </body>
 </html>

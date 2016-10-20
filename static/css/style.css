@@ -548,6 +548,11 @@ ul.postInfoLine > li {
 
 /* ERROR */
 .errorImage {
-    display:block;
+    display: block;
     margin: 0 auto;
+}
+
+.inline {
+    display: inline-block;
+    margin-right: 10px;
 }
