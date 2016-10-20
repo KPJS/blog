@@ -110,9 +110,15 @@ module.exports = function(mongo) {
 					return next(error);
 				}
 
-				mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
+				mongo.collection('posts').find({}, { title: 1, uri: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
 					if (err) {
 						return next(err);
+					}
+
+					for(var i = 0; i < items.length; i++) {
+						if(items[i].uri === req.params.uri) {
+							items[i].selected = true;
+						}
 					}
 
 					var model = { title: item.title, content: item.content, dateIsoStr: item.publishDate.toISOString(), author: user.name, posts: items };
