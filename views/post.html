@@ -13,7 +13,7 @@
                     <ul> 
                         <p class="asideTitle">All posts</p>
                         {{#each posts}}
-												<li><a href="{{uri}}" class="asideText{{#if selected}} selected{{/if}}">{{title}}</a><br></li>
+												<li{{#if selected}} class="selected"{{/if}}><a href="{{uri}}" class="asideText">{{title}}</a><br></li>
 			            			{{/each}}
                     </ul>
                 </aside>
