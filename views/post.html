@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
-	{{> head}}
+    {{> head}}
+    <link rel="stylesheet" type="text/css" href="/css/highlight.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/languages/javascript.min.js"></script>
     <body>
         <div class="grid"></div>
         <div class="content">
@@ -8,22 +11,25 @@
             <main class="BlogPostPage">
                 <aside class="AuthorsCard">
                     <ul class="asideTitle"> All posts
-                        {{#each posts}}<li><a href="{{uri}}" class="asideText">{{title}}</a><br></li>
-			            {{/each}}
-                    </ul>                        
+                        {{#each posts}}
+												<li><a href="{{uri}}" class="asideText{{#if selected}} selected{{/if}}">{{title}}</a><br></li>
+			            			{{/each}}
+                    </ul>
                 </aside>
 
                 <div class="MainText background">
                     <h1 class="MainTitle">{{{title}}}</h1>
                     <ul class="postInfoLine">
-                        <li> on <strong class="isoDateStr">{{dateIsoStr}}</strong></li> 
-                        <li> by <strong>{{author}}</strong></li> 
+                        <li> on <strong class="isoDateStr">{{dateIsoStr}}</strong></li>
+                        <li> by <strong>{{author}}</strong></li>
                     </ul>
                     {{{content}}}
-                </div> 
-                <script src="/js/dateFormatter.js" type="text/javascript"></script>               
+                </div>
+                <script src="/js/dateFormatter.js" type="text/javascript"></script>
             </main>
         </div>
         {{> footer}}
+        /* globals hljs */
+         <script>hljs.initHighlightingOnLoad();</script>
     </body>
 </html>

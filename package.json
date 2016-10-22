@@ -30,9 +30,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node app.js",
-    "pretest": "jshint --verbose --extract=always *.js controllers/*.js views/*.html",
+    "pretest": "jshint --verbose --extract=always server.js scheduler.js app.js controllers/ views/",
     "test": "mocha tests/ --reporter spec",
-    "posttest": "jscs --verbose *.js controllers/*.js"
+    "posttest": "jscs --verbose server.js scheduler.js app.js controllers/"
   },
   "engines": {
     "node": ">=4.2.0 <5.0"
