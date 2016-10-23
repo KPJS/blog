@@ -9,8 +9,9 @@
         <div class="content">
             {{> header}}
             <main class="BlogPostPage">
-                <aside class="AuthorsCard">
-                    <ul class="asideTitle"> All posts
+                <aside <class="asidePost">
+                    <ul> 
+                        <p class="asideTitle">All posts</p>
                         {{#each posts}}
 												<li{{#if selected}} class="selected"{{/if}}><a href="{{uri}}" class="asideText">{{title}}</a><br></li>
 			            			{{/each}}
