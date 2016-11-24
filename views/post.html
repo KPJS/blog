@@ -9,22 +9,24 @@
         <div class="content">
             {{> header}}
             <main class="BlogPostPage">
-                <aside class="AuthorsCard">
-                    <ul class="asideTitle"> All posts
-                        {{#each posts}}<li><a href="{{uri}}" class="asideText">{{title}}</a><br></li>
-                        {{/each}}
-                    </ul>                        
+                <aside <class="asidePost">
+                    <ul> 
+                        <p class="asideTitle">All posts</p>
+                        {{#each posts}}
+												<li{{#if selected}} class="selected"{{/if}}><a href="{{uri}}" class="asideText">{{title}}</a><br></li>
+			            			{{/each}}
+                    </ul>
                 </aside>
 
                 <div class="MainText background">
                     <h1 class="MainTitle">{{{title}}}</h1>
                     <ul class="postInfoLine">
-                        <li> on <strong class="isoDateStr">{{dateIsoStr}}</strong></li> 
-                        <li> by <strong>{{author}}</strong></li> 
+                        <li> on <strong class="isoDateStr">{{dateIsoStr}}</strong></li>
+                        <li> by <strong>{{author}}</strong></li>
                     </ul>
                     {{{content}}}
-                </div> 
-                <script src="/js/dateFormatter.js" type="text/javascript"></script>               
+                </div>
+                <script src="/js/dateFormatter.js" type="text/javascript"></script>
             </main>
         </div>
         {{> footer}}
