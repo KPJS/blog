@@ -1,6 +1,6 @@
 var winston = require('winston');
 var mongoClient = require('mongodb').MongoClient;
-__rootDir = __dirname;
+global.rootDir = __dirname;
 
 var mongoConnStr = process.env.CUSTOMCONNSTR_MONGOLABS_BLOG || 'mongodb://localhost:27017/blog';
 

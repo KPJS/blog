@@ -85,8 +85,8 @@ module.exports = function(mongo) {
 					try {
 						avatarUrl = avatarCallback(profile);
 					} catch(e) {}
-					var isRuler = item.value.role == '2';
-					var isCitizen = isRuler || (item.value.role == '1');
+					var isRuler = item.value.role === '2';
+					var isCitizen = isRuler || (item.value.role === '1');
 					return done(null, { id: item.value._id, name: item.value.name, avatarUrl: avatarUrl, isRuler: isRuler, isCitizen: isCitizen });
 				});
 		};
@@ -219,7 +219,7 @@ module.exports = function(mongo) {
 	}
 
 	function ensureMyselfInParams(req, res, next) {
-		if (req.user.id == req.params.userId) {
+		if (req.user.id === req.params.userId) {
 			return next();
 		}
 		var error = new Error('Not allowed to see other than your profile');
