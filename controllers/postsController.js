@@ -45,46 +45,28 @@ module.exports = function(mongo) {
 	}
 
 	function getPostsRouteHandler(req, res, next) {
-		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1, author_id: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
+		mongo.collection('posts').aggregate([
+			{ $match: {} },
+			{ $project: { title: 1, uri: 1, publishDate: 1, author_id: 1 } },
+			{ $lookup: { from: 'users', localField: 'author_id', foreignField: '_id', as: 'authors' } }
+			]).sort({ publishDate: -1 }).toArray(function(err, items) {
 			if (err) {
 				return next(err);
 			}
-			populateAuthors(items, function(err, authors) {
-				if (err) {
-					return next(err);
+			var model = {
+				title: 'KPJS blog',
+				posts: items.map(function(i) {
+					return { title: i.title, uri: i.uri, dateIsoStr: i.publishDate.toISOString(), authorName: i.authors[0].name };
+				})
+			};
+			res.format({
+				html: function() {
+					res.render('allPosts.html', model);
+				},
+				json: function() {
+					res.json(model.posts);
 				}
-				var model = {
-					title: 'KPJS blog',
-					posts: items.map(function(i) {
-						return { title: i.title, uri: i.uri, dateIsoStr: i.publishDate.toISOString(), authorName: authors[i.author_id] };
-					})
-				};
-				res.format({
-					html: function() {
-						res.render('allPosts.html', model);
-					},
-					json: function() {
-						res.json(model.posts);
-					}
-				});
 			});
-		});
-	}
-
-	function populateAuthors(postProjections, callback) {
-		var ObjectID = require('mongodb').ObjectID;
-		var authorIds = postProjections.map(function(x) {
-			return new ObjectID(x.author_id);
-		});
-		mongo.collection('users').find({ _id: { $in: authorIds } }, { _id: 1, name: 1 }).toArray(function(err, items) {
-			if (err) {
-				return callback(err);
-			}
-			var authors = {};
-			for (var i = 0; i < items.length; i++) {
-				authors[items[i]._id] = items[i].name;
-			}
-			callback(null, authors);
 		});
 	}
 
