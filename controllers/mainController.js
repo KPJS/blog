@@ -16,7 +16,7 @@
 	function contactRouteHandler(req, res) {
 		res.render('contact.html', { title: 'Contact' });
 	}
-	
+
 	function getRootRouteHandler(req, res, next) {
 		mongo.collection('posts').find({}, { title: 1, uri: 1, publishDate: 1, content: 1 }).sort({ publishDate: -1 }).limit(1).toArray(function(err, items) {
 			if (err) {
@@ -33,4 +33,4 @@
 			});
 		});
 	}
-}
+};
