@@ -30,7 +30,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node app.js",
-    "pretest": "jshint --verbose --extract=always server.js scheduler.js app.js controllers/ views/",
+    "pretest": "jshint --verbose --extract=auto server.js scheduler.js app.js controllers/ views/",
     "test": "mocha tests/ --reporter spec",
     "posttest": "jscs --verbose server.js scheduler.js app.js controllers/"
   },
