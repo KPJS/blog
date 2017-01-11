@@ -4,7 +4,7 @@ h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 abbr, address, cite, code,
 del, dfn, em, img, ins, kbd, q, samp,
 small, strong, sub, sup, var,
-b, i,
+b, i, a,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
@@ -218,9 +218,6 @@ pre {
     margin: 10px 0px 10px 30px;
     padding: 4px;
     white-space: pre;
-    white-space: pre-wrap;
-    white-space: -moz-pre-wrap;
-    white-space: -o-pre-wrap;
 }
 
 code {
@@ -228,9 +225,6 @@ code {
     font-size: 95%;
     line-height: 140%;
     white-space: pre;
-    white-space: pre-wrap;
-    white-space: -moz-pre-wrap;
-    white-space: -o-pre-wrap;
 }
 
 #content code {

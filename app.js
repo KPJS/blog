@@ -1,6 +1,6 @@
 var winston = require('winston');
 var mongoClient = require('mongodb').MongoClient;
-__rootDir = __dirname;
+global.rootDir = __dirname;
 
 var mongoConnStr = process.env.CUSTOMCONNSTR_MONGOLABS_BLOG || 'mongodb://localhost:27017/blog';
 
@@ -37,11 +37,12 @@ mongoClient.connect(mongoConnStr, function(err, db) {
 	else {
 		console.info('Connected to mongo, starting server...');
 		var authenticationController = require('./controllers/authenticationController')(db);
+		var mainController = require('./controllers/mainController')(db);
 		var postsController = require('./controllers/postsController')(db);
 		var usersController = require('./controllers/usersController')(db);
 		var imageUploadController = require('./controllers/imageUploadController');
 		var scheduler = require('./scheduler')();
-		var server = require('./server')(logger, authenticationController, postsController, usersController, imageUploadController, scheduler);
+		var server = require('./server')(logger, authenticationController, mainController, postsController, usersController, imageUploadController, scheduler);
 		server.start(startCallback);
 	}
 });

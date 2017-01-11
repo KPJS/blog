@@ -7,24 +7,27 @@
 		    {{> header}}
 		    <main class="standardPage">
 		    	<div class="MainText background">
-			        <ul class="blogsList">
-			            {{#each posts}}<li><a href="posts/{{uri}}" class="ListTitle">{{title}}</a>
-										<button class="floatRight" name="editButton" value="edit/{{uri}}">Edit</button>
-										<button class="floatRight" name="deleteButton" value="posts/{{uri}}">Delete</button>
-										<br>
-										Published on <span class="isoDateStr">{{dateIsoStr}}</span>
-									</li>
-									{{/each}}
-			        </ul>
+		    	    <ul class="blogsList">
+		    	        {{#unless posts}}<h1>You have no posts.</h1>
+		    	         <button name="linkButton" value="/create">Create post</button>
+                        {{/unless}}
+		    	        {{#each posts}}<li><a href="posts/{{uri}}" class="ListTitle">{{title}}</a>
+		    	                           <button class="floatRight" name="linkButton" value="edit/{{uri}}">Edit</button>
+		    	                           <button class="floatRight" name="deleteButton" value="posts/{{uri}}">Delete</button>
+		    	                           <br>
+		    	                           Published on <span class="isoDateStr">{{dateIsoStr}}</span>
+		    	                       </li>
+		    	        {{/each}}
+		    	    </ul>
 			    </div>
 					<script type="text/javascript">
 
-					var editHandler = function() {
+					var linkHandler = function() {
 						window.location.href = this.value;
 					};
-					var editButtons = document.getElementsByName('editButton');
-					for(var i = 0; i < editButtons.length; i++) {
-						editButtons[i].addEventListener('click', editHandler);
+					var linkButtons = document.getElementsByName('linkButton');
+					for(var i = 0; i < linkButtons.length; i++) {
+						linkButtons[i].addEventListener('click', linkHandler);
 					}
 
 					var deleteHandler = function() {
