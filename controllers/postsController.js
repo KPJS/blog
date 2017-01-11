@@ -191,7 +191,7 @@ module.exports = function(mongo) {
 
 	function moveImages(content) {
 		var result = content.replace(new RegExp('<img\\s+src="/uploads/([^"]*)"', 'g'), function(wholeMatch, filename) {
-			fs.rename(__rootDir + '/static/uploads/' + filename, __rootDir + '/static/postImages/' + filename);
+			fs.rename(global.rootDir + '/static/uploads/' + filename, global.rootDir + '/static/postImages/' + filename);
 			return wholeMatch.replace('"/uploads/' + filename + '"', '"/postImages/' + filename + '"');
 		});
 		return result;

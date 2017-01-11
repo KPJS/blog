@@ -8,8 +8,8 @@ module.exports = function() {
 	function start() {
 		var schedule = require('node-schedule');
 		var fs = require('fs');
-		var path = __rootDir + '/static/uploads';
-		var job = schedule.scheduleJob('42 * * * * *', function() {
+		var path = global.rootDir + '/static/uploads';
+		schedule.scheduleJob('42 * * * * *', function() {
 			fs.readdir(path, function(err, files) {
 				if (!err) {
 					files.map(function(file) {
