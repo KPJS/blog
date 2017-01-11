@@ -1,9 +1,12 @@
-module.exports = function(logger, authenticationController, postsController, usersController, imageUploadController, scheduler) {
+module.exports = function(logger, authenticationController, mainController, postsController, usersController, imageUploadController, scheduler) {
 	if(!logger) {
 		throw 'Missing logger';
 	}
 	if(!authenticationController) {
 		throw 'Missing authenticationController';
+	}
+	if(!mainController) {
+		throw 'Missing mainController';
 	}
 	if(!postsController) {
 		throw 'Missing postsController';
@@ -87,6 +90,7 @@ module.exports = function(logger, authenticationController, postsController, use
 		});
 
 		registerPostControllerRoutes(app, authenticationController.ensureRulerOrOwner, authenticationController.ensureCitizen, postsController);
+		registerMainControllerRoutes(app, mainController);
 		registerUserControllerRoutes(app, authenticationController.ensureRuler, authenticationController.ensureRulerOrMyself, usersController);
 		registerImageUploadControllerRoutes(app, authenticationController.ensureCitizen, imageUploadController);
 
@@ -126,9 +130,6 @@ module.exports = function(logger, authenticationController, postsController, use
 	}
 
 	function registerPostControllerRoutes(app, verifyRulerOrOwner, verifyCitizen, postsController) {
-		app.get('/', postsController.getRootRouteHandler);
-		app.get('/about', postsController.aboutRouteHandler);
-		app.get('/contact', postsController.contactRouteHandler);
 		app.get('/posts', postsController.getPostsRouteHandler);
 		app.get('/posts/:uri', postsController.getReadRouteHandler);
 		app.delete('/posts/:uri', verifyRulerOrOwner, postsController.deletePostRouteHandler);
@@ -137,6 +138,12 @@ module.exports = function(logger, authenticationController, postsController, use
 		app.get('/create', verifyCitizen, postsController.getCreateRouteHandler);
 		app.post('/create', verifyCitizen, postsController.postCreateRouteHandler);
 		app.get('/myPosts', postsController.getMyPostsRouteHandler);
+	}
+
+	function registerMainControllerRoutes(app, mainController) {
+		app.get('/', mainController.getRootRouteHandler);
+		app.get('/about', mainController.aboutRouteHandler);
+		app.get('/contact', mainController.contactRouteHandler);
 	}
 
 	function registerImageUploadControllerRoutes(app, verifyRulerOrOwner, imageUploadController) {
