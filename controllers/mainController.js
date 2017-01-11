@@ -1,4 +1,4 @@
-﻿module.exports = function(mongo) {
+module.exports = function(mongo) {
 	if (!mongo) {
 		throw 'Missing mongo';
 	}
