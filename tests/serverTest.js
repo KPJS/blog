@@ -10,9 +10,6 @@ var fakeAuth = {
 	ensureRulerOrOwner: function(req, res, next) { next(); },
 	ensureRulerOrMyself: function(req, res, next) { next(); } };
 var fakePostsController = {
-	getRootRouteHandler: function(req, res) {
-		res.end("root - GET");
-	},
 	getReadRouteHandler: function(req, res) {
 		res.end("read post - GET");
 	},
@@ -34,12 +31,6 @@ var fakePostsController = {
 	getPostsRouteHandler: function(req, res) {
 		res.end("all posts - GET");
 	},
-	aboutRouteHandler: function(req, res) {
-		res.end("about - GET");
-	},
-	contactRouteHandler: function(req, res) {
-		res.end("contact - GET");
-	},
 	getMyPostsRouteHandler: function(req, res) {
 		res.end("my posts - GET");
 	}
@@ -55,6 +46,17 @@ var fakeUsersController = {
 		res.end("edit user - POST");
 	}
 };
+var fakeMainController = {
+	getRootRouteHandler: function(req, res) {
+		res.end("root - GET");
+	},
+	aboutRouteHandler: function(req, res) {
+		res.end("about - GET");
+	},
+	contactRouteHandler: function(req, res) {
+		res.end("contact - GET");
+	}
+}
 var fakeImageUploadController = {
 	uploadImageRouteHandler: function(req, res) {
 		res.end("upload image - POST");
@@ -67,7 +69,7 @@ var fakeImageUploadController = {
 var fakeScheduler = { start: function() {} };
 
 describe('Server initialization tests', function() {
-	var server = require('../server')(fakeLogger, fakeAuth, fakePostsController, fakeUsersController, fakeImageUploadController, fakeScheduler);
+	var server = require('../server')(fakeLogger, fakeAuth, fakeMainController, fakePostsController, fakeUsersController, fakeImageUploadController, fakeScheduler);
 
 	afterEach(function() { server.stop(); });
 
@@ -96,7 +98,7 @@ describe('Server initialization tests', function() {
 });
 
 describe('Route authorization tests [successfull auth]', function() {
-	var server = require('../server')(fakeLogger, fakeAuth, fakePostsController, fakeUsersController, fakeImageUploadController, fakeScheduler);
+	var server = require('../server')(fakeLogger, fakeAuth, fakeMainController, fakePostsController, fakeUsersController, fakeImageUploadController, fakeScheduler);
 
 	afterEach(function() { server.stop(); });
 
@@ -179,7 +181,7 @@ describe('Route authorization tests [failed auth]', function() {
 		ensureRulerOrOwner: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
 		ensureRulerOrMyself: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); }
 	};
-	var server = require('../server')(fakeLogger, fakeAuth2, fakePostsController, fakeUsersController, fakeImageUploadController, fakeScheduler);
+	var server = require('../server')(fakeLogger, fakeAuth2, fakeMainController, fakePostsController, fakeUsersController, fakeImageUploadController, fakeScheduler);
 
 	afterEach(function() { server.stop(); });
 
