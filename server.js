@@ -141,5 +141,6 @@ module.exports = function(logger, authenticationController, postsController, use
 
 	function registerImageUploadControllerRoutes(app, verifyRulerOrOwner, imageUploadController) {
 		app.post('/uploadImage', verifyRulerOrOwner, imageUploadController.uploadImageRouteHandler);
+		app.get('/tempImages/:id', verifyRulerOrOwner, imageUploadController.getTempImageRouteHandler);
 	}
 };

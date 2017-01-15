@@ -58,6 +58,9 @@ var fakeUsersController = {
 var fakeImageUploadController = {
 	uploadImageRouteHandler: function(req, res) {
 		res.end("upload image - POST");
+	},
+	getTempImageRouteHandler: function(req, res) {
+		res.end('return imge - GET');
 	}
 };
 

@@ -39,7 +39,7 @@ mongoClient.connect(mongoConnStr, function(err, db) {
 		var authenticationController = require('./controllers/authenticationController')(db);
 		var postsController = require('./controllers/postsController')(db);
 		var usersController = require('./controllers/usersController')(db);
-		var imageUploadController = require('./controllers/imageUploadController');
+		var imageUploadController = require('./controllers/imageUploadController')(db);
 		var scheduler = require('./scheduler')();
 		var server = require('./server')(logger, authenticationController, postsController, usersController, imageUploadController, scheduler);
 		server.start(startCallback);

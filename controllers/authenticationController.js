@@ -9,6 +9,7 @@ module.exports = function(mongo) {
 	var GithubStrategy = require('passport-github').Strategy;
 	var TwitterStrategy = require('passport-twitter').Strategy;
 	var FacebookStrategy = require('passport-facebook').Strategy;
+	var ObjectID = require('mongodb').ObjectID;
 
 	passport.use(new GoogleStrategy({
 			clientID: process.env.GOOGLE_CLIENT_ID,
@@ -126,7 +127,6 @@ module.exports = function(mongo) {
 	}
 
 	function verifyRole(userId, role, callback) {
-		var ObjectID = require('mongodb').ObjectID;
 		mongo.collection('users').findOne({ _id: new ObjectID(userId) }, { role: 1 }, function(err, item) {
 			if(err) {
 				return callback(err);
