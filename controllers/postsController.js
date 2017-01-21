@@ -19,16 +19,18 @@ module.exports = function(mongo) {
 	function getPostsRouteHandler(req, res, next) {
 		mongo.collection('posts').aggregate([
 			{ $match: {} },
-			{ $project: { title: 1, uri: 1, publishDate: 1, author_id: 1 } },
-			{ $lookup: { from: 'users', localField: 'author_id', foreignField: '_id', as: 'authors' } }
-			]).sort({ publishDate: -1 }).toArray(function(err, items) {
+			{ $sort: { publishDate: -1 } },
+			{ $lookup: { from: 'users', localField: 'author_id', foreignField: '_id', as: 'author' } },
+			{ $unwind: '$author' },
+			{ $project: { title: 1, uri: 1, publishDate: 1, 'author.name': 1 } }
+			]).toArray(function(err, items) {
 			if (err) {
 				return next(err);
 			}
 			var model = {
 				title: 'KPJS blog',
 				posts: items.map(function(i) {
-					return { title: i.title, uri: i.uri, dateIsoStr: i.publishDate.toISOString(), authorName: i.authors[0].name };
+					return { title: i.title, uri: i.uri, dateIsoStr: i.publishDate.toISOString(), authorName: i.author.name };
 				})
 			};
 			res.format({
