@@ -92,7 +92,7 @@ module.exports = function(logger, authenticationController, mainController, post
 		registerPostControllerRoutes(app, authenticationController.ensureRulerOrOwner, authenticationController.ensureCitizen, postsController);
 		registerMainControllerRoutes(app, mainController);
 		registerUserControllerRoutes(app, authenticationController.ensureRuler, authenticationController.ensureRulerOrMyself, usersController);
-		registerImageUploadControllerRoutes(app, authenticationController.ensureCitizen, imageUploadController);
+		registerImageControllerRoutes(app, authenticationController.ensureCitizen, imageUploadController);
 
 		// handler for all other paths
 		app.use(function(req, res, next) {
@@ -146,8 +146,9 @@ module.exports = function(logger, authenticationController, mainController, post
 		app.get('/contact', mainController.contactRouteHandler);
 	}
 
-	function registerImageUploadControllerRoutes(app, verifyRulerOrOwner, imageUploadController) {
-		app.post('/uploadImage', verifyRulerOrOwner, imageUploadController.uploadImageRouteHandler);
-		app.get('/tempImages/:id', verifyRulerOrOwner, imageUploadController.getTempImageRouteHandler);
+	function registerImageControllerRoutes(app, verifyCitizen, imagesController) {
+		app.post('/uploadImage', verifyCitizen, imagesController.uploadImageRouteHandler);
+		app.get('/tempImages/:id', verifyCitizen, imagesController.getTempImageRouteHandler);
+		app.get('/postImages/:uri/:id', imagesController.getPostImageRouteHandler);
 	}
 };

@@ -3,7 +3,8 @@ module.exports = function(mongo) {
 		throw 'Missing mongo';
 	}
 
-	var fs = require('fs');
+	var ObjectID = require('mongodb').ObjectID;
+	var imgRegExp = /<img\s+src="\/tempImages\/(.*?)"/gi;
 
 	return {
 		getPostsRouteHandler: getPostsRouteHandler,
@@ -45,7 +46,6 @@ module.exports = function(mongo) {
 	}
 
 	function getReadRouteHandler(req, res, next) {
-		var ObjectID = require('mongodb').ObjectID;
 		mongo.collection('posts').findOne({ uri: req.params.uri }, { title: 1, content: 1, publishDate: 1, author_id: 1 }, function(err, item) {
 			if (err) {
 				return next(err);
@@ -132,23 +132,28 @@ module.exports = function(mongo) {
 			error.statusCode = 400;
 			return next(error);
 		}
-		content = moveImages(content);
-		mongo.collection('posts').findOneAndUpdate({ uri: req.params.uri }, { $set: { title: title, content: content } }, function(err, item) {
+		var output = extractTempImages(content, req.params.uri);
+		mongo.collection('tempImages').find({ _id: { $in: output.imageIds } }).toArray(function(err, images) {
 			if (err) {
 				return next(err);
 			}
-			if (!item.value) {
-				var error = new Error('Post not found');
-				error.statusCode = 404;
-				return next(error);
-			}
-			res.format({
-				html: function() {
-					res.redirect('/posts/' + req.params.uri);
-				},
-				json: function() {
-					res.json({ title: item.title, content: item.content });
+			mongo.collection('posts').findOneAndUpdate({ uri: req.params.uri }, { $set: { title: title, content: content }, $addToSet: { images: images } }, function(err, item) {
+				if (err) {
+					return next(err);
 				}
+				if (!item.value) {
+					var error = new Error('Post not found');
+					error.statusCode = 404;
+					return next(error);
+				}
+				res.format({
+					html: function() {
+						res.redirect('/posts/' + req.params.uri);
+					},
+					json: function() {
+						res.json({ title: item.title, content: item.content });
+					}
+				});
 			});
 		});
 	}
@@ -169,38 +174,45 @@ module.exports = function(mongo) {
 		if (!url) {
 			url = title.replace(/\s+/g, '-');
 		}
-		content = moveImages(content);
-		var ObjectID = require('mongodb').ObjectID;
-		mongo.collection('posts').insertOne({ title: title, uri: url, content: content, author_id: new ObjectID(req.user.id), publishDate: new Date() }, function(err) {
+		var output = extractTempImages(content, url);
+		mongo.collection('tempImages').find({ _id: { $in: output.imageIds } }).toArray(function(err, images) {
 			if (err) {
-				if (err.code === 11000) { //duplicate key
-					return res.render('create.html', { post: { url: url, title: title, content: content, exists: true } });
-				}
 				return next(err);
 			}
-			res.format({
-				html: function() {
-					res.redirect('/posts/' + url);
-				},
-				json: function() {
-					res.statusCode = 201;
-					res.location('/posts/' + url);
-					res.end();
+			mongo.collection('posts').insertOne({ title: title, uri: url, content: output.newContent, images: images, author_id: new ObjectID(req.user.id), publishDate: new Date() }, function(err) {
+				if (err) {
+					if (err.code === 11000) { //duplicate key
+						return res.render('create.html', { post: { url: url, title: title, content: content, exists: true } });
+					}
+					return next(err);
 				}
+				res.format({
+					html: function() {
+						res.redirect('/posts/' + url);
+					},
+					json: function() {
+						res.statusCode = 201;
+						res.location('/posts/' + url);
+						res.end();
+					}
+				});
 			});
 		});
 	}
 
-	function moveImages(content) {
-		var result = content.replace(new RegExp('<img\\s+src="/uploads/([^"]*)"', 'g'), function(wholeMatch, filename) {
-			fs.rename(global.rootDir + '/static/uploads/' + filename, global.rootDir + '/static/postImages/' + filename);
-			return wholeMatch.replace('"/uploads/' + filename + '"', '"/postImages/' + filename + '"');
+	function extractTempImages(content, postUri) {
+		var imageIds = [];
+		var newContent = content.replace(imgRegExp, function(match, imgId) {
+			imageIds.push(imgId);
+			return '<img src="/postImages/' + postUri + '/' + imgId + '"';
 		});
-		return result;
+		imageIds = imageIds.map(function(i) {
+			return new ObjectID(i);
+		});
+		return { imageIds: imageIds, newContent: newContent };
 	}
 
 	function getMyPostsRouteHandler(req, res, next) {
-		var ObjectID = require('mongodb').ObjectID;
 		mongo.collection('posts').find({ author_id: new ObjectID(req.user.id) }, { title: 1, uri: 1, publishDate: 1 }).sort({ publishDate: -1 }).toArray(function(err, items) {
 			if (err) {
 				return next(err);

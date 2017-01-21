@@ -6,11 +6,12 @@ module.exports = function(mongo) {
 	var ObjectID = require('mongodb').ObjectID;
 
 	return {
-		uploadImageRouteHandler: getRootRouteHandler,
-		getTempImageRouteHandler: getTempImageRouteHandler
+		uploadImageRouteHandler: uploadImageRouteHandler,
+		getTempImageRouteHandler: getTempImageRouteHandler,
+		getPostImageRouteHandler: getPostImageRouteHandler
 	};
 
-	function getRootRouteHandler(req, res) {
+	function uploadImageRouteHandler(req, res) {
 		var requestContainsFile = false;
 		req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
 			if(requestContainsFile) {
@@ -54,6 +55,21 @@ module.exports = function(mongo) {
 			}
 			res.type(item.mimetype);
 			res.end(item.imageData, 'base64');
+		});
+	}
+
+	function getPostImageRouteHandler(req, res, next) {
+		mongo.collection('posts').findOne({ uri: req.params.uri, 'images._id': new ObjectID(req.params.id) }, { 'images.$': 1 }, function(err, item) {
+			if (err) {
+				return next(err);
+			}
+			if (!item) {
+				var error = new Error('Image not found');
+				error.statusCode = 404;
+				return next(error);
+			}
+			res.type(item.images[0].mimetype);
+			res.end(item.images[0].imageData, 'base64');
 		});
 	}
 };

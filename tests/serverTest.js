@@ -59,11 +59,14 @@ var fakeMainController = {
 }
 var fakeImageUploadController = {
 	uploadImageRouteHandler: function(req, res) {
-		res.end("upload image - POST");
+		res.end('upload image - POST');
 	},
 	getTempImageRouteHandler: function(req, res) {
-		res.end('return imge - GET');
-	}
+		res.end('return temp image - GET');
+	},
+	getPostImageRouteHandler: function(req, res) {
+		res.end('return post image - GET');
+	},
 };
 
 var fakeScheduler = { start: function() {} };
