@@ -149,6 +149,6 @@ module.exports = function(logger, authenticationController, mainController, post
 	function registerImageControllerRoutes(app, verifyCitizen, imagesController) {
 		app.post('/uploadImage', verifyCitizen, imagesController.uploadImageRouteHandler);
 		app.get('/tempImages/:id', verifyCitizen, imagesController.getTempImageRouteHandler);
-		app.get('/postImages/:uri/:id', imagesController.getPostImageRouteHandler);
+		app.get('/images/:uri/:id', imagesController.getPostImageRouteHandler);
 	}
 };

@@ -204,7 +204,7 @@ module.exports = function(mongo) {
 		var imageIds = [];
 		var newContent = content.replace(imgRegExp, function(match, imgId) {
 			imageIds.push(imgId);
-			return '<img src="/postImages/' + postUri + '/' + imgId + '"';
+			return '<img src="/images/' + postUri + '/' + imgId + '"';
 		});
 		imageIds = imageIds.map(function(i) {
 			return new ObjectID(i);
