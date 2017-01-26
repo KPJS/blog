@@ -1,4 +1,4 @@
-module.exports = function(logger, authenticationController, mainController, postsController, usersController, imageUploadController, scheduler) {
+module.exports = function(logger, authenticationController, mainController, postsController, usersController, imageController, scheduler) {
 	if(!logger) {
 		throw 'Missing logger';
 	}
@@ -14,8 +14,8 @@ module.exports = function(logger, authenticationController, mainController, post
 	if(!usersController) {
 		throw 'Missing usersController';
 	}
-	if(!imageUploadController) {
-		throw 'Missing imageUploadController';
+	if(!imageController) {
+		throw 'Missing imageController';
 	}
 	if(!scheduler) {
 		throw 'Missing scheduler';
@@ -25,7 +25,7 @@ module.exports = function(logger, authenticationController, mainController, post
 
 	return {
 		start: function(startCallback) {
-			start(logger, authenticationController, postsController, usersController, imageUploadController, scheduler, function(err, srv) {
+			start(logger, authenticationController, postsController, usersController, imageController, scheduler, function(err, srv) {
 				if (err) {
 					return startCallback(err);
 				}
@@ -42,7 +42,7 @@ module.exports = function(logger, authenticationController, mainController, post
 		}
 	};
 
-	function start(logger, authenticationController, postsController, usersController, imageUploadController, scheduler, callback) {
+	function start(logger, authenticationController, postsController, usersController, imageController, scheduler, callback) {
 		var port = process.env.PORT || 1337;
 		var express = require('express');
 		var hbs = require('hbs');
@@ -92,7 +92,7 @@ module.exports = function(logger, authenticationController, mainController, post
 		registerPostControllerRoutes(app, authenticationController.ensureRulerOrOwner, authenticationController.ensureCitizen, postsController);
 		registerMainControllerRoutes(app, mainController);
 		registerUserControllerRoutes(app, authenticationController.ensureRuler, authenticationController.ensureRulerOrMyself, usersController);
-		registerImageControllerRoutes(app, authenticationController.ensureCitizen, imageUploadController);
+		registerImageControllerRoutes(app, authenticationController.ensureCitizen, imageController);
 
 		// handler for all other paths
 		app.use(function(req, res, next) {
