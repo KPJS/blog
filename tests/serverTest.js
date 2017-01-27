@@ -57,16 +57,22 @@ var fakeMainController = {
 		res.end("contact - GET");
 	}
 }
-var fakeImageUploadController = {
+var fakeImageController = {
 	uploadImageRouteHandler: function(req, res) {
-		res.end("upload image - POST");
-	}
+		res.end('upload image - POST');
+	},
+	getTempImageRouteHandler: function(req, res) {
+		res.end('return temp image - GET');
+	},
+	getPostImageRouteHandler: function(req, res) {
+		res.end('return post image - GET');
+	},
 };
 
 var fakeScheduler = { start: function() {} };
 
 describe('Server initialization tests', function() {
-	var server = require('../server')(fakeLogger, fakeAuth, fakeMainController, fakePostsController, fakeUsersController, fakeImageUploadController, fakeScheduler);
+	var server = require('../server')(fakeLogger, fakeAuth, fakeMainController, fakePostsController, fakeUsersController, fakeImageController, fakeScheduler);
 
 	afterEach(function() { server.stop(); });
 
@@ -95,7 +101,7 @@ describe('Server initialization tests', function() {
 });
 
 describe('Route authorization tests [successfull auth]', function() {
-	var server = require('../server')(fakeLogger, fakeAuth, fakeMainController, fakePostsController, fakeUsersController, fakeImageUploadController, fakeScheduler);
+	var server = require('../server')(fakeLogger, fakeAuth, fakeMainController, fakePostsController, fakeUsersController, fakeImageController, fakeScheduler);
 
 	afterEach(function() { server.stop(); });
 
@@ -178,7 +184,7 @@ describe('Route authorization tests [failed auth]', function() {
 		ensureRulerOrOwner: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); },
 		ensureRulerOrMyself: function(req, res, next){ var e = new Error("err"); e.statusCode = 401; next(e); }
 	};
-	var server = require('../server')(fakeLogger, fakeAuth2, fakeMainController, fakePostsController, fakeUsersController, fakeImageUploadController, fakeScheduler);
+	var server = require('../server')(fakeLogger, fakeAuth2, fakeMainController, fakePostsController, fakeUsersController, fakeImageController, fakeScheduler);
 
 	afterEach(function() { server.stop(); });
 
