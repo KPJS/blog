@@ -81,6 +81,7 @@ module.exports = function(mongo) {
 
 					res.format({
 						html: function() {
+							model.includeHighlightLib = true;
 							res.render('post.html', model);
 						},
 						json: function() {
