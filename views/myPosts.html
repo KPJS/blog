@@ -31,6 +31,9 @@
 					}
 
 					var deleteHandler = function() {
+						if(!confirm("Sure?")){
+							return;
+						}
 						var oReq = new XMLHttpRequest();
 						oReq.onreadystatechange = function() {
 							if (oReq.readyState === 4 && oReq.status === 200) {
