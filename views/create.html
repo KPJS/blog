@@ -2,33 +2,36 @@
 <html>
 	{{> head}}
     <body>
+        <div class="grid"></div>
         <div class="content">
             {{> header}}
             <main class="standardPage">
-							<div class="MainText">
-                <form method="post">
-                    <div>
-                        Title: <input name="title" value="{{post.title}}" />
+                <div class="MainText">
+                    <div class="UserName">My new post
                     </div>
-                    {{#if post}}
-                    {{#if post.exists}}
-                    <div style="color: #b20982">Post with this url already exits</div>
-                    {{/if}}
-                    <div>
-                        Url: <input name="url" value="{{post.url}}" />
-                    </div>
-                    {{/if}}
-                    <div>
-                        Content: <textarea name="content" id="editor" cols="100" rows="50">{{post.content}}</textarea>
-                    </div>
-                    <input type="submit" value="Save"/>
-                </form>
-        		<script src="/ckeditor/ckeditor.js"></script>
-        		<script>
-        			/* globals CKEDITOR */
-        			CKEDITOR.replace('editor');
-        		</script>
-					</div>
+                    <form method="post">
+                        <div>
+                            Title: <input name="title" value="{{post.title}}" />
+                        </div>
+                        {{#if post}}
+                        {{#if post.exists}}
+                        <div style="color: #b20982">Post with this url already exits</div>
+                        {{/if}}
+                        <div>
+                            Url: <input name="url" value="{{post.url}}" />
+                        </div>
+                        {{/if}}
+                        <div>
+                            Content: <textarea name="content" id="editor" cols="100" rows="50">{{post.content}}</textarea>
+                        </div>
+                        <input type="submit" value="Save"/>
+                    </form>
+            		<script src="/ckeditor/ckeditor.js"></script>
+            		<script>
+            			/* globals CKEDITOR */
+            			CKEDITOR.replace('editor');
+            		</script>
+				</div>
             </main>
         </div>
         {{> footer}}
