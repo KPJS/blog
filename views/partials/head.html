@@ -2,7 +2,12 @@
   <meta charset="UTF-8">
   <title>{{title}}</title>
 	<link rel="icon" href="/img/KPJS_fav_2.jpg" sizes="16x16 32x32" type="image/jpeg">
-	<link href="https://fonts.googleapis.com/css?family=Teko:300,400,500,600,700&subset=latin-ext" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Teko:300,400,500,600,700&amp;subset=latin-ext" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" type="text/css" href="/css/style.css">
+	{{#if includeHighlightLib}}
+	<link rel="stylesheet" type="text/css" href="/css/highlight.css"/>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/languages/javascript.min.js"></script>
+	{{/if}}
 </head>
