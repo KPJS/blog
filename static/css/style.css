@@ -119,6 +119,7 @@ main {
 .MainText {
     padding: 3px 15px 15px 15px;
     margin: 0 0 0 215px;
+    min-height: 450px;
 }
 
 .background {
@@ -250,7 +251,7 @@ main.BlogPostPage img {
 input, textarea {
     width: 100%;
     margin: 5px 0 15px;
-    padding: 3px;
+    padding: 3px 0 3px 0;
     border: none;
 }
 
@@ -300,7 +301,7 @@ div #main-logo  {
 
 nav {
     margin: 0 0 20px 230px;
-    padding: 30px 0 4px 0 ;
+    padding: 30px 0 5px 0 ;
     height: 28px;
     text-align: right;
     border-bottom: #222222 solid 2px;
@@ -441,6 +442,12 @@ footer a {
     border-bottom: hidden;
 }
 
+.UserName {
+    font-size: 56px;
+    font-weight: 400;
+    border-bottom: hidden;
+}
+
 .MainTitle > p {
 
 }
@@ -559,5 +566,5 @@ ul.postInfoLine > li {
 
 .inline {
     display: inline-block;
-    margin-right: 10px;
+    margin: 0px 10px 15px 0px;
 }

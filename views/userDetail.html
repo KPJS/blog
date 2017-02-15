@@ -2,15 +2,16 @@
 <html>
 {{> head}}
     <body>
+        <div class="grid"></div>
         <div class="content">
             {{> header}}
             <main class="standardPage">
                 <div class="MainText background">
                 <form action='' method='post'>
                     <input type='hidden' name="userId" value='{{userId}}' />
-                    <div class="inline">{{userName}} ({{userProvider}})</div>
+                    <div class="inline UserName">{{userName}} ({{userProvider}})</div><br>
                     {{#if user.isRuler}}
-                    <div class="inline">
+                    <div class="inline"> Hodnosť:
                         <select name='role'>
                             {{#select role}}
                             <option value="0">zombie</option>
@@ -20,7 +21,7 @@
                         </select>
                     </div>
                     {{/if}}
-                    <div>Comment:</div>
+                    <div>About:</div>
                     <div>
                         <textarea name="comment">{{comment}}</textarea>
                     </div>
